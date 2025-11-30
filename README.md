@@ -48,7 +48,7 @@ An AI-assisted flashcard workflow that turns pasted study material into spaced-r
 ### Setup
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/<your-org>/10x-cards.git
+   git clone https://github.com/mateuszhadrian/10x-cards.git
    cd 10x-cards
    ```
 2. **Install dependencies**
