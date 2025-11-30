@@ -1,7 +1,7 @@
 # Dokument wymagań produktu (PRD) - 10x Cards
 
 ## 1. Przegląd produktu
-10x Cards to webowa aplikacja do szybkiego generowania i zarządzania fiszkami edukacyjnymi opartymi na metodzie spaced repetition. Produkt ma uprościć tworzenie wysokiej jakości fiszek poprzez konwersję wklejonego tekstu na gotowe karty, umożliwić ręczne uzupełnienia oraz przekazać zatwierdzone materiały do biblioteki SRS opartej na gotowym algorytmie powtórek. System będzie dostępny dla wszystkich użytkowników (brak segmentacji) i ma zostać zbudowany w około sześć tygodni przez jednoosobowy zespół, dlatego priorytetem są funkcjonalności krytyczne dla pierwszych sesji nauki.
+10x Cards to webowa aplikacja do szybkiego generowania i zarządzania fiszkami edukacyjnymi opartymi na metodzie spaced repetition. Produkt ma uprościć tworzenie wysokiej jakości fiszek poprzez konwersję wklejonego tekstu na gotowe karty, umożliwić ręczne uzupełnienia oraz przekazać zatwierdzone materiały do biblioteki SRS opartej na gotowym algorytmie powtórek. 
 
 ## 2. Problem użytkownika
 - Manualne pisanie rozbudowanych fiszek jest czasochłonne i zniechęca do systematycznych powtórek.
