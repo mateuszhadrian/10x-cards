@@ -98,7 +98,7 @@ Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze wz
 ## 6. Metryki sukcesu
 
 - 75% generowanych fiszek przez AI musi być akceptowanych przez użytkowników.
-- Co najmniej 75% fiszek tworzonych przez użytkowników musi pochodzić z generacji AI.
+- Co najmniej 75% zaakceptowanych fiszek w sesji powinno pochodzić z generacji AI (ai_full lub ai_edited) w stosunku do wszystkich zaakceptowanych fiszek.
 - Średni czas recenzji fiszek powinien być optymalny, aby zapewnić płynność procesu nauki.
 - Walidacja wejściowego tekstu i limitów ilościowych musi być przestrzegana na wszystkich warstwach aplikacji (UI, API, RLS).
 
