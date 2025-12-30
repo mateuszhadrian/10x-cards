@@ -6,7 +6,7 @@ Produkt 10x-cards to aplikacja webowa umożliwiająca automatyczne generowanie f
 
 ## 2. Problem użytkownika
 
-Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze względu na wysoki nakład pracy i czasochłonność. Brak efektywnego procesu generowania fiszek obniża motywację do nauki i korzystania z metody spaced repetition. Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, umożliwiając szybsze i bardziej efektywne uczenie się.
+Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze względu na czasochłonność oraz brak umiejętności stworzenia wielu skutecznych fiszek (czyli takich, które umozliwią skuteczną naukę). Brak efektywnego procesu generowania fiszek obniża motywację do nauki i korzystania z metody spaced repetition. Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, umożliwiając szybsze i bardziej efektywne uczenie się. 
 
 ## 3. Wymagania funkcjonalne
 
