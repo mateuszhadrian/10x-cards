@@ -10,11 +10,15 @@ import node from "@astrojs/node";
 export default defineConfig({
   output: "server",
   integrations: [react(), sitemap()],
-  server: { port: 3000 },
+  server: { port: 4321 },
   vite: {
     plugins: [tailwindcss()],
   },
   adapter: node({
     mode: "standalone",
   }),
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "hover",
+  },
 });

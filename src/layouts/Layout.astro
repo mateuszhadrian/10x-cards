@@ -1,25 +1,70 @@
 ---
 // This is the main layout for the 10x-cards application
-import ThemeToggle from "../components/ThemeToggle";
+import { ViewTransitions } from "astro:transitions";
+import { NavigationBar } from "../components/NavigationBar";
+import { Toaster } from "../components/ui/sonner";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 interface Props {
   title?: string;
 }
 
 const { title = "10x Cards" } = Astro.props;
+
+// Get current path for active navigation link
+const currentPath = Astro.url.pathname;
+
+// Mock user status - will be replaced with Supabase auth later
+// For now, simulate authenticated user
+const userStatus = "authenticated" as const;
 ---
 
 <!doctype html>
-<html lang="pl" class="dark">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Apple Human Interface Guidelines - System Fonts -->
     <link rel="stylesheet" href="/src/styles/global.css" />
+    <ViewTransitions />
     <title>{title}</title>
+    <!-- Critical: Theme script MUST be in head and run before body renders -->
+    <script is:inline>
+      // Apply theme immediately on page load (use IIFE to avoid variable conflicts)
+      (function() {
+        const applyTheme = () => {
+          const savedTheme = localStorage.getItem("theme") || "dark";
+          if (savedTheme === "dark") {
+            document.documentElement.classList.add("dark");
+          } else {
+            document.documentElement.classList.remove("dark");
+          }
+        };
+
+        // Apply on initial load
+        applyTheme();
+
+        // Preserve theme during Astro View Transitions
+        // Remove existing listener if any to avoid duplicates
+        const handleBeforeSwap = (ev) => {
+          const savedTheme = localStorage.getItem("theme") || "dark";
+          if (savedTheme === "dark") {
+            ev.newDocument.documentElement.classList.add("dark");
+          } else {
+            ev.newDocument.documentElement.classList.remove("dark");
+          }
+        };
+
+        document.removeEventListener("astro:before-swap", handleBeforeSwap);
+        document.addEventListener("astro:before-swap", handleBeforeSwap);
+      })();
+    </script>
   </head>
   <body class="min-h-screen bg-background text-foreground font-sans antialiased">
-    <ThemeToggle client:only="react" />
-    <slot />
+    <NavigationBar client:only="react" currentPath={currentPath} userStatus={userStatus} />
+    <Toaster client:only="react" transition:persist />
+    <main transition:animate="fade">
+      <slot />
+    </main>
   </body>
 </html>

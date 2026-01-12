@@ -77,7 +77,14 @@ export default function FlashcardReviewItem({
                 <Button variant="outline" size="sm" onClick={handleStartEdit}>
                   Edit
                 </Button>
-                <Button variant="destructive" size="sm" onClick={() => onReject(index)}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onReject(index);
+                  }}
+                >
                   Reject
                 </Button>
               </div>

@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
+export function ThemeToggleInline() {
+  const [theme, setTheme] = useState<"light" | "dark" | null>(null);
 
   useEffect(() => {
-    // Check for saved theme preference or default to 'dark'
+    // Sync state with localStorage and DOM on mount
     const savedTheme = localStorage.getItem("theme") as "light" | "dark" | null;
-    const initialTheme = savedTheme || "dark";
-    setTheme(initialTheme);
+    const actualTheme = savedTheme || "dark";
+    setTheme(actualTheme);
 
-    // Apply theme to html element
-    if (initialTheme === "dark") {
+    // Ensure DOM is in sync with localStorage
+    if (actualTheme === "dark") {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
@@ -19,6 +19,8 @@ export default function ThemeToggle() {
   }, []);
 
   const toggleTheme = () => {
+    if (!theme) return; // Don't toggle before hydration
+
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
 
@@ -33,19 +35,41 @@ export default function ThemeToggle() {
     }
   };
 
+  // Don't render icon until theme is determined
+  if (!theme) {
+    return (
+      <Button variant="ghost" size="icon" disabled className="h-9 w-9 rounded-md" aria-label="Loading theme">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="opacity-0"
+        >
+          <circle cx="12" cy="12" r="4" />
+        </svg>
+      </Button>
+    );
+  }
+
   return (
     <Button
-      variant="outline"
+      variant="ghost"
       size="icon"
       onClick={toggleTheme}
-      className="fixed bottom-4 right-4 z-50 h-10 w-10 rounded-full border-border bg-background shadow-lg hover:bg-accent transition-colors"
+      className="h-9 w-9 rounded-md transition-colors"
       aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
     >
       {theme === "light" ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -58,8 +82,8 @@ export default function ThemeToggle() {
       ) : (
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width="18"
+          height="18"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

@@ -29,9 +29,9 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 
 ### Widok Listy Fiszek
 - **Ścieżka widoku:** `/flashcards`
-- **Główny cel:** Umożliwić przegląd, edycję i usuwanie zapisanych fiszek.
-- **Kluczowe informacje do wyświetlenia:** Lista fiszek (pola front, back, źródło), opcje edycji/usuwania, paginacja oraz możliwość szczegółowej edycji poprzez modal.
-- **Kluczowe komponenty widoku:** Tabela lub lista fiszek, modal do edycji, przyciski akcji, mechanizm paginacji.
+- **Główny cel:** Umożliwić przegląd i usuwanie zapisanych fiszek.
+- **Kluczowe informacje do wyświetlenia:** Lista fiszek (pola front, back, źródło), opcje usuwania, paginacja.
+- **Kluczowe komponenty widoku:** Tabela lub lista fiszek, przyciski akcji, mechanizm paginacji.
 - **UX, dostępność i bezpieczeństwo:** Łatwa nawigacja, potwierdzenie akcji (np. usunięcia), czytelne oznaczenia przycisków, zgodność z wytycznymi dostępności.
 
 ### Widok Panelu Użytkownika
@@ -61,11 +61,19 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 
 ## 4. Układ i struktura nawigacji
 
-- **Główne menu:** Umieszczone jako górne menu, zawiera linki do widoków: Generowanie fiszek, Lista fiszek, Panel użytkownika, Sesje nauki.
-- **Przekierowania:** Po zalogowaniu/rejestracji użytkownik jest automatycznie przenoszony do widoku generowania fiszek.
-- **Breadcrumbs:** Umożliwiają łatwe poruszanie się po szczegółowych widokach, np. podczas edycji fiszki w modalach.
-- **Responsywność:** Menu oraz nawigacja automatycznie dostosowują się do urządzeń mobilnych (np. hamburger menu).
-- **Dostępność:** Wszystkie elementy nawigacyjne posiadają odpowiednie etykiety oraz wsparcie dla urządzeń asystujących.
+Nawigacja aplikacji zostanie umieszczona na górze ekranu i będzie miała charakter "sticky" na urządzeniach desktopowych, dzięki czemu zawsze pozostanie widoczna podczas przewijania. Na urządzeniach mobilnych nawigacja przekształci się w hamburger menu, umożliwiające oszczędność miejsca, z możliwością rozwinięcia po kliknięciu.
+
+- **Lewa strona nawigacji (dla zalogowanego użytkownika):**
+  - **Home:** Link do widoku `@src/components/Welcome.astro`
+  - **Generate:** Link do widoku `@src/pages/generate.astro`
+  - **Flashcards:** Link do widoku `@src/pages/flashcards.astro`
+  - **Learning Sessions:** Element nieaktywny (funkcjonalność w budowie)
+  - **User Profile:** Element nieaktywny (funkcjonalność w budowie)
+- **Prawa strona nawigacji:**
+  - Przycisk logowania oraz przyciski rejestracji lub wylogowywania, w zależności od stanu autoryzacji użytkownika.
+- **Dodatkowe cechy:**
+  - Na desktopie, pasek nawigacji jest "sticky" u góry ekranu.
+  - Na urządzeniach mobilnych, nawigacja jest dostępna poprzez hamburger menu, które po kliknięciu rozwija pełną listę opcji nawigacyjnych.
 
 ## 5. Kluczowe komponenty
 

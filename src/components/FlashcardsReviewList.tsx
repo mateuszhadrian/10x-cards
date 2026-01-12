@@ -26,7 +26,15 @@ export default function FlashcardsReviewList({
   };
 
   const handleReject = (index: number) => {
+    // Save current scroll position before removing
+    const scrollPosition = window.scrollY;
+    
     onFlashcardRemove(index);
+    
+    // Restore scroll position after React re-renders
+    requestAnimationFrame(() => {
+      window.scrollTo(0, scrollPosition);
+    });
   };
 
   if (flashcards.length === 0) {
@@ -41,7 +49,7 @@ export default function FlashcardsReviewList({
     <div className="space-y-4">
       {flashcards.map((flashcard, index) => (
         <FlashcardReviewItem
-          key={index}
+          key={`${flashcard.front}-${index}`}
           flashcard={flashcard}
           index={index}
           onAcceptChange={handleAcceptChange}

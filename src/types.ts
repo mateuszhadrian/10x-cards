@@ -110,3 +110,22 @@ export interface CreateFlashcardsCommandViewModelDTO {
   accepted: boolean; // Determines if flashcard should be saved in bulk-save
   edited: boolean; // Tracks if user modified the flashcard
 }
+
+// ===== NAVIGATION TYPES =====
+
+// Navigation link model
+export interface NavLink {
+  label: string;
+  path: string;
+  isActive?: boolean;
+  isDisabled?: boolean;
+}
+
+// User status for navigation
+export type UserStatus = "authenticated" | "unauthenticated" | "loading";
+
+// Navigation props
+export interface NavigationProps {
+  currentPath: string;
+  userStatus: UserStatus;
+}

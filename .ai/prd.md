@@ -6,7 +6,9 @@ Produkt 10x-cards to aplikacja webowa umożliwiająca automatyczne generowanie f
 
 ## 2. Problem użytkownika
 
-Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze względu na czasochłonność oraz brak umiejętności stworzenia wielu skutecznych fiszek (czyli takich, które umozliwią skuteczną naukę). Brak efektywnego procesu generowania fiszek obniża motywację do nauki i korzystania z metody spaced repetition. Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, umożliwiając szybsze i bardziej efektywne uczenie się. 
+Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze względu na czasochłonność oraz brak umiejętności stworzenia wielu skutecznych fiszek (czyli takich, które umozliwią skuteczną naukę). Brak efektywnego procesu generowania fiszek obniża motywację do nauki i korzystania z metody spaced repetition. 
+
+Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, umożliwiając szybsze i bardziej efektywne uczenie się.
 
 ## 3. Wymagania funkcjonalne
 
@@ -35,7 +37,7 @@ Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze wz
 
 5. Walidacja wejściowego tekstu:
    - Tekst musi mieć od 1000 do 10000 znaków.
-   - Walidacja odbywa się na poziomie interfejsu użytkownika, API i poprzez zasady RLS w bazie danych.
+   - Walidacja odbywa się na poziomie interfejsu użytkownika, API oraz przez zasady RLS w bazie danych.
 
 ## 4. Granice produktu
 
@@ -55,6 +57,11 @@ Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze wz
 - Kryteria akceptacji:
   - Użytkownik musi móc zarejestrować i zalogować się przy użyciu email i hasła.
   - Uwierzytelnianie odbywa się zgodnie z mechanizmem Supabase.
+  - Logowanie i rejestracja powinna odbywać się na osobnych stronach '/login', '/register'
+  - Wszystkie właściwe funkcje aplikacji są dostępne dla użytkownika dopiero po zalogowaniu (bez logowania dostępna jest tylko strona pod url '/' gdzie jest na środku nazwa aplikacji i pod spodem linki - LOGIN, REGISTER).
+  - Użytkownik może się logować poprzez przycisk w prawym górnym rogu.
+  - Użytkownik może się wylogować poprzez przycisk w prawym górnym rogu.
+  - Odzyskiwanie hasła powinno być możliwe.
   - Nie dopuszcza się logowania społecznościowego.
 
 ### US-002: Walidacja wejściowego tekstu
@@ -70,7 +77,8 @@ Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze wz
 - Kryteria akceptacji:
   - AI generuje minimalnie 1 i maksymalnie 30 fiszek na jedno żądanie.
   - Każda fiszka zawiera pola 'front' (1-200 znaków), 'back' (1-500 znaków), 'source' oraz metadane (id, created_at, updated_at, generation_id, user_id).
-  - W przypadku braku wygenerowanych fiszek system wyświetla komunikat Nie udało się wygenerować fiszek.
+  - W przypadku braku wygenerowanych fiszek system wyświetla komunikat "Nie udało się wygenerować fiszek".
+  - Funkcjonalność nie jest dostępna bez logowania się do systemu.
 
 ### US-004: Ręczne tworzenie fiszek
 - Tytuł: Manualne dodawanie fiszek
@@ -89,11 +97,27 @@ Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze wz
   - Po zatwierdzeniu, edycja fiszki nie jest już dostępna.
 
 ### US-006: Zarządzanie fiszkami
-- Tytuł: Przeglądanie i zarządzanie zapisanmi fiszkami
+- Tytuł: Przeglądanie i zarządzanie zapisanymi fiszkami
 - Opis: Użytkownik przegląda wszystkie zapisane fiszki w globalnej liście oraz ma możliwość ich usunięcia, jeśli zajdzie taka potrzeba.
 - Kryteria akceptacji:
   - Użytkownik widzi listę wszystkich swoich fiszek.
-  - Użytkownik może usunąć fiszkę, co powoduje natychmiastowe jej usunięcie z bazy danych.
+  - Użytkownik może usunąć fiszkę z bazy danych (soft delete).
+
+### US-007: Nawigacja po aplikacji
+- Tytuł: Poruszanie się po interfejsie nawigacyjnym
+- Opis: Użytkownik korzysta z górnej nawigacji, która na desktopie jest sticky, a na urządzeniach mobilnych zamienia się w hamburger menu. Lewa sekcja nawigacji zawiera linki do widoków: 
+  - Home (prowadzi do widoku `@src/components/Welcome.astro`),
+  - Generate (prowadzi do widoku `@src/pages/generate.astro`),
+  - Flashcards (prowadzi do widoku `@src/pages/flashcards.astro`),
+  - Learning Sessions (element nieaktywny, funkcjonalność w budowie),
+  - User Profile (element nieaktywny, funkcjonalność w budowie).
+
+  Prawa sekcja zawiera przyciski logowania, rejestracji lub wylogowywania w zależności od statusu autoryzacji użytkownika.
+- Kryteria akceptacji:
+  - Pasek nawigacji jest sticky na desktopie i zawsze widoczny.
+  - Na urządzeniach mobilnych, nawigacja jest dostępna jako hamburger menu, które rozwija pełną listę opcji po kliknięciu.
+  - Lewa sekcja zawiera wymienione linki, a elementy Learning Sessions i User Profile są widoczne jako nieaktywne.
+  - Prawa sekcja dynamicznie zmienia przyciski w zależności od tego, czy użytkownik jest zalogowany, czy nie.
 
 ## 6. Metryki sukcesu
 
@@ -101,4 +125,3 @@ Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze wz
 - Co najmniej 75% zaakceptowanych fiszek w sesji powinno pochodzić z generacji AI (ai_full lub ai_edited) w stosunku do wszystkich zaakceptowanych fiszek.
 - Średni czas recenzji fiszek powinien być optymalny, aby zapewnić płynność procesu nauki.
 - Walidacja wejściowego tekstu i limitów ilościowych musi być przestrzegana na wszystkich warstwach aplikacji (UI, API, RLS).
-

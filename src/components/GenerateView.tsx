@@ -19,6 +19,7 @@ export default function GenerateView() {
   const [generationId, setGenerationId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const flashcardsRef = useRef<HTMLDivElement>(null);
+  const hasScrolledToFlashcards = useRef(false);
 
   // Validation
   const textLength = inputText.length;
@@ -71,6 +72,7 @@ export default function GenerateView() {
 
       setFlashcards(viewModelFlashcards);
       setGenerationId(data.generation.id);
+      hasScrolledToFlashcards.current = false; // Reset flag so we can scroll to new generation
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
       setError(errorMessage);
@@ -96,6 +98,7 @@ export default function GenerateView() {
     setFlashcards([]);
     setGenerationId(null);
     setInputText("");
+    hasScrolledToFlashcards.current = false; // Reset for next generation
   };
 
   const handleSaveError = (errorMessage: string) => {
@@ -111,9 +114,10 @@ export default function GenerateView() {
     setFlashcards((prevFlashcards) => prevFlashcards.map((flashcard) => ({ ...flashcard, accepted: false })));
   };
 
-  // Auto-scroll to flashcards section after generation
+  // Auto-scroll to flashcards section after generation (only once per generation)
   useEffect(() => {
-    if (flashcards.length > 0 && flashcardsRef.current) {
+    if (flashcards.length > 0 && flashcardsRef.current && !hasScrolledToFlashcards.current) {
+      hasScrolledToFlashcards.current = true;
       setTimeout(() => {
         flashcardsRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);

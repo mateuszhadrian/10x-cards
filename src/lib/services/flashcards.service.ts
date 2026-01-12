@@ -102,3 +102,123 @@ export async function createFlashcards(
     flashcards: createdFlashcards,
   };
 }
+
+/**
+ * Input parameters for listing flashcards.
+ */
+export interface ListFlashcardsInput {
+  page: number;
+  limit: number;
+  is_deleted?: boolean;
+  search?: string;
+}
+
+/**
+ * Result of the list flashcards operation.
+ */
+export interface ListFlashcardsResult {
+  flashcards: FlashcardRow[];
+  total: number;
+  page: number;
+  limit: number;
+}
+
+/**
+ * Lists flashcards for the user with pagination and optional filters.
+ *
+ * This function:
+ * 1. Builds a query with pagination (page, limit)
+ * 2. Applies optional filters (is_deleted, search by front text)
+ * 3. Returns flashcards and pagination metadata
+ *
+ * @param supabase - Supabase client instance
+ * @param params - Pagination and filter parameters
+ * @returns Result containing flashcards and pagination metadata
+ * @throws Error if database operation fails
+ */
+export async function listFlashcards(
+  supabase: SupabaseClient,
+  params: ListFlashcardsInput
+): Promise<ListFlashcardsResult> {
+  const { page, limit, is_deleted, search } = params;
+
+  // Calculate offset for pagination
+  const offset = (page - 1) * limit;
+
+  // Build the base query
+  let query = supabase.from("flashcards").select("*", { count: "exact" }).eq("user_id", DEFAULT_USER_ID);
+
+  // Apply is_deleted filter if provided
+  if (is_deleted !== undefined) {
+    query = query.eq("is_deleted", is_deleted);
+  }
+
+  // Apply search filter if provided (case-insensitive search in front field)
+  if (search && search.trim() !== "") {
+    query = query.ilike("front", `%${search.trim()}%`);
+  }
+
+  // Apply pagination and ordering
+  query = query.order("created_at", { ascending: false }).range(offset, offset + limit - 1);
+
+  // Execute query
+  const { data: flashcards, error, count } = await query;
+
+  if (error) {
+    throw new Error(`Failed to list flashcards: ${error.message}`);
+  }
+
+  // Return results with pagination metadata
+  return {
+    flashcards: flashcards || [],
+    total: count || 0,
+    page,
+    limit,
+  };
+}
+
+/**
+ * Deletes a flashcard by marking it as deleted (soft delete).
+ *
+ * This function:
+ * 1. Verifies the flashcard exists and belongs to the user
+ * 2. Marks the flashcard as deleted (is_deleted = true)
+ * 3. Returns success status
+ *
+ * @param supabase - Supabase client instance
+ * @param id - ID of the flashcard to delete
+ * @returns True if deletion was successful
+ * @throws Error if flashcard not found or database operation fails
+ */
+export async function deleteFlashcard(supabase: SupabaseClient, id: number): Promise<boolean> {
+  // Step 1: Verify flashcard exists and belongs to the user
+  const { data: existingFlashcard, error: fetchError } = await supabase
+    .from("flashcards")
+    .select("id, user_id, is_deleted")
+    .eq("id", id)
+    .eq("user_id", DEFAULT_USER_ID)
+    .single();
+
+  if (fetchError || !existingFlashcard) {
+    throw new Error(`Flashcard with id ${id} not found`);
+  }
+
+  // Check if flashcard is already deleted
+  if (existingFlashcard.is_deleted) {
+    throw new Error(`Flashcard with id ${id} is already deleted`);
+  }
+
+  // Step 2: Mark flashcard as deleted (soft delete)
+  const { error: updateError } = await supabase
+    .from("flashcards")
+    .update({ is_deleted: true, updated_at: new Date().toISOString() })
+    .eq("id", id)
+    .eq("user_id", DEFAULT_USER_ID);
+
+  if (updateError) {
+    throw new Error(`Failed to delete flashcard: ${updateError.message}`);
+  }
+
+  // Step 3: Return success
+  return true;
+}

@@ -57,6 +57,11 @@ export default function FlashcardsBulkSaveButton({
 
       const data: CreateFlashcardsResponseDTO = await response.json();
       onSaveSuccess(data.flashcards.length);
+      
+      // Redirect to flashcards list after successful save
+      setTimeout(() => {
+        window.location.href = "/flashcards";
+      }, 1500); // Give user time to see success message
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "An unexpected error occurred";
       onSaveError(errorMessage);
