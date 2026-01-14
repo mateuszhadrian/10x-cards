@@ -19,6 +19,7 @@ export default function GenerateView() {
   const [generationId, setGenerationId] = useState<number | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const flashcardsRef = useRef<HTMLDivElement>(null);
+  const generateButtonRef = useRef<HTMLDivElement>(null);
   const hasScrolledToFlashcards = useRef(false);
 
   // Validation
@@ -36,6 +37,11 @@ export default function GenerateView() {
 
   const handleGenerate = async () => {
     if (!isValidLength) return;
+
+    // Scroll to button section at the top
+    setTimeout(() => {
+      generateButtonRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
 
     setIsGenerating(true);
     setError(null);
@@ -135,7 +141,7 @@ export default function GenerateView() {
   }, [successMessage]);
 
   return (
-    <div className="container mx-auto max-w-4xl px-4 py-8">
+    <div className="container mx-auto max-w-4xl px-4 py-4">
       <div className="space-y-8">
         {/* Header */}
         <div>
@@ -157,7 +163,7 @@ export default function GenerateView() {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               disabled={isGenerating}
-              className="min-h-[300px] resize-y bg-background text-foreground border-border"
+              className="h-[300px] resize-none overflow-y-auto bg-background text-foreground border-border"
             />
             <div className="flex items-center justify-between text-sm">
               <span className={getCharCountColor()}>
@@ -176,9 +182,11 @@ export default function GenerateView() {
             </div>
           </div>
 
-          <Button onClick={handleGenerate} disabled={isGenerateDisabled} className="w-full sm:w-auto">
-            {isGenerating ? "Generating..." : "Generate Flashcards"}
-          </Button>
+          <div ref={generateButtonRef} className="scroll-mt-4">
+            <Button onClick={handleGenerate} disabled={isGenerateDisabled} className="w-full sm:w-auto">
+              {isGenerating ? "Generating..." : "Generate Flashcards"}
+            </Button>
+          </div>
         </div>
 
         {/* Loading State */}

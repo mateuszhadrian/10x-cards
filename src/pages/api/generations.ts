@@ -50,8 +50,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { input_text } = validationResult.data;
 
-    // Get Supabase client from context
+    // Get Supabase client and user from context
     const supabase = locals.supabase;
+    const user = locals.user;
 
     if (!supabase) {
       return new Response(
@@ -67,8 +68,22 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          error: "User not authenticated",
+        }),
+        {
+          status: 401,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     // Call generation service to initiate the generation process
-    const result = await initiateGeneration(supabase, input_text);
+    const result = await initiateGeneration(supabase, user.id, input_text);
 
     // Return successful response with generation data and flashcard proposals
     const response: GenerationResponseDTO = {

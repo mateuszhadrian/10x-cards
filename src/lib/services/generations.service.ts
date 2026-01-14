@@ -1,7 +1,6 @@
 import { createHash } from "crypto";
 import type { SupabaseClient } from "../../db/supabase.client";
 import type { Database } from "../../db/database.types";
-import { DEFAULT_USER_ID } from "../../db/supabase.client";
 import { createOpenRouterService, type ResponseFormat } from "./openrouter.service";
 
 type GenerationRow = Database["public"]["Tables"]["generations"]["Row"];
@@ -122,11 +121,12 @@ async function aiGenerateFlashcards(inputText: string): Promise<{ front: string;
  * 4. Logs errors to generations_errors table if the AI service fails
  *
  * @param supabase - Supabase client instance
+ * @param userId - The ID of the authenticated user
  * @param inputText - The input text to generate flashcards from (1000-10000 chars)
  * @returns Generation result with generation record and flashcard proposals
  * @throws Error if generation fails or no flashcards are generated
  */
-export async function initiateGeneration(supabase: SupabaseClient, inputText: string): Promise<GenerationResult> {
+export async function initiateGeneration(supabase: SupabaseClient, userId: string, inputText: string): Promise<GenerationResult> {
   const startTime = Date.now();
 
   // Generate hash of the input text for deduplication (checksum)
@@ -136,7 +136,7 @@ export async function initiateGeneration(supabase: SupabaseClient, inputText: st
   const { data: generation, error: generationError } = await supabase
     .from("generations")
     .insert({
-      user_id: DEFAULT_USER_ID,
+      user_id: userId,
       model: "openai/gpt-4o-mini", // OpenRouter model
       source_text_length: inputText.length,
       source_text_hash: textHash,
@@ -172,7 +172,7 @@ export async function initiateGeneration(supabase: SupabaseClient, inputText: st
       back: card.back,
       source: "ai-full" as const,
       generation_id: generation.id,
-      user_id: DEFAULT_USER_ID,
+      user_id: userId,
       is_deleted: false,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
@@ -205,15 +205,15 @@ export async function initiateGeneration(supabase: SupabaseClient, inputText: st
     const errorMessage = error instanceof Error ? error.message : "Unknown error";
     const errorDetails = error instanceof Error ? error.stack : String(error);
 
+    // Build detailed error message including stack trace if available
+    const fullErrorMessage = errorDetails 
+      ? `${errorMessage}\n\nStack trace:\n${errorDetails}`
+      : errorMessage;
+
     const { error: logError } = await supabase.from("generations_errors").insert({
       generation_id: generation.id,
-      error_type: "ai_service_error",
-      error_message: errorMessage,
-      error_details: {
-        message: errorMessage,
-        stack: errorDetails,
-        timestamp: new Date().toISOString(),
-      },
+      error_message: fullErrorMessage,
+      model: "openai/gpt-4o-mini",
     });
 
     if (logError) {

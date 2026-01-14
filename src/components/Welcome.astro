@@ -1,21 +1,51 @@
-<div class="min-h-screen flex items-center justify-center bg-background">
+---
+// Get user status from Astro.locals (injected by middleware)
+const user = Astro.locals.user;
+---
+
+<div class="h-full flex items-center justify-center bg-background">
   <div class="container mx-auto max-w-2xl px-4 py-8">
     <div class="text-center space-y-6">
       <h1 class="text-4xl font-bold tracking-tight text-foreground">10x Cards</h1>
-      <div class="pt-4">
-        <a
-          href="/login"
-          class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-10 px-6"
-        >
-          Login
-        </a>
-        <a
-          href="/register"
-          class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-10 px-6"
-        >
-          Register
-        </a>
-      </div>
+
+      {
+        user ? (
+          <div class="pt-4 space-y-4">
+            <p class="text-muted-foreground">Welcome back, {user.email}!</p>
+            <div class="flex gap-3 justify-center">
+              <a
+                href="/generate"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-10 px-6"
+              >
+                Generate Flashcards
+              </a>
+              <a
+                href="/flashcards"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all border border-border bg-background hover:bg-accent hover:text-accent-foreground h-10 px-6"
+              >
+                My Flashcards
+              </a>
+            </div>
+          </div>
+        ) : (
+          <div class="pt-4">
+            <div class="flex gap-3 justify-center">
+              <a
+                href="/login"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all border border-border bg-background hover:bg-accent hover:text-accent-foreground h-10 px-6"
+              >
+                Login
+              </a>
+              <a
+                href="/register"
+                class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-all bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-10 px-6"
+              >
+                Sign Up
+              </a>
+            </div>
+          </div>
+        )
+      }
     </div>
   </div>
 </div>

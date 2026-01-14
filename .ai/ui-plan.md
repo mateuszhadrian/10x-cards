@@ -27,6 +27,14 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 - **Kluczowe komponenty widoku:** Edytor tekstu, moduł walidacji, lista fiszek z opcjami zatwierdzania, edycji i odrzucenia, przycisk do zbiorczego zatwierdzania.
 - **UX, dostępność i bezpieczeństwo:** Dynamiczna walidacja, responsywny design, szybka informacja zwrotna oraz ograniczenie widoczności danych do bieżącego użytkownika.
 
+
+### Widok Ręcznego Dodawania Fiszek
+- **Ścieżka widoku:** `/add-manually`
+- **Główny cel:** Pozwolić użytkownikowi ręcznie dodać fiszki bez wsparcia AI.
+- **Kluczowe informacje do wyświetlenia:** Formularz umożliwiający wprowadzenie treści fiszki (np. pola front i back) oraz opcjonalne metadane.
+- **Kluczowe komponenty widoku:** Formularz z polami input, przyciski zapisu, moduł walidacji oraz mechanizmy zapisu danych.
+- **UX, dostępność i bezpieczeństwo:** Natychmiastowa walidacja danych, przyjazny i responsywny interfejs, oraz komunikaty błędów. Widok korzysta z tego samego endpointa co widok generowania fiszek, jednak wysyłany parametr `source` ma wartość `manual` zamiast `ai-full` lub `ai-edited`.
+
 ### Widok Listy Fiszek
 - **Ścieżka widoku:** `/flashcards`
 - **Główny cel:** Umożliwić przegląd i usuwanie zapisanych fiszek.

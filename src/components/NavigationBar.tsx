@@ -7,7 +7,7 @@ import { HamburgerMenu } from "./HamburgerMenu";
 import { ThemeToggleInline } from "./ThemeToggleInline";
 import type { NavigationProps, NavLink } from "@/types";
 
-export function NavigationBar({ currentPath, userStatus }: NavigationProps) {
+export function NavigationBar({ currentPath, userStatus, userEmail }: NavigationProps) {
   const { isMobile } = useWindowSize();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -23,6 +23,12 @@ export function NavigationBar({ currentPath, userStatus }: NavigationProps) {
       label: "Generate",
       path: "/generate",
       isActive: currentPath === "/generate",
+      isDisabled: false,
+    },
+    {
+      label: "Add",
+      path: "/add-manually",
+      isActive: currentPath === "/add-manually",
       isDisabled: false,
     },
     {
@@ -45,23 +51,41 @@ export function NavigationBar({ currentPath, userStatus }: NavigationProps) {
     },
   ], [currentPath]);
 
-  // Mock handlers for auth actions (will be implemented with Supabase later)
+  // Auth action handlers
   const handleLogin = useCallback(() => {
-    toast.info("Login feature coming soon", {
-      description: "Supabase Auth integration in progress",
-    });
+    window.location.href = "/login";
   }, []);
 
   const handleRegister = useCallback(() => {
-    toast.info("Registration feature coming soon", {
-      description: "Supabase Auth integration in progress",
-    });
+    window.location.href = "/register";
   }, []);
 
-  const handleLogout = useCallback(() => {
-    toast.success("Logged out successfully", {
-      description: "See you later!",
-    });
+  const handleLogout = useCallback(async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Logout failed");
+      }
+
+      toast.success("Logged out successfully", {
+        description: "See you later!",
+      });
+
+      // Redirect to home page after logout
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 500);
+    } catch (error) {
+      toast.error("Logout failed", {
+        description: "Please try again",
+      });
+    }
   }, []);
 
   return (
@@ -74,9 +98,9 @@ export function NavigationBar({ currentPath, userStatus }: NavigationProps) {
       role="banner"
     >
       <div className="container mx-auto px-4 h-16 flex items-center gap-8">
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - Only show for authenticated users */}
         <div className="flex items-center">
-          {!isMobile && <LeftNavigation links={navLinks} />}
+          {!isMobile && userStatus === "authenticated" && <LeftNavigation links={navLinks} />}
         </div>
 
         {/* Right Side Navigation */}
@@ -85,6 +109,7 @@ export function NavigationBar({ currentPath, userStatus }: NavigationProps) {
           {!isMobile && (
             <RightNavigation
               userStatus={userStatus}
+              userEmail={userEmail}
               onLoginClick={handleLogin}
               onRegisterClick={handleRegister}
               onLogoutClick={handleLogout}
@@ -97,6 +122,7 @@ export function NavigationBar({ currentPath, userStatus }: NavigationProps) {
             <HamburgerMenu
               links={navLinks}
               userStatus={userStatus}
+              userEmail={userEmail}
               onLoginClick={handleLogin}
               onRegisterClick={handleRegister}
               onLogoutClick={handleLogout}

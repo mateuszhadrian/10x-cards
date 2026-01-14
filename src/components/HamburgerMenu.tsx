@@ -7,6 +7,7 @@ import type { NavLink, UserStatus } from "@/types";
 interface HamburgerMenuProps {
   links: NavLink[];
   userStatus: UserStatus;
+  userEmail?: string | null;
   onLoginClick?: () => void;
   onRegisterClick?: () => void;
   onLogoutClick?: () => void;
@@ -17,6 +18,7 @@ interface HamburgerMenuProps {
 export const HamburgerMenu = memo(function HamburgerMenu({
   links,
   userStatus,
+  userEmail,
   onLoginClick,
   onRegisterClick,
   onLogoutClick,
@@ -100,9 +102,13 @@ export const HamburgerMenu = memo(function HamburgerMenu({
           className="absolute top-full left-0 right-0 max-h-[calc(100vh-4rem)] bg-background border-b border-border shadow-lg z-50 overflow-y-auto"
         >
           <div className="container mx-auto px-4 pt-4 pb-16 flex flex-col gap-2">
-            <LeftNavigation links={links} isMobile onLinkClick={handleLinkClick} />
+            {/* Only show navigation links for authenticated users */}
+            {userStatus === "authenticated" && (
+              <LeftNavigation links={links} isMobile onLinkClick={handleLinkClick} />
+            )}
             <RightNavigation
               userStatus={userStatus}
+              userEmail={userEmail}
               isMobile
               themeToggle={themeToggle}
               onLoginClick={() => {

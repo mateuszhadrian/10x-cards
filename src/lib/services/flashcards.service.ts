@@ -1,6 +1,5 @@
 import type { SupabaseClient } from "../../db/supabase.client";
 import type { Database } from "../../db/database.types";
-import { DEFAULT_USER_ID } from "../../db/supabase.client";
 import type { FlashcardSource } from "../../types";
 
 type FlashcardRow = Database["public"]["Tables"]["flashcards"]["Row"];
@@ -28,16 +27,17 @@ export interface CreateFlashcardsResult {
  * This is important to ensure data integrity when creating AI-sourced flashcards.
  *
  * @param supabase - Supabase client instance
+ * @param userId - The ID of the authenticated user
  * @param generationId - The generation ID to verify
  * @returns True if the generation exists, throws an error otherwise
  * @throws Error if the generation doesn't exist
  */
-async function verifyGenerationExists(supabase: SupabaseClient, generationId: number): Promise<boolean> {
+async function verifyGenerationExists(supabase: SupabaseClient, userId: string, generationId: number): Promise<boolean> {
   const { data: generation, error } = await supabase
     .from("generations")
     .select("id")
     .eq("id", generationId)
-    .eq("user_id", DEFAULT_USER_ID)
+    .eq("user_id", userId)
     .single();
 
   if (error || !generation) {
@@ -56,12 +56,14 @@ async function verifyGenerationExists(supabase: SupabaseClient, generationId: nu
  * 3. Returns the created flashcard records
  *
  * @param supabase - Supabase client instance
+ * @param userId - The ID of the authenticated user
  * @param flashcards - Array of flashcards to create
  * @returns Result containing the created flashcard records
  * @throws Error if validation fails or database operation fails
  */
 export async function createFlashcards(
   supabase: SupabaseClient,
+  userId: string,
   flashcards: CreateFlashcardInput[]
 ): Promise<CreateFlashcardsResult> {
   // Step 1: Validate all AI-sourced flashcards have valid generation_ids
@@ -75,7 +77,7 @@ export async function createFlashcards(
 
   // Verify each unique generation_id exists
   for (const generationId of uniqueGenerationIds) {
-    await verifyGenerationExists(supabase, generationId);
+    await verifyGenerationExists(supabase, userId, generationId);
   }
 
   // Step 2: Prepare flashcard records for insertion
@@ -84,7 +86,7 @@ export async function createFlashcards(
     back: flashcard.back,
     source: flashcard.source,
     generation_id: flashcard.generation_id,
-    user_id: DEFAULT_USER_ID,
+    user_id: userId,
   }));
 
   // Step 3: Perform bulk insert
@@ -132,12 +134,14 @@ export interface ListFlashcardsResult {
  * 3. Returns flashcards and pagination metadata
  *
  * @param supabase - Supabase client instance
+ * @param userId - The ID of the authenticated user
  * @param params - Pagination and filter parameters
  * @returns Result containing flashcards and pagination metadata
  * @throws Error if database operation fails
  */
 export async function listFlashcards(
   supabase: SupabaseClient,
+  userId: string,
   params: ListFlashcardsInput
 ): Promise<ListFlashcardsResult> {
   const { page, limit, is_deleted, search } = params;
@@ -146,7 +150,7 @@ export async function listFlashcards(
   const offset = (page - 1) * limit;
 
   // Build the base query
-  let query = supabase.from("flashcards").select("*", { count: "exact" }).eq("user_id", DEFAULT_USER_ID);
+  let query = supabase.from("flashcards").select("*", { count: "exact" }).eq("user_id", userId);
 
   // Apply is_deleted filter if provided
   if (is_deleted !== undefined) {
@@ -186,17 +190,18 @@ export async function listFlashcards(
  * 3. Returns success status
  *
  * @param supabase - Supabase client instance
+ * @param userId - The ID of the authenticated user
  * @param id - ID of the flashcard to delete
  * @returns True if deletion was successful
  * @throws Error if flashcard not found or database operation fails
  */
-export async function deleteFlashcard(supabase: SupabaseClient, id: number): Promise<boolean> {
+export async function deleteFlashcard(supabase: SupabaseClient, userId: string, id: number): Promise<boolean> {
   // Step 1: Verify flashcard exists and belongs to the user
   const { data: existingFlashcard, error: fetchError } = await supabase
     .from("flashcards")
     .select("id, user_id, is_deleted")
     .eq("id", id)
-    .eq("user_id", DEFAULT_USER_ID)
+    .eq("user_id", userId)
     .single();
 
   if (fetchError || !existingFlashcard) {
@@ -213,7 +218,7 @@ export async function deleteFlashcard(supabase: SupabaseClient, id: number): Pro
     .from("flashcards")
     .update({ is_deleted: true, updated_at: new Date().toISOString() })
     .eq("id", id)
-    .eq("user_id", DEFAULT_USER_ID);
+    .eq("user_id", userId);
 
   if (updateError) {
     throw new Error(`Failed to delete flashcard: ${updateError.message}`);

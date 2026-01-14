@@ -4,6 +4,7 @@ import type { UserStatus } from "@/types";
 
 interface RightNavigationProps {
   userStatus: UserStatus;
+  userEmail?: string | null;
   isMobile?: boolean;
   onLoginClick?: () => void;
   onRegisterClick?: () => void;
@@ -13,6 +14,7 @@ interface RightNavigationProps {
 
 export const RightNavigation = memo(function RightNavigation({
   userStatus,
+  userEmail,
   isMobile = false,
   onLoginClick,
   onRegisterClick,
@@ -41,6 +43,11 @@ export const RightNavigation = memo(function RightNavigation({
           <div className="flex justify-center pb-2">{themeToggle}</div>
         )}
         {!isMobile && themeToggle}
+        {userEmail && (
+          <span className="text-sm text-muted-foreground">
+            {userEmail}
+          </span>
+        )}
         <Button
           variant="outline"
           size={buttonSize}
@@ -72,7 +79,7 @@ export const RightNavigation = memo(function RightNavigation({
         onClick={onRegisterClick}
         className={isMobile ? "w-full justify-center" : ""}
       >
-        Register
+        Sign Up
       </Button>
     </div>
   );

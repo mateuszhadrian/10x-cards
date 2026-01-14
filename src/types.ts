@@ -128,4 +128,5 @@ export type UserStatus = "authenticated" | "unauthenticated" | "loading";
 export interface NavigationProps {
   currentPath: string;
   userStatus: UserStatus;
+  userEmail?: string | null;
 }

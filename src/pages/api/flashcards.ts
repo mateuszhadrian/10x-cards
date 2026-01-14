@@ -58,8 +58,9 @@ export const GET: APIRoute = async ({ url, locals }) => {
 
     const { page, limit, is_deleted, search } = validationResult.data;
 
-    // Get Supabase client from context
+    // Get Supabase client and user from context
     const supabase = locals.supabase;
+    const user = locals.user;
 
     if (!supabase) {
       return new Response(
@@ -75,8 +76,22 @@ export const GET: APIRoute = async ({ url, locals }) => {
       );
     }
 
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          error: "User not authenticated",
+        }),
+        {
+          status: 401,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     // Call flashcards service to list flashcards
-    const result = await listFlashcards(supabase, {
+    const result = await listFlashcards(supabase, user.id, {
       page,
       limit,
       is_deleted,
@@ -183,8 +198,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { flashcards } = validationResult.data;
 
-    // Get Supabase client from context
+    // Get Supabase client and user from context
     const supabase = locals.supabase;
+    const user = locals.user;
 
     if (!supabase) {
       return new Response(
@@ -200,8 +216,22 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          error: "User not authenticated",
+        }),
+        {
+          status: 401,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     // Call flashcards service to create the flashcards
-    const result = await createFlashcards(supabase, flashcards);
+    const result = await createFlashcards(supabase, user.id, flashcards);
 
     // Return successful response with created flashcards
     const response: CreateFlashcardsResponseDTO = {

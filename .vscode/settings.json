@@ -1,35 +1,16 @@
 {
-  "[typescript]": {
-    "editor.defaultFormatter": "denoland.vscode-deno"
+  // Traktuj pliki .mdc jak Markdown, aby podgląd działał
+  "files.associations": {
+    "*.mdc": "markdown"
   },
-  "deno.enablePaths": [
-    "supabase/functions"
-  ],
-  "deno.lint": true,
-  "deno.unstable": [
-    "bare-node-builtins",
-    "byonm",
-    "sloppy-imports",
-    "unsafe-proto",
-    "webgpu",
-    "broadcast-channel",
-    "worker-options",
-    "cron",
-    "kv",
-    "ffi",
-    "fs",
-    "http",
-    "net"
-  ],
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
-  },
-  "eslint.enable": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact",
-    "astro"
+
+  // Włącz renderowanie Mermaid w podglądzie Markdown
+  "markdown-mermaid.enabled": true,
+
+  // Rozszerz rozpoznawane identyfikatory języka (opcjonalnie)
+  "markdown-mermaid.languages": [
+    "mermaid",
+    "mmd",
+    "diagram"
   ]
 }

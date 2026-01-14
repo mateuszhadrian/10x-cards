@@ -1,0 +1,17 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import AddManuallyView from "@/components/AddManuallyView";
+
+// Get user session from middleware
+const user = Astro.locals.user;
+const isAuthenticated = !!user;
+
+// Redirect to login if not authenticated
+if (!isAuthenticated) {
+  return Astro.redirect("/login");
+}
+---
+
+<Layout title="Add Manually - 10x Cards">
+  <AddManuallyView client:load />
+</Layout>

@@ -1,0 +1,17 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import LoginForm from "@/components/auth/LoginForm";
+
+// Check if user is already logged in - redirect to generate
+// This is handled by middleware, but we add it here as additional safeguard
+const user = Astro.locals.user;
+if (user) {
+  return Astro.redirect('/generate');
+}
+---
+
+<Layout title="Sign In - 10x Cards">
+  <div class="min-h-[calc(100vh-64px)] flex items-center justify-center px-4 py-12 bg-background">
+    <LoginForm client:only="react" />
+  </div>
+</Layout>

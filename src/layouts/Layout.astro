@@ -3,7 +3,6 @@
 import { ViewTransitions } from "astro:transitions";
 import { NavigationBar } from "../components/NavigationBar";
 import { Toaster } from "../components/ui/sonner";
-import { ErrorBoundary } from "../components/ErrorBoundary";
 
 interface Props {
   title?: string;
@@ -14,9 +13,9 @@ const { title = "10x Cards" } = Astro.props;
 // Get current path for active navigation link
 const currentPath = Astro.url.pathname;
 
-// Mock user status - will be replaced with Supabase auth later
-// For now, simulate authenticated user
-const userStatus = "authenticated" as const;
+// Get user status from middleware (Astro.locals.user)
+const userStatus = Astro.locals.user ? "authenticated" : "unauthenticated";
+const userEmail = Astro.locals.user?.email || null;
 ---
 
 <!doctype html>
@@ -29,9 +28,10 @@ const userStatus = "authenticated" as const;
     <ViewTransitions />
     <title>{title}</title>
     <!-- Critical: Theme script MUST be in head and run before body renders -->
+    <!-- eslint-disable -->
     <script is:inline>
       // Apply theme immediately on page load (use IIFE to avoid variable conflicts)
-      (function() {
+      (function () {
         const applyTheme = () => {
           const savedTheme = localStorage.getItem("theme") || "dark";
           if (savedTheme === "dark") {
@@ -60,10 +60,10 @@ const userStatus = "authenticated" as const;
       })();
     </script>
   </head>
-  <body class="min-h-screen bg-background text-foreground font-sans antialiased">
-    <NavigationBar client:only="react" currentPath={currentPath} userStatus={userStatus} />
+  <body class="h-screen bg-background text-foreground font-sans antialiased flex flex-col overflow-hidden">
+    <NavigationBar client:only="react" currentPath={currentPath} userStatus={userStatus} userEmail={userEmail} />
     <Toaster client:only="react" transition:persist />
-    <main transition:animate="fade">
+    <main class="flex-1 overflow-y-auto" transition:animate="fade">
       <slot />
     </main>
   </body>

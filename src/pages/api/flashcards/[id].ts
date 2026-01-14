@@ -48,8 +48,9 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
 
     const { id } = validationResult.data;
 
-    // Get Supabase client from context
+    // Get Supabase client and user from context
     const supabase = locals.supabase;
+    const user = locals.user;
 
     if (!supabase) {
       return new Response(
@@ -65,8 +66,22 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
       );
     }
 
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          error: "User not authenticated",
+        }),
+        {
+          status: 401,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     // Call flashcards service to delete the flashcard
-    await deleteFlashcard(supabase, id);
+    await deleteFlashcard(supabase, user.id, id);
 
     // Return success response
     return new Response(
