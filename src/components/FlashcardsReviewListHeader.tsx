@@ -25,11 +25,23 @@ export default function FlashcardsReviewListHeader({
       </div>
       <div className="flex gap-2 w-full sm:w-auto">
         {!allSelected ? (
-          <Button variant="outline" size="sm" onClick={onSelectAll} className="w-full sm:w-auto">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onSelectAll} 
+            className="w-full sm:w-auto"
+            data-testid="select-all-flashcards-button"
+          >
             Select All
           </Button>
         ) : (
-          <Button variant="outline" size="sm" onClick={onDeselectAll} className="w-full sm:w-auto">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onDeselectAll} 
+            className="w-full sm:w-auto"
+            data-testid="deselect-all-flashcards-button"
+          >
             Deselect All
           </Button>
         )}

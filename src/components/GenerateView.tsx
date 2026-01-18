@@ -159,6 +159,7 @@ export default function GenerateView() {
             </label>
             <Textarea
               id="input-text"
+              data-testid="generate-input-text"
               placeholder="Paste your text here... (minimum 1,000 characters)"
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
@@ -183,7 +184,12 @@ export default function GenerateView() {
           </div>
 
           <div ref={generateButtonRef} className="scroll-mt-4">
-            <Button onClick={handleGenerate} disabled={isGenerateDisabled} className="w-full sm:w-auto">
+            <Button 
+              data-testid="generate-flashcards-button"
+              onClick={handleGenerate} 
+              disabled={isGenerateDisabled} 
+              className="w-full sm:w-auto"
+            >
               {isGenerating ? "Generating..." : "Generate Flashcards"}
             </Button>
           </div>
@@ -191,7 +197,7 @@ export default function GenerateView() {
 
         {/* Loading State */}
         {isGenerating && (
-          <div className="space-y-4">
+          <div className="space-y-4" data-testid="generate-loading-state">
             <div className="flex items-center gap-2">
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
               <span className="text-sm text-muted-foreground">Generating flashcards with AI...</span>
@@ -210,7 +216,7 @@ export default function GenerateView() {
 
         {/* Error Notification */}
         {error && (
-          <Alert variant="destructive">
+          <Alert variant="destructive" data-testid="generate-error-alert">
             <AlertTitle>Error</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
@@ -218,7 +224,7 @@ export default function GenerateView() {
 
         {/* Success Notification */}
         {successMessage && (
-          <Alert className="border-green-600 bg-green-50 dark:bg-green-950/20 relative">
+          <Alert className="border-green-600 bg-green-50 dark:bg-green-950/20 relative" data-testid="generate-success-alert">
             <AlertTitle className="text-green-800 dark:text-green-400">Success</AlertTitle>
             <AlertDescription className="text-green-700 dark:text-green-300 pr-8">{successMessage}</AlertDescription>
             <Button
@@ -234,7 +240,7 @@ export default function GenerateView() {
 
         {/* Flashcards Review List */}
         {!isGenerating && flashcards.length > 0 && (
-          <div ref={flashcardsRef} className="space-y-4 scroll-mt-8">
+          <div ref={flashcardsRef} className="space-y-4 scroll-mt-8" data-testid="flashcards-review-section">
             <FlashcardsReviewListHeader
               totalCount={flashcards.length}
               acceptedCount={flashcards.filter((f) => f.accepted).length}

@@ -18,6 +18,9 @@
 
 - **Frontend**: Astro v5, React v19, Tailwind CSS v4, and Shadcn/ui
 - **Backend**: TypeScript v5 with Supabase for database and authentication
+- **Testing**: 
+  - **Unit & Integration Tests**: Vitest, React Testing Library, MSW (Mock Service Worker)
+  - **E2E Tests**: Playwright
 
 _See [./.ai/tech-stack.md](./.ai/tech-stack.md) for more details about the tech stack._
 
@@ -88,6 +91,23 @@ _See [./.ai/prd.md](./.ai/prd.md) for the complete product requirements document
 - `npm run dev` - Runs the app in development mode.
 - `npm run build` - Builds the app for production.
 - `npm start` - Runs the built production app.
+
+### Testing Scripts
+
+- `npm test` - Runs unit tests in watch mode.
+- `npm run test:unit` - Runs all unit tests once.
+- `npm run test:watch` - Runs unit tests in watch mode.
+- `npm run test:ui` - Opens Vitest UI for visual test running.
+- `npm run test:coverage` - Runs unit tests with coverage report.
+- `npm run test:e2e` - Runs E2E tests with Playwright.
+- `npm run test:e2e:ui` - Opens Playwright UI for visual E2E test running.
+- `npm run test:e2e:debug` - Runs E2E tests in debug mode.
+- `npm run test:e2e:codegen` - Opens Playwright codegen for test recording.
+- `npm run test:e2e:report` - Shows the last E2E test report.
+
+_See [TESTING.md](TESTING.md) for the complete testing guide and [INSTALL_TESTS.md](INSTALL_TESTS.md) for installation instructions._
+
+_See [./.ai/test-plan.md](./.ai/test-plan.md) for the complete testing strategy._
 
 ## License
 

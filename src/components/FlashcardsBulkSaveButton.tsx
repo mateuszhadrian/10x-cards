@@ -74,7 +74,10 @@ export default function FlashcardsBulkSaveButton({
   const hasAny = totalCount > 0;
 
   return (
-    <div className="sticky bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t border-border p-4 -mx-4 sm:-mx-0 sm:rounded-lg sm:border sm:p-6">
+    <div 
+      className="sticky bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t border-border p-4 -mx-4 sm:-mx-0 sm:rounded-lg sm:border sm:p-6"
+      data-testid="flashcards-bulk-save-section"
+    >
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex flex-col gap-1">
           <h3 className="text-lg font-semibold text-foreground">Save Flashcards</h3>
@@ -92,6 +95,7 @@ export default function FlashcardsBulkSaveButton({
             onClick={() => handleSave("all")}
             disabled={!hasAny || isSaving}
             className="w-full sm:w-auto"
+            data-testid="save-all-flashcards-button"
           >
             {isSaving ? "Saving..." : `Save All (${totalCount})`}
           </Button>
@@ -99,6 +103,7 @@ export default function FlashcardsBulkSaveButton({
             onClick={() => handleSave("accepted")}
             disabled={!hasAccepted || isSaving}
             className="w-full sm:w-auto"
+            data-testid="save-accepted-flashcards-button"
           >
             {isSaving ? "Saving..." : `Save Accepted (${acceptedCount})`}
           </Button>

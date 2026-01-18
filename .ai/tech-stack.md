@@ -16,5 +16,27 @@ AI - Komunikacja z modelami przez usługę Openrouter.ai:
 - Pozwala na ustawianie limitów finansowych na klucze API
 
 CI/CD i Hosting:
-- Github Actions do tworzenia pipeline’ów CI/CD
+- Github Actions do tworzenia pipeline'ów CI/CD
 - DigitalOcean do hostowania aplikacji za pośrednictwem obrazu docker
+
+Testowanie:
+
+1. Testy jednostkowe i integracyjne:
+   - Vitest - Framework testowy zbudowany na Vite, oferujący 10-50x lepszą wydajność niż Jest
+   - React Testing Library - Do testowania komponentów React z perspektywy użytkownika
+   - @testing-library/user-event - Do symulacji realistycznych interakcji użytkownika
+   - MSW (Mock Service Worker) - Do mockowania requestów HTTP na poziomie sieci
+   - jsdom - Środowisko DOM dla testów jednostkowych
+
+2. Testy end-to-end (E2E):
+   - Playwright - Nowoczesne narzędzie E2E od Microsoft, standard branżowy w 2026
+   - Wspiera wiele przeglądarek (Chrome, Firefox, Safari, Edge)
+   - Zaawansowane narzędzia debugowania (trace viewer, UI mode, codegen)
+
+3. Testy dostępności (opcjonalnie):
+   - Axe-core / axe-playwright - Automatyczne wykrywanie problemów z dostępnością WCAG 2.1/2.2
+
+4. Testy wydajnościowe (opcjonalnie):
+   - Lighthouse CI - Automatyczne audyty wydajności, SEO i dostępności w CI/CD
+   - Artillery - Testy obciążeniowe dla API
+   - WebPageTest - Szczegółowa analiza wydajności i Core Web Vitals

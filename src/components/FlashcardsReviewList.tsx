@@ -46,7 +46,7 @@ export default function FlashcardsReviewList({
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4" data-testid="flashcards-review-list">
       {flashcards.map((flashcard, index) => (
         <FlashcardReviewItem
           key={`${flashcard.front}-${index}`}

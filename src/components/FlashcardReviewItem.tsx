@@ -49,7 +49,10 @@ export default function FlashcardReviewItem({
   const canSave = isFrontValid && isBackValid;
 
   return (
-    <Card className={`transition-all ${flashcard.accepted ? "border-primary shadow-md bg-card" : "bg-card"}`}>
+    <Card 
+      className={`transition-all ${flashcard.accepted ? "border-primary shadow-md bg-card" : "bg-card"}`}
+      data-testid={`flashcard-review-item-${index}`}
+    >
       <CardContent className="p-4 sm:p-6">
         <div className="flex flex-col gap-4">
           {/* Header with checkbox and actions */}
@@ -57,6 +60,7 @@ export default function FlashcardReviewItem({
             <div className="flex items-start gap-3">
               <Checkbox
                 id={`flashcard-${index}`}
+                data-testid={`flashcard-checkbox-${index}`}
                 checked={flashcard.accepted}
                 onCheckedChange={(checked) => onAcceptChange(index, checked === true)}
                 className="mt-1"
@@ -74,7 +78,12 @@ export default function FlashcardReviewItem({
 
             {!isEditing && (
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" onClick={handleStartEdit}>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleStartEdit}
+                  data-testid={`flashcard-edit-button-${index}`}
+                >
                   Edit
                 </Button>
                 <Button
@@ -84,6 +93,7 @@ export default function FlashcardReviewItem({
                     e.preventDefault();
                     onReject(index);
                   }}
+                  data-testid={`flashcard-reject-button-${index}`}
                 >
                   Reject
                 </Button>
@@ -100,6 +110,7 @@ export default function FlashcardReviewItem({
                 </label>
                 <Input
                   id={`front-${index}`}
+                  data-testid={`flashcard-edit-front-${index}`}
                   value={editedFront}
                   onChange={(e) => setEditedFront(e.target.value)}
                   placeholder="Enter front text..."
@@ -120,6 +131,7 @@ export default function FlashcardReviewItem({
                 </label>
                 <Textarea
                   id={`back-${index}`}
+                  data-testid={`flashcard-edit-back-${index}`}
                   value={editedBack}
                   onChange={(e) => setEditedBack(e.target.value)}
                   placeholder="Enter back text..."
@@ -135,10 +147,20 @@ export default function FlashcardReviewItem({
               </div>
 
               <div className="flex gap-2 justify-end">
-                <Button variant="outline" size="sm" onClick={handleCancelEdit}>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleCancelEdit}
+                  data-testid={`flashcard-cancel-edit-button-${index}`}
+                >
                   Cancel
                 </Button>
-                <Button size="sm" onClick={handleSaveEdit} disabled={!canSave}>
+                <Button 
+                  size="sm" 
+                  onClick={handleSaveEdit} 
+                  disabled={!canSave}
+                  data-testid={`flashcard-save-edit-button-${index}`}
+                >
                   Save Changes
                 </Button>
               </div>
