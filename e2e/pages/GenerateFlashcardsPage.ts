@@ -1,32 +1,32 @@
 /**
  * Page Object Model - Generate Flashcards Page
- * 
+ *
  * This class encapsulates all interactions with the Generate Flashcards view.
  * It provides methods for the complete workflow: input text, generate, review, and save flashcards.
  */
 
-import { Page, Locator } from '@playwright/test';
-import { FlashcardReviewItem } from './FlashcardReviewItem';
+import { Page, Locator, expect } from "@playwright/test";
+import { FlashcardReviewItem } from "./FlashcardReviewItem";
 
 export class GenerateFlashcardsPage {
   readonly page: Page;
-  
+
   // Step 1: Input elements
   readonly inputTextarea: Locator;
   readonly generateButton: Locator;
   readonly characterCount: Locator;
-  
+
   // Step 2: Generation state elements
   readonly loadingState: Locator;
   readonly errorAlert: Locator;
   readonly successAlert: Locator;
-  
+
   // Step 3: Review section elements
   readonly reviewSection: Locator;
   readonly reviewList: Locator;
   readonly selectAllButton: Locator;
   readonly deselectAllButton: Locator;
-  
+
   // Step 4: Save section elements
   readonly saveSection: Locator;
   readonly saveAllButton: Locator;
@@ -34,80 +34,73 @@ export class GenerateFlashcardsPage {
 
   constructor(page: Page) {
     this.page = page;
-    
+
     // Step 1: Input
-    this.inputTextarea = page.getByTestId('generate-input-text');
-    this.generateButton = page.getByTestId('generate-flashcards-button');
-    this.characterCount = page.locator('text=/\\d+.*\\/.*10,000 characters/');
-    
+    this.inputTextarea = page.getByTestId("generate-input-text");
+    this.generateButton = page.getByTestId("generate-flashcards-button");
+    this.characterCount = page.locator("text=/\\d+.*\\/.*10,000 characters/");
+
     // Step 2: Generation state
-    this.loadingState = page.getByTestId('generate-loading-state');
-    this.errorAlert = page.getByTestId('generate-error-alert');
-    this.successAlert = page.getByTestId('generate-success-alert');
-    
+    this.loadingState = page.getByTestId("generate-loading-state");
+    this.errorAlert = page.getByTestId("generate-error-alert");
+    this.successAlert = page.getByTestId("generate-success-alert");
+
     // Step 3: Review
-    this.reviewSection = page.getByTestId('flashcards-review-section');
-    this.reviewList = page.getByTestId('flashcards-review-list');
-    this.selectAllButton = page.getByTestId('select-all-flashcards-button');
-    this.deselectAllButton = page.getByTestId('deselect-all-flashcards-button');
-    
+    this.reviewSection = page.getByTestId("flashcards-review-section");
+    this.reviewList = page.getByTestId("flashcards-review-list");
+    this.selectAllButton = page.getByTestId("select-all-flashcards-button");
+    this.deselectAllButton = page.getByTestId("deselect-all-flashcards-button");
+
     // Step 4: Save
-    this.saveSection = page.getByTestId('flashcards-bulk-save-section');
-    this.saveAllButton = page.getByTestId('save-all-flashcards-button');
-    this.saveAcceptedButton = page.getByTestId('save-accepted-flashcards-button');
+    this.saveSection = page.getByTestId("flashcards-bulk-save-section");
+    this.saveAllButton = page.getByTestId("save-all-flashcards-button");
+    this.saveAcceptedButton = page.getByTestId("save-accepted-flashcards-button");
   }
 
   async goto() {
-    await this.page.goto('/generate');
+    await this.page.goto("/generate");
   }
 
   /**
    * Step 1: Enter text into the input textarea
+   *
+   * Hybrid approach:
+   * 1. Type first 50 chars to ensure React onChange is triggered
+   * 2. Use fill() to set remaining text (fast)
    * 
-   * Hybrid approach based on text length:
-   * - Short text (<500 chars): use pressSequentially (reliable, triggers React events)
-   * - Long text (>=500 chars): use direct React state manipulation (fast)
+   * This is reliable across all test scenarios (fresh page and reused page state)
    */
   async enterText(text: string) {
+    // Clear any existing text first
+    await this.inputTextarea.clear();
+    
+    // Click to focus the textarea (important for React event handlers)
     await this.inputTextarea.click();
     
-    if (text.length < 500) {
-      // Short text: use pressSequentially for reliability
-      await this.inputTextarea.clear();
-      await this.inputTextarea.pressSequentially(text, { delay: 0 });
-    } else {
-      // Long text: directly manipulate React state (much faster)
-      await this.inputTextarea.evaluate((el: HTMLTextAreaElement, value: string) => {
-        // Get React's internal instance
-        const key = Object.keys(el).find(k => k.startsWith('__reactProps'));
-        if (key) {
-          const props = (el as any)[key];
-          // Call onChange handler directly with synthetic event
-          if (props.onChange) {
-            props.onChange({
-              target: { value },
-              currentTarget: { value },
-            });
-          }
-        }
-        // Also set the actual value
-        el.value = value;
-      }, text);
-    }
+    // Type first portion to trigger React onChange (this ensures hooks are properly initialized)
+    const typeLength = Math.min(50, text.length);
+    await this.inputTextarea.type(text.substring(0, typeLength), { delay: 0 });
     
+    // If there's more text, use fill() for the rest (much faster)
+    if (text.length > typeLength) {
+      // Select all and replace with full text
+      await this.inputTextarea.press('Meta+A'); // Ctrl+A on Windows/Linux, Cmd+A on Mac
+      await this.inputTextarea.fill(text);
+    }
+
     // Wait for character count to update
-    const expectedCount = text.length.toLocaleString();
-    await this.page.waitForFunction(
-      (expected: string) => {
-        const text = document.body.textContent || '';
-        return text.includes(expected);
-      },
-      expectedCount,
-      { timeout: 3000 }
-    ).catch(() => {
-      // If waiting for exact count fails, just wait a bit
-      return this.page.waitForTimeout(500);
-    });
+    // Use the character count locator which is much faster than searching the entire DOM
+    const expectedCount = text.trim().length.toLocaleString();
+    await expect(this.characterCount).toContainText(expectedCount, { timeout: 5000 });
+
+    // If text length is valid for generation, wait for button to become enabled
+    const textLength = text.trim().length;
+    const MIN_LENGTH = 1000;
+    const MAX_LENGTH = 10000;
+    if (textLength >= MIN_LENGTH && textLength <= MAX_LENGTH) {
+      // Wait for React to update button state and for button to become enabled
+      await expect(this.generateButton).toBeEnabled({ timeout: 5000 });
+    }
   }
 
   /**
@@ -127,8 +120,32 @@ export class GenerateFlashcardsPage {
 
   /**
    * Step 2: Click the generate button to start flashcard generation
+   * Waits for the button to be enabled before clicking to avoid race conditions
    */
   async clickGenerate() {
+    // Wait for button to be visible
+    await this.generateButton.waitFor({ state: "visible", timeout: 5000 });
+    
+    // Wait for button to be enabled (not disabled)
+    // This is critical to avoid race conditions where React hasn't updated the button state yet
+    try {
+      await this.page.waitForFunction(
+        (buttonTestId: string) => {
+          const button = document.querySelector(`[data-testid="${buttonTestId}"]`) as HTMLButtonElement;
+          return button && !button.disabled;
+        },
+        "generate-flashcards-button",
+        { timeout: 5000 }
+      );
+    } catch (error) {
+      // If button doesn't become enabled, check if it's intentional (e.g., invalid text length)
+      const isEnabled = await this.generateButton.isEnabled();
+      if (!isEnabled) {
+        throw new Error(`Generate button is disabled. Check if text input is valid (1000-10000 chars).`);
+      }
+      throw error;
+    }
+    
     await this.generateButton.click();
   }
 
@@ -137,16 +154,16 @@ export class GenerateFlashcardsPage {
    */
   async waitForGenerationComplete() {
     // Wait for loading to disappear
-    await this.loadingState.waitFor({ state: 'hidden', timeout: 60000 });
-    
+    await this.loadingState.waitFor({ state: "hidden", timeout: 60000 });
+
     // Check if we got results or an error
     const hasError = await this.errorAlert.isVisible().catch(() => false);
     if (hasError) {
       return false;
     }
-    
+
     // Wait for review section to appear
-    await this.reviewSection.waitFor({ state: 'visible' });
+    await this.reviewSection.waitFor({ state: "visible" });
     return true;
   }
 
@@ -264,7 +281,7 @@ export class GenerateFlashcardsPage {
    * Wait for save operation to complete (redirects to /flashcards)
    */
   async waitForSaveComplete() {
-    await this.page.waitForURL('/flashcards', { timeout: 10000 });
+    await this.page.waitForURL("/flashcards", { timeout: 10000 });
   }
 
   /**
@@ -282,7 +299,7 @@ export class GenerateFlashcardsPage {
   async generateAndSaveAll(text: string) {
     const success = await this.generateFlashcards(text);
     if (!success) {
-      throw new Error('Failed to generate flashcards');
+      throw new Error("Failed to generate flashcards");
     }
     await this.saveAllFlashcards();
     await this.waitForSaveComplete();
@@ -294,15 +311,15 @@ export class GenerateFlashcardsPage {
   async generateAndSaveSelected(text: string, indicesToSelect: number[]) {
     const success = await this.generateFlashcards(text);
     if (!success) {
-      throw new Error('Failed to generate flashcards');
+      throw new Error("Failed to generate flashcards");
     }
-    
+
     // Accept specific flashcards
     for (const index of indicesToSelect) {
       const item = this.getFlashcardItem(index);
       await item.accept();
     }
-    
+
     await this.saveAcceptedFlashcards();
     await this.waitForSaveComplete();
   }

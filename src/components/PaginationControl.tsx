@@ -11,7 +11,12 @@ interface PaginationControlProps {
  * Pagination control component for navigating through pages
  * Displays page numbers with Previous/Next buttons
  */
-export default function PaginationControl({ currentPage, totalPages, onPageChange, disabled = false }: PaginationControlProps) {
+export default function PaginationControl({
+  currentPage,
+  totalPages,
+  onPageChange,
+  disabled = false,
+}: PaginationControlProps) {
   if (totalPages <= 1) return null;
 
   const handlePrevious = () => {

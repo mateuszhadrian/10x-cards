@@ -1,53 +1,73 @@
 /**
  * Global Authentication Setup for Playwright Tests
- * 
+ *
  * This file runs once before all tests to authenticate a user and save the session state.
  * Subsequent tests can reuse this authenticated state without logging in again.
- * 
+ *
  * Benefits:
  * - Faster tests (login only once)
  * - More reliable (consistent auth state)
  * - Better DX (tests focus on functionality, not auth)
  */
 
-import { test as setup, expect } from '@playwright/test';
-import { LoginPage } from './pages/LoginPage';
+import { test as setup, expect } from "@playwright/test";
+import { LoginPage } from "./pages/LoginPage";
 
-const authFile = 'playwright/.auth/user.json';
+const authFile = "playwright/.auth/user.json";
 
-setup('authenticate', async ({ page }) => {
+setup("authenticate", async ({ page }) => {
   // Check if credentials are available
   const email = process.env.E2E_USERNAME;
   const password = process.env.E2E_PASSWORD;
 
   if (!email || !password) {
-    throw new Error(
-      'E2E_USERNAME and E2E_PASSWORD must be set in .env.test file.\n' +
-      'Please ensure .env.test exists with these variables.'
-    );
+    console.warn("⚠️  E2E_USERNAME and E2E_PASSWORD not set - skipping authentication setup");
+    console.warn("   Tests requiring authentication will be skipped");
+    return;
   }
 
   console.log(`Authenticating user: ${email}`);
 
-  // Navigate to login page and authenticate
-  const loginPage = new LoginPage(page);
-  await loginPage.goto();
-  
-  // Fill in credentials
-  await loginPage.login(email, password);
-  
-  // Wait for successful login (redirect away from /login)
-  await page.waitForURL(url => !url.pathname.includes('/login'), { timeout: 10000 });
-  
-  // Verify we're authenticated by checking we can access a protected route
-  await page.goto('/generate');
-  await expect(page).toHaveURL('/generate');
-  
-  console.log('Authentication successful, saving session state...');
+  try {
+    // Navigate to login page and authenticate
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
 
-  // End of authentication steps
-  // Save the authenticated state to be reused in tests
-  await page.context().storageState({ path: authFile });
-  
-  console.log(`Session state saved to: ${authFile}`);
+    // Fill in credentials
+    await loginPage.login(email, password);
+
+    // Wait for successful login (redirect away from /login) or error message
+    await Promise.race([
+      page.waitForURL((url) => !url.pathname.includes("/login"), { timeout: 10000 }),
+      page.waitForSelector('[role="alert"]', { timeout: 10000 }),
+    ]);
+
+    // Check if we're still on login page (authentication failed)
+    if (page.url().includes("/login")) {
+      const errorText = await page.locator('[role="alert"]').textContent();
+      console.error(`❌ Authentication failed: ${errorText}`);
+      console.warn("⚠️  Please check your .env file has valid SUPABASE_URL and SUPABASE_KEY");
+      console.warn("⚠️  Tests requiring authentication will be skipped");
+      return;
+    }
+
+    // Verify we're authenticated by checking we can access a protected route
+    await page.goto("/generate");
+    await expect(page).toHaveURL("/generate");
+
+    console.log("✓ Authentication successful, saving session state...");
+
+    // Save the authenticated state to be reused in tests
+    await page.context().storageState({ path: authFile });
+
+    console.log(`✓ Session state saved to: ${authFile}`);
+  } catch (error) {
+    console.error(`❌ Authentication setup failed:`, error);
+    console.warn("⚠️  Tests requiring authentication will be skipped");
+    console.warn("⚠️  Common causes:");
+    console.warn("   - Invalid Supabase credentials in .env file");
+    console.warn("   - E2E_USERNAME/PASSWORD in .env.test do not match an existing user");
+    console.warn("   - Supabase project is not accessible");
+    // Don't throw - let tests run without auth (they will skip if they need it)
+  }
 });

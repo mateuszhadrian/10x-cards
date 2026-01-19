@@ -126,7 +126,11 @@ async function aiGenerateFlashcards(inputText: string): Promise<{ front: string;
  * @returns Generation result with generation record and flashcard proposals
  * @throws Error if generation fails or no flashcards are generated
  */
-export async function initiateGeneration(supabase: SupabaseClient, userId: string, inputText: string): Promise<GenerationResult> {
+export async function initiateGeneration(
+  supabase: SupabaseClient,
+  userId: string,
+  inputText: string
+): Promise<GenerationResult> {
   const startTime = Date.now();
 
   // Generate hash of the input text for deduplication (checksum)
@@ -206,9 +210,7 @@ export async function initiateGeneration(supabase: SupabaseClient, userId: strin
     const errorDetails = error instanceof Error ? error.stack : String(error);
 
     // Build detailed error message including stack trace if available
-    const fullErrorMessage = errorDetails 
-      ? `${errorMessage}\n\nStack trace:\n${errorDetails}`
-      : errorMessage;
+    const fullErrorMessage = errorDetails ? `${errorMessage}\n\nStack trace:\n${errorDetails}` : errorMessage;
 
     const { error: logError } = await supabase.from("generations_errors").insert({
       generation_id: generation.id,

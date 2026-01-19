@@ -20,10 +20,7 @@ interface UseFlashcardEditReturn {
  * Custom hook for managing flashcard edit mode
  * Handles edit state, validation, and edit lifecycle
  */
-export function useFlashcardEdit(
-  initialFront: string,
-  initialBack: string
-): UseFlashcardEditReturn {
+export function useFlashcardEdit(initialFront: string, initialBack: string): UseFlashcardEditReturn {
   const [isEditing, setIsEditing] = useState(false);
   const [editedFront, setEditedFront] = useState(initialFront);
   const [editedBack, setEditedBack] = useState(initialBack);

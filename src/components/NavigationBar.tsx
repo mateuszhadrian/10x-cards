@@ -12,44 +12,47 @@ export function NavigationBar({ currentPath, userStatus, userEmail }: Navigation
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Define navigation links with useMemo to prevent recreation on every render
-  const navLinks: NavLink[] = useMemo(() => [
-    {
-      label: "Home",
-      path: "/",
-      isActive: currentPath === "/",
-      isDisabled: false,
-    },
-    {
-      label: "Generate",
-      path: "/generate",
-      isActive: currentPath === "/generate",
-      isDisabled: false,
-    },
-    {
-      label: "Add",
-      path: "/add-manually",
-      isActive: currentPath === "/add-manually",
-      isDisabled: false,
-    },
-    {
-      label: "Flashcards",
-      path: "/flashcards",
-      isActive: currentPath === "/flashcards",
-      isDisabled: false,
-    },
-    {
-      label: "Learning Sessions",
-      path: "/sessions",
-      isActive: currentPath === "/sessions",
-      isDisabled: true, // Not yet implemented
-    },
-    {
-      label: "Profile",
-      path: "/profile",
-      isActive: currentPath === "/profile",
-      isDisabled: true, // Not yet implemented
-    },
-  ], [currentPath]);
+  const navLinks: NavLink[] = useMemo(
+    () => [
+      {
+        label: "Home",
+        path: "/",
+        isActive: currentPath === "/",
+        isDisabled: false,
+      },
+      {
+        label: "Generate",
+        path: "/generate",
+        isActive: currentPath === "/generate",
+        isDisabled: false,
+      },
+      {
+        label: "Add",
+        path: "/add-manually",
+        isActive: currentPath === "/add-manually",
+        isDisabled: false,
+      },
+      {
+        label: "Flashcards",
+        path: "/flashcards",
+        isActive: currentPath === "/flashcards",
+        isDisabled: false,
+      },
+      {
+        label: "Learning Sessions",
+        path: "/sessions",
+        isActive: currentPath === "/sessions",
+        isDisabled: true, // Not yet implemented
+      },
+      {
+        label: "Profile",
+        path: "/profile",
+        isActive: currentPath === "/profile",
+        isDisabled: true, // Not yet implemented
+      },
+    ],
+    [currentPath]
+  );
 
   // Auth action handlers
   const handleLogin = useCallback(() => {
@@ -91,9 +94,7 @@ export function NavigationBar({ currentPath, userStatus, userEmail }: Navigation
   return (
     <header
       className={`sticky top-0 z-40 w-full border-b border-border transition-all duration-300 ${
-        isMenuOpen 
-          ? "bg-background" 
-          : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+        isMenuOpen ? "bg-background" : "bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
       }`}
       role="banner"
     >

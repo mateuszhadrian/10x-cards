@@ -7,10 +7,12 @@ interface LeftNavigationProps {
   onLinkClick?: () => void;
 }
 
-export const LeftNavigation = memo(function LeftNavigation({ links, isMobile = false, onLinkClick }: LeftNavigationProps) {
-  const baseClasses = isMobile
-    ? "flex flex-col gap-2 w-full"
-    : "flex items-center gap-8";
+export const LeftNavigation = memo(function LeftNavigation({
+  links,
+  isMobile = false,
+  onLinkClick,
+}: LeftNavigationProps) {
+  const baseClasses = isMobile ? "flex flex-col gap-2 w-full" : "flex items-center gap-8";
 
   return (
     <nav className={baseClasses} aria-label="Main navigation">

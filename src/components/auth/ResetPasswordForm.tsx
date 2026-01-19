@@ -56,22 +56,22 @@ export default function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps)
       // const { error } = await supabase.auth.updateUser({
       //   password: password,
       // });
-      
+
       // Placeholder for now
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       // Show success message
       setSuccessMessage("Password updated successfully! Redirecting to login...");
-      
+
       // Reset form
       setPassword("");
       setConfirmPassword("");
-      
+
       // Redirect to login after delay
       setTimeout(() => {
         window.location.href = "/login";
       }, 2000);
-      
+
       // Call onSuccess callback
       onSuccess?.();
     } catch (err) {
@@ -100,7 +100,7 @@ export default function ResetPasswordForm({ onSuccess }: ResetPasswordFormProps)
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <ValidatedField
           id={passwordId}
           type="password"

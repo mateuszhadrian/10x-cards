@@ -1,34 +1,34 @@
 /**
  * Test Fixtures - Reusable Test Data
- * 
+ *
  * This file contains reusable test data and fixtures for E2E tests.
  */
 
 export const testUsers = {
   validUser: {
-    email: 'test@example.com',
-    password: 'SecurePassword123!',
+    email: "test@example.com",
+    password: "SecurePassword123!",
   },
   invalidUser: {
-    email: 'invalid@example.com',
-    password: 'wrongpassword',
+    email: "invalid@example.com",
+    password: "wrongpassword",
   },
   newUser: {
-    email: 'newuser@example.com',
-    password: 'NewPassword123!',
+    email: "newuser@example.com",
+    password: "NewPassword123!",
   },
 };
 
 export const testFlashcards = {
   basic: {
-    question: 'What is TypeScript?',
-    answer: 'A typed superset of JavaScript that compiles to plain JavaScript.',
-    tags: ['programming', 'typescript'],
+    question: "What is TypeScript?",
+    answer: "A typed superset of JavaScript that compiles to plain JavaScript.",
+    tags: ["programming", "typescript"],
   },
   advanced: {
-    question: 'What is the difference between interface and type in TypeScript?',
-    answer: 'Interfaces can be extended and merged, while types are more flexible with unions and intersections.',
-    tags: ['typescript', 'advanced'],
+    question: "What is the difference between interface and type in TypeScript?",
+    answer: "Interfaces can be extended and merged, while types are more flexible with unions and intersections.",
+    tags: ["typescript", "advanced"],
   },
 };
 
@@ -38,10 +38,10 @@ export const testGenerations = {
     giving you better tooling at any scale. It adds optional static typing to JavaScript,
     which can help catch errors early in development.
   `,
-  longInput: 'Lorem ipsum '.repeat(100),
+  longInput: "Lorem ipsum ".repeat(100),
   validInput: generateValidGenerationText(),
-  shortInput: 'This text is too short.',
-  tooLongInput: 'A'.repeat(10001),
+  shortInput: "This text is too short.",
+  tooLongInput: "A".repeat(10001),
 };
 
 /**
@@ -81,13 +81,13 @@ function generateValidGenerationText(): string {
     implicit type conversions, which can lead to unexpected results. Understanding how 
     JavaScript handles different data types and conversions is essential for avoiding bugs.
   `;
-  
+
   // Repeat the text to reach at least 1000 characters
   let result = baseText;
   while (result.length < 1000) {
     result += baseText;
   }
-  
+
   // Trim to ensure it's under 10000 characters
   return result.slice(0, 9500).trim();
 }
@@ -101,8 +101,8 @@ export const generateRandomEmail = () => {
 };
 
 export const generateRandomPassword = () => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
-  let password = '';
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";
+  let password = "";
   for (let i = 0; i < 12; i++) {
     password += chars.charAt(Math.floor(Math.random() * chars.length));
   }

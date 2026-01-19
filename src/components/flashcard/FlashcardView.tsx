@@ -11,12 +11,7 @@ interface FlashcardViewProps {
 /**
  * View mode component for displaying flashcard content
  */
-export default function FlashcardView({
-  flashcard,
-  index,
-  onEdit,
-  onReject,
-}: FlashcardViewProps) {
+export default function FlashcardView({ flashcard, index, onEdit, onReject }: FlashcardViewProps) {
   return (
     <>
       {/* Header with actions */}
@@ -32,12 +27,7 @@ export default function FlashcardView({
         </div>
 
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onEdit}
-            data-testid={`flashcard-edit-button-${index}`}
-          >
+          <Button variant="outline" size="sm" onClick={onEdit} data-testid={`flashcard-edit-button-${index}`}>
             Edit
           </Button>
           <Button
@@ -58,12 +48,16 @@ export default function FlashcardView({
       <div className="space-y-3">
         <div className="space-y-1">
           <div className="text-sm font-medium text-muted-foreground">Front:</div>
-          <div className="text-base text-foreground">{flashcard.front}</div>
+          <div className="text-base text-foreground" data-testid={`flashcard-front-text-${index}`}>
+            {flashcard.front}
+          </div>
         </div>
         <div className="h-px bg-border" />
         <div className="space-y-1">
           <div className="text-sm font-medium text-muted-foreground">Back:</div>
-          <div className="text-base whitespace-pre-wrap text-foreground">{flashcard.back}</div>
+          <div className="text-base whitespace-pre-wrap text-foreground" data-testid={`flashcard-back-text-${index}`}>
+            {flashcard.back}
+          </div>
         </div>
       </div>
     </>

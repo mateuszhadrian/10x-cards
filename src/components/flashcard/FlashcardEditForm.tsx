@@ -52,11 +52,7 @@ export default function FlashcardEditForm({
           aria-invalid={!frontValidation.isValid}
           className="bg-background text-foreground border-border"
         />
-        <CharacterCounter
-          current={frontValidation.length}
-          max={MAX_FRONT_LENGTH}
-          color={frontValidation.color}
-        />
+        <CharacterCounter current={frontValidation.length} max={MAX_FRONT_LENGTH} color={frontValidation.color} />
       </div>
 
       <div className="space-y-2">
@@ -73,28 +69,14 @@ export default function FlashcardEditForm({
           className="min-h-[100px] bg-background text-foreground border-border"
           aria-invalid={!backValidation.isValid}
         />
-        <CharacterCounter
-          current={backValidation.length}
-          max={MAX_BACK_LENGTH}
-          color={backValidation.color}
-        />
+        <CharacterCounter current={backValidation.length} max={MAX_BACK_LENGTH} color={backValidation.color} />
       </div>
 
       <div className="flex gap-2 justify-end">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={onCancel}
-          data-testid={`flashcard-cancel-edit-button-${index}`}
-        >
+        <Button variant="outline" size="sm" onClick={onCancel} data-testid={`flashcard-cancel-edit-button-${index}`}>
           Cancel
         </Button>
-        <Button
-          size="sm"
-          onClick={onSave}
-          disabled={!canSave}
-          data-testid={`flashcard-save-edit-button-${index}`}
-        >
+        <Button size="sm" onClick={onSave} disabled={!canSave} data-testid={`flashcard-save-edit-button-${index}`}>
           Save Changes
         </Button>
       </div>

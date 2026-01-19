@@ -1,38 +1,32 @@
-import {
-  CircleCheckIcon,
-  InfoIcon,
-  Loader2Icon,
-  OctagonXIcon,
-  TriangleAlertIcon,
-} from "lucide-react"
-import { useEffect, useState } from "react"
-import { Toaster as Sonner, type ToasterProps } from "sonner"
+import { CircleCheckIcon, InfoIcon, Loader2Icon, OctagonXIcon, TriangleAlertIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Toaster as Sonner, type ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
-  const [theme, setTheme] = useState<"light" | "dark">("dark")
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     // Check current theme from document
-    const isDark = document.documentElement.classList.contains("dark")
-    setTheme(isDark ? "dark" : "light")
+    const isDark = document.documentElement.classList.contains("dark");
+    setTheme(isDark ? "dark" : "light");
 
     // Watch for theme changes
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === "class") {
-          const isDark = document.documentElement.classList.contains("dark")
-          setTheme(isDark ? "dark" : "light")
+          const isDark = document.documentElement.classList.contains("dark");
+          setTheme(isDark ? "dark" : "light");
         }
-      })
-    })
+      });
+    });
 
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["class"],
-    })
+    });
 
-    return () => observer.disconnect()
-  }, [])
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <Sonner
@@ -47,15 +41,15 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       toastOptions={{
         style: {
-          background: 'var(--popover)',
-          color: 'var(--popover-foreground)',
-          border: '1px solid var(--border)',
+          background: "var(--popover)",
+          color: "var(--popover-foreground)",
+          border: "1px solid var(--border)",
         },
-        className: 'gap-3',
+        className: "gap-3",
       }}
       {...props}
     />
-  )
-}
+  );
+};
 
-export { Toaster }
+export { Toaster };

@@ -22,8 +22,8 @@ export default function AddManuallyView() {
   const frontValidation = useCharacterValidation(front, MIN_FRONT_LENGTH, MAX_FRONT_LENGTH);
   const backValidation = useCharacterValidation(back, MIN_BACK_LENGTH, MAX_BACK_LENGTH);
 
-  const isFormValid = frontValidation.isValid && backValidation.isValid && 
-                      frontValidation.length > 0 && backValidation.length > 0;
+  const isFormValid =
+    frontValidation.isValid && backValidation.isValid && frontValidation.length > 0 && backValidation.length > 0;
   const isSaveDisabled = !isFormValid || isSaving;
 
   const handleSave = async () => {
@@ -81,17 +81,11 @@ export default function AddManuallyView() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground">Add Flashcard Manually</h1>
-          <p className="mt-2 text-muted-foreground">
-            Create a new flashcard by entering the front and back text.
-          </p>
+          <p className="mt-2 text-muted-foreground">Create a new flashcard by entering the front and back text.</p>
         </div>
 
         {/* Alerts */}
-        <GenerateAlerts
-          successMessage={successMessage}
-          errorMessage={errorMessage}
-          onClearSuccess={clearAlerts}
-        />
+        <GenerateAlerts successMessage={successMessage} errorMessage={errorMessage} onClearSuccess={clearAlerts} />
 
         {/* Input Form Section */}
         <div className="space-y-6">

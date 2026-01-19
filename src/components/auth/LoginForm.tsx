@@ -98,7 +98,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <ValidatedField
           id={emailId}
           type="email"

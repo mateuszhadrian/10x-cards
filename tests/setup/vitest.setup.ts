@@ -1,6 +1,6 @@
 /**
  * Vitest Global Setup File
- * 
+ *
  * This file runs before all tests and configures the testing environment.
  * It includes:
  * - Testing Library matchers
@@ -8,9 +8,9 @@
  * - Custom test utilities
  */
 
-import '@testing-library/jest-dom/vitest';
-import { cleanup } from '@testing-library/react';
-import { afterEach, beforeAll, vi } from 'vitest';
+import "@testing-library/jest-dom/vitest";
+import { cleanup } from "@testing-library/react";
+import { afterEach, beforeAll, vi } from "vitest";
 
 // Cleanup after each test case
 afterEach(() => {
@@ -20,7 +20,7 @@ afterEach(() => {
 // Mock browser APIs that might not be available in jsdom
 beforeAll(() => {
   // Mock window.matchMedia
-  Object.defineProperty(window, 'matchMedia', {
+  Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
       matches: false,

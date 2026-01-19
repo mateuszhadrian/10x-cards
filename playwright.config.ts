@@ -1,41 +1,20 @@
-import { defineConfig, devices } from '@playwright/test';
-import * as fs from 'fs';
-import * as path from 'path';
-import { fileURLToPath } from 'url';
+import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
 
-// Get __dirname equivalent in ES modules
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Load .env.test file for E2E test credentials (manual parsing to avoid extra dependencies)
-try {
-  const envPath = path.resolve(__dirname, '.env.test');
-  if (fs.existsSync(envPath)) {
-    const envContent = fs.readFileSync(envPath, 'utf-8');
-    envContent.split('\n').forEach(line => {
-      const trimmed = line.trim();
-      if (trimmed && !trimmed.startsWith('#')) {
-        const [key, ...valueParts] = trimmed.split('=');
-        if (key && valueParts.length > 0) {
-          process.env[key.trim()] = valueParts.join('=').trim();
-        }
-      }
-    });
-    console.log('✓ Loaded environment variables from .env.test');
-  }
-} catch (error) {
-  console.warn('Warning: Could not load .env.test file:', error);
-}
+// Load .env file for E2E tests (use same env as dev server for consistency)
+// Then load .env.test to override with test-specific values (like E2E_USERNAME)
+dotenv.config(); // Load .env (base config)
+dotenv.config({ path: ".env.test", override: true }); // Load .env.test (test overrides)
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
   // Test directory
-  testDir: './e2e',
+  testDir: "./e2e",
 
   // Global teardown - runs once after all tests complete
-  globalTeardown: './e2e/global.teardown.ts',
+  globalTeardown: "./e2e/global.teardown.ts",
 
   // Run tests in files in parallel
   fullyParallel: true,
@@ -51,8 +30,8 @@ export default defineConfig({
 
   // Reporter to use
   reporter: [
-    ['html', { outputFolder: 'playwright-report' }],
-    ['list'],
+    ["html", { outputFolder: "playwright-report" }],
+    ["list"],
     // Uncomment for CI environments
     // ['github'],
   ],
@@ -60,16 +39,16 @@ export default defineConfig({
   // Shared settings for all the projects below
   use: {
     // Base URL to use in actions like `await page.goto('/')`
-    baseURL: process.env.BASE_URL || 'http://localhost:4321',
+    baseURL: process.env.BASE_URL || "http://localhost:4321",
 
     // Collect trace when retrying the failed test
-    trace: 'on-first-retry',
+    trace: "on-first-retry",
 
     // Screenshot on failure
-    screenshot: 'only-on-failure',
+    screenshot: "only-on-failure",
 
     // Video on failure
-    video: 'retain-on-failure',
+    video: "retain-on-failure",
 
     // Timeout for each action
     actionTimeout: 10000,
@@ -79,19 +58,19 @@ export default defineConfig({
   projects: [
     // Setup project - runs once to authenticate and save session state
     {
-      name: 'setup',
+      name: "setup",
       testMatch: /.*\.setup\.ts/,
     },
 
     // Main test project - uses authenticated session state
     {
-      name: 'chromium',
-      use: { 
-        ...devices['Desktop Chrome'],
+      name: "chromium",
+      use: {
+        ...devices["Desktop Chrome"],
         // Use authenticated session state
-        storageState: 'playwright/.auth/user.json',
+        storageState: "playwright/.auth/user.json",
       },
-      dependencies: ['setup'], // Run setup before this project
+      dependencies: ["setup"], // Run setup before this project
     },
 
     // Uncomment these when needed for cross-browser testing
@@ -117,8 +96,8 @@ export default defineConfig({
 
   // Run your local dev server before starting the tests
   webServer: {
-    command: 'npm run dev',
-    url: 'http://localhost:4321',
+    command: "npm run dev",
+    url: "http://localhost:4321",
     reuseExistingServer: true, // Always reuse to avoid conflicts
     timeout: 120000,
   },
@@ -132,5 +111,5 @@ export default defineConfig({
   },
 
   // Output directory for test artifacts
-  outputDir: 'test-results/',
+  outputDir: "test-results/",
 });

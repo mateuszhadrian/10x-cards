@@ -2,11 +2,7 @@
  * Custom hook for character validation with color coding
  * Used for text inputs with min/max length requirements
  */
-export function useCharacterValidation(
-  text: string,
-  minLength: number,
-  maxLength: number
-) {
+export function useCharacterValidation(text: string, minLength: number, maxLength: number) {
   const length = text.trim().length;
   const isValid = length >= minLength && length <= maxLength;
   const isOverLimit = length > maxLength;

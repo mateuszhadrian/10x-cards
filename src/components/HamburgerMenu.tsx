@@ -103,9 +103,7 @@ export const HamburgerMenu = memo(function HamburgerMenu({
         >
           <div className="container mx-auto px-4 pt-4 pb-16 flex flex-col gap-2">
             {/* Only show navigation links for authenticated users */}
-            {userStatus === "authenticated" && (
-              <LeftNavigation links={links} isMobile onLinkClick={handleLinkClick} />
-            )}
+            {userStatus === "authenticated" && <LeftNavigation links={links} isMobile onLinkClick={handleLinkClick} />}
             <RightNavigation
               userStatus={userStatus}
               userEmail={userEmail}

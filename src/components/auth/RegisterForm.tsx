@@ -73,9 +73,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
       }
 
       // Show success message
-      setSuccessMessage(
-        "Registration successful! You can now sign in with your credentials."
-      );
+      setSuccessMessage("Registration successful! You can now sign in with your credentials.");
 
       // Reset form
       setEmail("");
@@ -112,7 +110,7 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <ValidatedField
           id={emailId}
           type="email"

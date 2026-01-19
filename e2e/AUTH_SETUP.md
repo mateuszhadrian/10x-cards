@@ -53,8 +53,10 @@ projects: [
 Credentials są ładowane z `.env.test`:
 
 ```bash
-E2E_USERNAME=tenhadrian@gmail.com
-E2E_PASSWORD=EifA)))777
+# IMPORTANT: Use your actual test user credentials
+# DO NOT commit this file to version control!
+E2E_USERNAME=your-test-user@example.com
+E2E_PASSWORD=YourSecurePassword123!
 ```
 
 ## Storage State

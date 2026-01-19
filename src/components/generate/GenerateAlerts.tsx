@@ -10,11 +10,7 @@ interface GenerateAlertsProps {
 /**
  * Alert component for success/error messages in generation flow
  */
-export default function GenerateAlerts({
-  successMessage,
-  errorMessage,
-  onClearSuccess,
-}: GenerateAlertsProps) {
+export default function GenerateAlerts({ successMessage, errorMessage, onClearSuccess }: GenerateAlertsProps) {
   if (!successMessage && !errorMessage) return null;
 
   return (
@@ -32,9 +28,7 @@ export default function GenerateAlerts({
           data-testid="generate-success-alert"
         >
           <AlertTitle className="text-green-800 dark:text-green-400">Success</AlertTitle>
-          <AlertDescription className="text-green-700 dark:text-green-300 pr-8">
-            {successMessage}
-          </AlertDescription>
+          <AlertDescription className="text-green-700 dark:text-green-300 pr-8">{successMessage}</AlertDescription>
           {onClearSuccess && (
             <Button
               variant="ghost"

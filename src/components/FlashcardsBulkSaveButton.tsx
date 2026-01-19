@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import type { CreateFlashcardsCommandViewModelDTO, CreateFlashcardsCommandDTO, CreateFlashcardsResponseDTO } from "@/types";
+import type {
+  CreateFlashcardsCommandViewModelDTO,
+  CreateFlashcardsCommandDTO,
+  CreateFlashcardsResponseDTO,
+} from "@/types";
 
 interface FlashcardsBulkSaveButtonProps {
   flashcards: CreateFlashcardsCommandViewModelDTO[];
@@ -57,7 +61,7 @@ export default function FlashcardsBulkSaveButton({
 
       const data: CreateFlashcardsResponseDTO = await response.json();
       onSaveSuccess(data.flashcards.length);
-      
+
       // Redirect to flashcards list after successful save
       setTimeout(() => {
         window.location.href = "/flashcards";
@@ -74,7 +78,7 @@ export default function FlashcardsBulkSaveButton({
   const hasAny = totalCount > 0;
 
   return (
-    <div 
+    <div
       className="sticky bottom-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-t border-border p-4 -mx-4 sm:-mx-0 sm:rounded-lg sm:border sm:p-6"
       data-testid="flashcards-bulk-save-section"
     >
@@ -112,4 +116,3 @@ export default function FlashcardsBulkSaveButton({
     </div>
   );
 }
-

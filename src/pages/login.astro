@@ -6,7 +6,7 @@ import LoginForm from "@/components/auth/LoginForm";
 // This is handled by middleware, but we add it here as additional safeguard
 const user = Astro.locals.user;
 if (user) {
-  return Astro.redirect('/generate');
+  return Astro.redirect("/generate");
 }
 ---
 

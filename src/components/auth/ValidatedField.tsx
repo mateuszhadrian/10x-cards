@@ -39,12 +39,15 @@ export default function ValidatedField({
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
         aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
         className="bg-background text-foreground border-border"
       />
-      {error && <p className="text-sm text-destructive">{error}</p>}
-      {helperText && !error && (
-        <p className="text-xs text-muted-foreground">{helperText}</p>
+      {error && (
+        <p id={`${id}-error`} data-testid={`${id}-error`} className="text-sm text-destructive" role="alert">
+          {error}
+        </p>
       )}
+      {helperText && !error && <p className="text-xs text-muted-foreground">{helperText}</p>}
     </div>
   );
 }

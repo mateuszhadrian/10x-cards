@@ -32,7 +32,11 @@ export interface CreateFlashcardsResult {
  * @returns True if the generation exists, throws an error otherwise
  * @throws Error if the generation doesn't exist
  */
-async function verifyGenerationExists(supabase: SupabaseClient, userId: string, generationId: number): Promise<boolean> {
+async function verifyGenerationExists(
+  supabase: SupabaseClient,
+  userId: string,
+  generationId: number
+): Promise<boolean> {
   const { data: generation, error } = await supabase
     .from("generations")
     .select("id")

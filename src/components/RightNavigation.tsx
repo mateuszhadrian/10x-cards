@@ -39,15 +39,9 @@ export const RightNavigation = memo(function RightNavigation({
   if (userStatus === "authenticated") {
     return (
       <div className={containerClasses}>
-        {isMobile && themeToggle && (
-          <div className="flex justify-center pb-2">{themeToggle}</div>
-        )}
+        {isMobile && themeToggle && <div className="flex justify-center pb-2">{themeToggle}</div>}
         {!isMobile && themeToggle}
-        {userEmail && (
-          <span className="text-sm text-muted-foreground">
-            {userEmail}
-          </span>
-        )}
+        {userEmail && <span className="text-sm text-muted-foreground">{userEmail}</span>}
         <Button
           variant="outline"
           size={buttonSize}
@@ -62,9 +56,7 @@ export const RightNavigation = memo(function RightNavigation({
 
   return (
     <div className={containerClasses}>
-      {isMobile && themeToggle && (
-        <div className="flex justify-center pb-2">{themeToggle}</div>
-      )}
+      {isMobile && themeToggle && <div className="flex justify-center pb-2">{themeToggle}</div>}
       {!isMobile && themeToggle}
       <Button
         variant="ghost"
@@ -74,11 +66,7 @@ export const RightNavigation = memo(function RightNavigation({
       >
         Login
       </Button>
-      <Button
-        size={buttonSize}
-        onClick={onRegisterClick}
-        className={isMobile ? "w-full justify-center" : ""}
-      >
+      <Button size={buttonSize} onClick={onRegisterClick} className={isMobile ? "w-full justify-center" : ""}>
         Sign Up
       </Button>
     </div>

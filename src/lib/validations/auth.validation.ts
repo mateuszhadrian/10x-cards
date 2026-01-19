@@ -4,8 +4,14 @@ import { z } from "zod";
  * Validation schema for login form
  */
 export const loginSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(1, { message: "Password is required" })
+    .min(6, { message: "Password must be at least 6 characters long" }),
 });
 
 /**
@@ -13,9 +19,18 @@ export const loginSchema = z.object({
  */
 export const registerSchema = z
   .object({
-    email: z.string().email({ message: "Invalid email address" }),
-    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
-    confirmPassword: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+    email: z
+      .string()
+      .min(1, { message: "Email is required" })
+      .email({ message: "Invalid email address" }),
+    password: z
+      .string()
+      .min(1, { message: "Password is required" })
+      .min(6, { message: "Password must be at least 6 characters long" }),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Confirm password is required" })
+      .min(6, { message: "Password must be at least 6 characters long" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -26,7 +41,10 @@ export const registerSchema = z
  * Validation schema for forgot password form
  */
 export const forgotPasswordSchema = z.object({
-  email: z.string().email({ message: "Invalid email address" }),
+  email: z
+    .string()
+    .min(1, { message: "Email is required" })
+    .email({ message: "Invalid email address" }),
 });
 
 /**
@@ -34,8 +52,14 @@ export const forgotPasswordSchema = z.object({
  */
 export const resetPasswordSchema = z
   .object({
-    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
-    confirmPassword: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+    password: z
+      .string()
+      .min(1, { message: "Password is required" })
+      .min(6, { message: "Password must be at least 6 characters long" }),
+    confirmPassword: z
+      .string()
+      .min(1, { message: "Confirm password is required" })
+      .min(6, { message: "Password must be at least 6 characters long" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",

@@ -28,9 +28,9 @@ export default function FlashcardsReviewList({
   const handleReject = (index: number) => {
     // Save current scroll position before removing
     const scrollPosition = window.scrollY;
-    
+
     onFlashcardRemove(index);
-    
+
     // Restore scroll position after React re-renders
     requestAnimationFrame(() => {
       window.scrollTo(0, scrollPosition);

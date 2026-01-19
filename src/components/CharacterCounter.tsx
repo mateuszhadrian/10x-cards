@@ -8,12 +8,7 @@ interface CharacterCounterProps {
 /**
  * Reusable character counter component with validation feedback
  */
-export default function CharacterCounter({
-  current,
-  max,
-  color,
-  message,
-}: CharacterCounterProps) {
+export default function CharacterCounter({ current, max, color, message }: CharacterCounterProps) {
   return (
     <div className="flex items-center justify-between text-sm">
       <span className={color}>

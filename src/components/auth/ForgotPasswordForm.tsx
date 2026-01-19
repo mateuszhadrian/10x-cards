@@ -54,18 +54,18 @@ export default function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProp
       // const { error } = await supabase.auth.resetPasswordForEmail(email, {
       //   redirectTo: `${window.location.origin}/reset-password`,
       // });
-      
+
       // Placeholder for now
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      
+
       // Show success message
       setSuccessMessage(
         "If an account exists with this email, you will receive a password reset link shortly. Please check your inbox."
       );
-      
+
       // Reset form
       setEmail("");
-      
+
       // Call onSuccess callback
       onSuccess?.();
     } catch (err) {
@@ -94,7 +94,7 @@ export default function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProp
         </>
       }
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} noValidate className="space-y-4">
         <ValidatedField
           id={emailId}
           type="email"

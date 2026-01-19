@@ -1,6 +1,6 @@
 /// <reference types="astro/client" />
 
-import type { SupabaseClient } from './db/supabase.client.ts';
+import type { SupabaseClient } from "./db/supabase.client.ts";
 
 /**
  * User session information stored in Astro.locals

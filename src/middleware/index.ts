@@ -12,7 +12,16 @@ import { createSupabaseServerInstance } from "../db/supabase.client";
  * - "/api/auth/register" - Registration API endpoint
  * - "/api/auth/logout" - Logout API endpoint
  */
-const PUBLIC_PATHS = ["/", "/login", "/register", "/forgot-password", "/reset-password", "/api/auth/login", "/api/auth/register", "/api/auth/logout"];
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/api/auth/login",
+  "/api/auth/register",
+  "/api/auth/logout",
+];
 
 /**
  * Check if the given path is public (doesn't require authentication)

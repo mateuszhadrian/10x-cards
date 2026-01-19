@@ -20,7 +20,8 @@ export default function FlashcardReviewItem({
   onEdit,
   onReject,
 }: FlashcardReviewItemProps) {
-  const { isEditing, editedFront, editedBack, setEditedFront, setEditedBack, startEdit, cancelEdit, canSave } = useFlashcardEdit(flashcard.front, flashcard.back);
+  const { isEditing, editedFront, editedBack, setEditedFront, setEditedBack, startEdit, cancelEdit, canSave } =
+    useFlashcardEdit(flashcard.front, flashcard.back);
 
   const handleSaveEdit = () => {
     if (canSave(1, 200, 1, 500)) {

@@ -1,9 +1,5 @@
 import { useState, useCallback } from "react";
-import type {
-  TriggerGenerationCommandDTO,
-  GenerationResponseDTO,
-  CreateFlashcardsCommandViewModelDTO,
-} from "@/types";
+import type { TriggerGenerationCommandDTO, GenerationResponseDTO, CreateFlashcardsCommandViewModelDTO } from "@/types";
 
 const MIN_TEXT_LENGTH = 1000;
 const MAX_TEXT_LENGTH = 10000;
@@ -34,7 +30,7 @@ export function useGenerateFlashcards(): UseGenerateFlashcardsReturn {
   const [flashcards, setFlashcards] = useState<CreateFlashcardsCommandViewModelDTO[]>([]);
   const [generationId, setGenerationId] = useState<number | null>(null);
 
-  const textLength = inputText.length;
+  const textLength = inputText.trim().length;
   const isValidLength = textLength >= MIN_TEXT_LENGTH && textLength <= MAX_TEXT_LENGTH;
 
   const generateFlashcards = useCallback(async () => {
@@ -65,15 +61,13 @@ export function useGenerateFlashcards(): UseGenerateFlashcardsReturn {
 
       const data: GenerationResponseDTO = await response.json();
 
-      const viewModelFlashcards: CreateFlashcardsCommandViewModelDTO[] = data.flashcards.map(
-        (flashcard) => ({
-          front: flashcard.front,
-          back: flashcard.back,
-          source: "ai-full" as const,
-          accepted: false,
-          edited: false,
-        })
-      );
+      const viewModelFlashcards: CreateFlashcardsCommandViewModelDTO[] = data.flashcards.map((flashcard) => ({
+        front: flashcard.front,
+        back: flashcard.back,
+        source: "ai-full" as const,
+        accepted: false,
+        edited: false,
+      }));
 
       setFlashcards(viewModelFlashcards);
       setGenerationId(data.generation.id);
@@ -82,14 +76,9 @@ export function useGenerateFlashcards(): UseGenerateFlashcardsReturn {
     }
   }, [inputText, isValidLength]);
 
-  const updateFlashcard = useCallback(
-    (index: number, changes: Partial<CreateFlashcardsCommandViewModelDTO>) => {
-      setFlashcards((prev) =>
-        prev.map((flashcard, i) => (i === index ? { ...flashcard, ...changes } : flashcard))
-      );
-    },
-    []
-  );
+  const updateFlashcard = useCallback((index: number, changes: Partial<CreateFlashcardsCommandViewModelDTO>) => {
+    setFlashcards((prev) => prev.map((flashcard, i) => (i === index ? { ...flashcard, ...changes } : flashcard)));
+  }, []);
 
   const removeFlashcard = useCallback((index: number) => {
     setFlashcards((prev) => prev.filter((_, i) => i !== index));

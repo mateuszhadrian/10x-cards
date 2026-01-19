@@ -37,9 +37,7 @@ export default function AuthFormWrapper({
           {successMessage && (
             <Alert className="border-green-600 bg-green-50 dark:bg-green-950/20">
               <AlertTitle className="text-green-800 dark:text-green-400">Success</AlertTitle>
-              <AlertDescription className="text-green-700 dark:text-green-300">
-                {successMessage}
-              </AlertDescription>
+              <AlertDescription className="text-green-700 dark:text-green-300">{successMessage}</AlertDescription>
             </Alert>
           )}
 
@@ -55,9 +53,7 @@ export default function AuthFormWrapper({
           {children}
 
           {/* Footer */}
-          {footer && (
-            <div className="text-center text-sm text-muted-foreground">{footer}</div>
-          )}
+          {footer && <div className="text-center text-sm text-muted-foreground">{footer}</div>}
         </div>
       </CardContent>
     </Card>
