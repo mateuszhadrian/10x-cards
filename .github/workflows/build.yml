@@ -1,6 +1,7 @@
 name: Build and Test
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
 
@@ -8,11 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: ./.github/actions/setup-node
         with:
-          node-version: '20'
-      - run: npm ci
-      - run: npm test
+          node-version-file: .nvmrc
+      - run: npm run test:unit
       - run: npm run build
