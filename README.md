@@ -1,4 +1,4 @@
-# 10x Cards
+# 10x Cards app by mhadrian
 
 ## Overview
 
