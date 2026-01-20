@@ -82,7 +82,7 @@ test.describe("Generate Flashcards", () => {
           });
         }, 1000); // 1 second delay
       });
-      
+
       await generatePage.enterText(testGenerations.validInput);
       await generatePage.clickGenerate();
 
@@ -205,7 +205,7 @@ test.describe("Generate Flashcards", () => {
     test.beforeEach(async ({ page }) => {
       // Navigate to generate page (in case previous test redirected elsewhere)
       await generatePage.goto();
-      
+
       // Mock successful generation for UI tests (fast and reliable)
       await setupSuccessfulGenerationMock(page);
       await generatePage.generateFlashcards(testGenerations.validInput);

@@ -4,10 +4,7 @@ import { z } from "zod";
  * Validation schema for login form
  */
 export const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Invalid email address" }),
+  email: z.string().min(1, { message: "Email is required" }).email({ message: "Invalid email address" }),
   password: z
     .string()
     .min(1, { message: "Password is required" })
@@ -19,10 +16,7 @@ export const loginSchema = z.object({
  */
 export const registerSchema = z
   .object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required" })
-      .email({ message: "Invalid email address" }),
+    email: z.string().min(1, { message: "Email is required" }).email({ message: "Invalid email address" }),
     password: z
       .string()
       .min(1, { message: "Password is required" })
@@ -41,10 +35,7 @@ export const registerSchema = z
  * Validation schema for forgot password form
  */
 export const forgotPasswordSchema = z.object({
-  email: z
-    .string()
-    .min(1, { message: "Email is required" })
-    .email({ message: "Invalid email address" }),
+  email: z.string().min(1, { message: "Email is required" }).email({ message: "Invalid email address" }),
 });
 
 /**

@@ -27,6 +27,7 @@ e2e/
 Main page class for the complete flashcard generation workflow.
 
 **Key Features:**
+
 - Text input and validation
 - Generation process management
 - Flashcard review list operations
@@ -35,23 +36,23 @@ Main page class for the complete flashcard generation workflow.
 **Example Usage:**
 
 ```typescript
-import { GenerateFlashcardsPage } from './pages/GenerateFlashcardsPage';
-import { testGenerations } from './fixtures/test-data';
+import { GenerateFlashcardsPage } from "./pages/GenerateFlashcardsPage";
+import { testGenerations } from "./fixtures/test-data";
 
-test('should generate and save flashcards', async ({ page }) => {
+test("should generate and save flashcards", async ({ page }) => {
   const generatePage = new GenerateFlashcardsPage(page);
   await generatePage.goto();
-  
+
   // Step 1: Enter text
   await generatePage.enterText(testGenerations.validInput);
-  
+
   // Step 2: Generate
   await generatePage.clickGenerate();
   await generatePage.waitForGenerationComplete();
-  
+
   // Step 3: Review and select
   await generatePage.selectAllFlashcards();
-  
+
   // Step 4: Save
   await generatePage.saveAcceptedFlashcards();
   await generatePage.waitForSaveComplete();
@@ -72,6 +73,7 @@ await generatePage.generateAndSaveSelected(text, [0, 1, 2]);
 Helper class for individual flashcard operations in the review list.
 
 **Key Features:**
+
 - Accept/unaccept flashcards
 - Edit flashcard content
 - Reject flashcards
@@ -87,7 +89,7 @@ const flashcard = generatePage.getFlashcardItem(0);
 await flashcard.accept();
 
 // Edit content
-await flashcard.editAndSave('New Question', 'New Answer');
+await flashcard.editAndSave("New Question", "New Answer");
 
 // Check status
 const isAccepted = await flashcard.isAccepted();
@@ -104,13 +106,13 @@ Page class for authentication operations.
 **Example Usage:**
 
 ```typescript
-import { LoginPage } from './pages/LoginPage';
+import { LoginPage } from "./pages/LoginPage";
 
-test('should login successfully', async ({ page }) => {
+test("should login successfully", async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
-  await loginPage.login('user@example.com', 'password123');
-  
+  await loginPage.login("user@example.com", "password123");
+
   const success = await loginPage.isLoginSuccessful();
   expect(success).toBe(true);
 });
@@ -121,16 +123,16 @@ test('should login successfully', async ({ page }) => {
 Reusable test data is stored in `fixtures/test-data.ts`:
 
 ```typescript
-import { testGenerations } from './fixtures/test-data';
+import { testGenerations } from "./fixtures/test-data";
 
 // Valid text for generation (1000-10000 chars)
-testGenerations.validInput
+testGenerations.validInput;
 
 // Text that's too short
-testGenerations.shortInput
+testGenerations.shortInput;
 
 // Text that's too long
-testGenerations.tooLongInput
+testGenerations.tooLongInput;
 ```
 
 ## Element Locator Strategy
@@ -139,13 +141,13 @@ All page objects use `data-testid` attributes for reliable element selection:
 
 ```typescript
 // Primary strategy: data-testid
-this.generateButton = page.getByTestId('generate-flashcards-button');
+this.generateButton = page.getByTestId("generate-flashcards-button");
 
 // Secondary strategy: ARIA roles
-this.submitButton = page.getByRole('button', { name: /submit/i });
+this.submitButton = page.getByRole("button", { name: /submit/i });
 
 // Text content (for labels)
-this.errorMessage = page.locator('text=/error/i');
+this.errorMessage = page.locator("text=/error/i");
 ```
 
 ## Test ID Naming Convention
@@ -155,6 +157,7 @@ Test IDs follow a consistent pattern:
 **Format:** `{component}-{element}-{action/type}[-{index}]`
 
 **Examples:**
+
 - `generate-input-text` - Main text input
 - `generate-flashcards-button` - Generate button
 - `flashcard-checkbox-0` - Checkbox for flashcard at index 0
@@ -164,6 +167,7 @@ Test IDs follow a consistent pattern:
 ## Best Practices
 
 ### 1. Encapsulation
+
 Keep selectors and page-specific logic within page objects:
 
 ```typescript
@@ -171,23 +175,25 @@ Keep selectors and page-specific logic within page objects:
 await generatePage.saveAllFlashcards();
 
 // ❌ Bad
-await page.getByTestId('save-all-flashcards-button').click();
+await page.getByTestId("save-all-flashcards-button").click();
 ```
 
 ### 2. Readable Methods
+
 Create methods that describe user actions:
 
 ```typescript
 // ✅ Good
-await flashcard.editAndSave('Question', 'Answer');
+await flashcard.editAndSave("Question", "Answer");
 
 // ❌ Bad
-await flashcard.frontInput.fill('Question');
-await flashcard.backTextarea.fill('Answer');
+await flashcard.frontInput.fill("Question");
+await flashcard.backTextarea.fill("Answer");
 await flashcard.saveEditButton.click();
 ```
 
 ### 3. Wait for State Changes
+
 Always wait for state changes to complete:
 
 ```typescript
@@ -201,6 +207,7 @@ await generatePage.clickGenerate();
 ```
 
 ### 4. Workflow Methods
+
 Provide high-level workflow methods for common scenarios:
 
 ```typescript
@@ -216,6 +223,7 @@ await generatePage.waitForSaveComplete();
 ```
 
 ### 5. Index-Based Access
+
 Use index-based access for list items:
 
 ```typescript
@@ -252,6 +260,7 @@ npx playwright codegen http://localhost:4321
 ## Debugging
 
 ### Trace Viewer
+
 When tests fail, use the trace viewer:
 
 ```bash
@@ -259,13 +268,15 @@ npx playwright show-trace test-results/*/trace.zip
 ```
 
 ### Screenshots
+
 Add screenshots for debugging:
 
 ```typescript
-await page.screenshot({ path: 'screenshot.png', fullPage: true });
+await page.screenshot({ path: "screenshot.png", fullPage: true });
 ```
 
 ### Pause Execution
+
 Pause test execution to inspect:
 
 ```typescript
@@ -286,7 +297,7 @@ When adding a new page object:
 **Template:**
 
 ```typescript
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class NewPage {
   readonly page: Page;
@@ -294,11 +305,11 @@ export class NewPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.element = page.getByTestId('element-id');
+    this.element = page.getByTestId("element-id");
   }
 
   async goto() {
-    await this.page.goto('/path');
+    await this.page.goto("/path");
   }
 
   async performAction() {

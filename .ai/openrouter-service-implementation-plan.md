@@ -57,17 +57,17 @@ Konstruktor usługi powinien inicjalizować podstawowe zależności:
 
 ### Metody
 
-1. **_formatMessage(message: string, type: 'system' | 'user'): object**
+1. **\_formatMessage(message: string, type: 'system' | 'user'): object**
    - Prywatna metoda formatująca komunikat do API.
-2. **_handleApiResponse(response: any): Response**
+2. **\_handleApiResponse(response: any): Response**
    - Prywatna metoda odpowiedzialna za wstępną walidację i przetwarzanie odpowiedzi z API.
-3. **_logError(error: Error): void**
+3. **\_logError(error: Error): void**
    - Prywatna metoda do logowania błędów, która umożliwia dalszą analizę przyczyn problemów.
 
 ### Pola
 
-1. **_httpClient: HttpClient** - Prywatny klient HTTP wykorzystywany do komunikacji z API.
-2. **_config: object** - Wewnętrzne ustawienia konfiguracyjne dla sesji.
+1. **\_httpClient: HttpClient** - Prywatny klient HTTP wykorzystywany do komunikacji z API.
+2. **\_config: object** - Wewnętrzne ustawienia konfiguracyjne dla sesji.
 
 ---
 
@@ -108,7 +108,7 @@ Konstruktor usługi powinien inicjalizować podstawowe zależności:
 
 2. **Implementacja Modułu API Client**
    - Stworzenie modułu odpowiedzialnego za autoryzację i komunikację z OpenRouter API.
-   - Zaimplementowanie metody `sendMessage`, wykorzystującej _httpClient do wysłania danych.
+   - Zaimplementowanie metody `sendMessage`, wykorzystującej \_httpClient do wysłania danych.
 
 3. **Implementacja Menedżera Sesji Czatów**
    - Utworzenie mechanizmu przechowywania historii wiadomości oraz ich formatowania.
@@ -138,7 +138,14 @@ Konstruktor usługi powinien inicjalizować podstawowe zależności:
    - Sposób: Konfiguracja formatów odpowiedzi zgodnie z przykładem:
 
      ```json
-     { "type": "json_schema", "json_schema": { "name": "openrouter_response", "strict": true, "schema": { "result": "string", "details": "object" } } }
+     {
+       "type": "json_schema",
+       "json_schema": {
+         "name": "openrouter_response",
+         "strict": true,
+         "schema": { "result": "string", "details": "object" }
+       }
+     }
      ```
 
 4. **Nazwa modelu**
@@ -153,4 +160,3 @@ Konstruktor usługi powinien inicjalizować podstawowe zależności:
 Plan wdrożenia usługi OpenRouter obejmuje kompletne wdrożenie kluczowych komponentów: od modułu API Client, przez sesje czatu, formatowanie komunikatów, aż po centralną obsługę błędów. Podejście to uwzględnia specyfikę technologii wykorzystywanych w projekcie oraz najlepsze praktyki w zakresie bezpieczeństwa i niezawodności.
 
 Każdy krok wdrożenia został zaprojektowany tak, aby można go było łatwo zintegrować z istniejącym stosowaną architekturą oraz zapewnić spójną, stabilną i skalowalną komunikację z OpenRouter API.
-

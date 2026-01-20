@@ -18,7 +18,7 @@
 
 - **Frontend**: Astro v5, React v19, Tailwind CSS v4, and Shadcn/ui
 - **Backend**: TypeScript v5 with Supabase for database and authentication
-- **Testing**: 
+- **Testing**:
   - **Unit & Integration Tests**: Vitest, React Testing Library, MSW (Mock Service Worker)
   - **E2E Tests**: Playwright
 

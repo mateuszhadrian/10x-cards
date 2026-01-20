@@ -3,6 +3,7 @@
 ## ✅ Co zostało zaimplementowane
 
 ### 1. Aktualizacja Stack'u
+
 - ✅ Dodano `@supabase/ssr` do `package.json`
 - ✅ Zaktualizowano `src/db/supabase.client.ts` z nowymi klientami:
   - `createSupabaseServerInstance()` - do użytku w middleware i API routes
@@ -10,12 +11,14 @@
   - Poprawna obsługa cookies zgodnie z best practices `@supabase/ssr`
 
 ### 2. Typy TypeScript
+
 - ✅ Zaktualizowano `src/env.d.ts`:
   - Dodano interfejs `UserSession` z polami `id` i `email`
   - Zaktualizowano `App.Locals` o pole `user: UserSession | null`
   - Zachowano kompatybilność z istniejącym `supabase: SupabaseClient`
 
 ### 3. Middleware z Zarządzaniem Sesją
+
 - ✅ Całkowicie przepisano `src/middleware/index.ts`:
   - Tworzenie Supabase server client z cookie handling
   - Automatyczne odświeżanie sesji użytkownika
@@ -25,6 +28,7 @@
   - Zdefiniowane `PUBLIC_PATHS`: `/`, `/login`, `/api/auth/login`
 
 ### 4. API Endpoint
+
 - ✅ Utworzono `src/pages/api/auth/login.ts`:
   - Endpoint typu POST przyjmujący email i password
   - Walidacja danych za pomocą `loginSchema` (zod)
@@ -34,6 +38,7 @@
   - Disabled prerendering (`export const prerender = false`)
 
 ### 5. Integracja Frontend
+
 - ✅ Zaktualizowano `src/components/auth/LoginForm.tsx`:
   - Usunięto placeholder logic
   - Dodano wywołanie API `/api/auth/login` przez fetch
@@ -50,24 +55,29 @@
 ## 📋 Wymagane kroki przed testowaniem
 
 ### 1. Zainstaluj Dependencies
+
 ```bash
 npm install
 ```
 
 **Uwaga**: Jeśli wystąpi błąd związany z uprawnieniami npm cache, uruchom:
+
 ```bash
 sudo chown -R 501:20 "/Users/mhadrian-macwro/.npm"
 npm install
 ```
 
 ### 2. Zweryfikuj zmienne środowiskowe
+
 Upewnij się, że plik `.env` zawiera:
+
 ```env
 SUPABASE_URL=your_project_url
 SUPABASE_KEY=your_anon_key
 ```
 
 ### 3. Uruchom dev server
+
 ```bash
 npm run dev
 ```
@@ -75,34 +85,40 @@ npm run dev
 ## 🧪 Scenariusze testowe
 
 ### Test 1: Ochrona tras
+
 1. Przejdź do `http://localhost:4321/generate` (bez logowania)
 2. **Oczekiwany rezultat**: Automatyczne przekierowanie na `/login`
 
 ### Test 2: Logowanie użytkownika
+
 1. Przejdź do `http://localhost:4321/login`
 2. Wprowadź poprawne dane logowania (email i hasło)
 3. Kliknij "Sign In"
-4. **Oczekiwany rezultat**: 
+4. **Oczekiwany rezultat**:
    - Sukces logowania
    - Przekierowanie na `/generate`
    - Sesja zostaje zapisana (sprawdź cookies w DevTools)
 
 ### Test 3: Walidacja danych
+
 1. Na stronie `/login` wprowadź niepoprawny email (np. "test")
 2. **Oczekiwany rezultat**: Błąd walidacji "Invalid email address"
 3. Wprowadź hasło krótsze niż 6 znaków
 4. **Oczekiwany rezultat**: Błąd "Password must be at least 6 characters long"
 
 ### Test 4: Błędne dane logowania
+
 1. Na stronie `/login` wprowadź niepoprawne dane
 2. **Oczekiwany rezultat**: Komunikat błędu z Supabase (np. "Invalid login credentials")
 
 ### Test 5: Przekierowanie zalogowanych
+
 1. Zaloguj się na konto
 2. Przejdź ręcznie do `http://localhost:4321/login`
 3. **Oczekiwany rezultat**: Automatyczne przekierowanie na `/generate`
 
 ### Test 6: Persistencja sesji
+
 1. Zaloguj się na konto
 2. Odśwież stronę
 3. **Oczekiwany rezultat**: Użytkownik pozostaje zalogowany
@@ -193,6 +209,7 @@ npm run dev
 ## 🔐 Bezpieczeństwo
 
 ### Zaimplementowane zabezpieczenia
+
 - ✅ HttpOnly cookies (nie dostępne dla JavaScript na kliencie)
 - ✅ Secure cookies (tylko HTTPS w produkcji)
 - ✅ SameSite: 'lax' (ochrona przed CSRF)
@@ -201,6 +218,7 @@ npm run dev
 - ✅ Automatyczne odświeżanie tokenów przez middleware
 
 ### Best Practices
+
 - ✅ Auth logic tylko w API endpoints (nie w komponentach React)
 - ✅ Walidacja na wielu warstwach (UI → API → Supabase)
 - ✅ Proper error handling (nie ujawnianie szczegółów wewnętrznych)
@@ -246,16 +264,20 @@ Zgodnie z instrukcjami, następujące elementy **nie zostały** zaimplementowane
 ## 🐛 Znane problemy i rozwiązania
 
 ### Problem: npm install nie działa (EPERM)
-**Rozwiązanie**: 
+
+**Rozwiązanie**:
+
 ```bash
 sudo chown -R 501:20 "/Users/mhadrian-macwro/.npm"
 npm install
 ```
 
 ### Problem: "Cannot find module @supabase/ssr"
+
 **Rozwiązanie**: Upewnij się, że uruchomiłeś `npm install` po dodaniu pakietu do package.json
 
 ### Problem: Infinite redirect loop
+
 **Przyczyna**: Middleware przekierowuje na `/login`, a `/login` przekierowuje z powrotem
 **Rozwiązanie**: Upewnij się, że `/login` jest w `PUBLIC_PATHS`
 
@@ -268,6 +290,7 @@ npm install
 ## ✨ Podsumowanie
 
 Integracja logowania została zaimplementowana zgodnie z:
+
 - ✅ Specyfikacją techniczną (`.ai/auth-spec.md`)
 - ✅ User story US-001 (częściowo - tylko logowanie)
 - ✅ Best practices `@supabase/ssr`

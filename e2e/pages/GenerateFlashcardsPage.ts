@@ -67,24 +67,24 @@ export class GenerateFlashcardsPage {
    * Hybrid approach:
    * 1. Type first 50 chars to ensure React onChange is triggered
    * 2. Use fill() to set remaining text (fast)
-   * 
+   *
    * This is reliable across all test scenarios (fresh page and reused page state)
    */
   async enterText(text: string) {
     // Clear any existing text first
     await this.inputTextarea.clear();
-    
+
     // Click to focus the textarea (important for React event handlers)
     await this.inputTextarea.click();
-    
+
     // Type first portion to trigger React onChange (this ensures hooks are properly initialized)
     const typeLength = Math.min(50, text.length);
     await this.inputTextarea.type(text.substring(0, typeLength), { delay: 0 });
-    
+
     // If there's more text, use fill() for the rest (much faster)
     if (text.length > typeLength) {
       // Select all and replace with full text
-      await this.inputTextarea.press('Meta+A'); // Ctrl+A on Windows/Linux, Cmd+A on Mac
+      await this.inputTextarea.press("Meta+A"); // Ctrl+A on Windows/Linux, Cmd+A on Mac
       await this.inputTextarea.fill(text);
     }
 
@@ -125,7 +125,7 @@ export class GenerateFlashcardsPage {
   async clickGenerate() {
     // Wait for button to be visible
     await this.generateButton.waitFor({ state: "visible", timeout: 5000 });
-    
+
     // Wait for button to be enabled (not disabled)
     // This is critical to avoid race conditions where React hasn't updated the button state yet
     try {
@@ -145,7 +145,7 @@ export class GenerateFlashcardsPage {
       }
       throw error;
     }
-    
+
     await this.generateButton.click();
   }
 

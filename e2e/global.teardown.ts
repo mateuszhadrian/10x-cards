@@ -114,10 +114,7 @@ async function globalTeardown() {
       const { data, error } = await supabase
         .from("generations_errors")
         .delete()
-        .in(
-          "generation_id",
-          supabase.from("generations").select("id").eq("user_id", testUserId)
-        )
+        .in("generation_id", supabase.from("generations").select("id").eq("user_id", testUserId))
         .select();
 
       if (error) {

@@ -107,7 +107,7 @@ test.describe("Registration", () => {
 
     // Check for validation error message
     // Use text locator as fallback since React useId() generates special characters
-    const emailError = page.locator('p.text-destructive', { hasText: /invalid.*email/i }).first();
+    const emailError = page.locator("p.text-destructive", { hasText: /invalid.*email/i }).first();
     await expect(emailError).toBeVisible({ timeout: 3000 });
   });
 });

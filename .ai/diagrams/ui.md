@@ -1,56 +1,57 @@
 <architecture_analysis>
+
 1.  **Komponenty (z PRD i Auth Spec):**
-    *   **Strony (Astro Pages):**
-        *   `index.astro` (Strona główna/Landing)
-        *   `login.astro` (Logowanie)
-        *   `register.astro` (Rejestracja)
-        *   `forgot-password.astro` (Odzyskiwanie hasła)
-        *   `generate.astro` (Generowanie fiszek - chroniona)
-        *   `flashcards.astro` (Lista fiszek - chroniona)
-    *   **Layouty:**
-        *   `Layout.astro` (Główny layout z nawigacją)
-        *   `AuthLayout` (Opcjonalny, uproszczony dla stron auth)
-    *   **Komponenty Nawigacyjne:**
-        *   `NavigationBar.tsx` (Górny pasek, stan zalogowania)
-        *   `LeftNavigation.tsx` (Boczny pasek, linki)
-        *   `HamburgerMenu.tsx` (Mobilne menu)
-    *   **Komponenty Auth (React Islands):**
-        *   `LoginForm.tsx`
-        *   `RegisterForm.tsx`
-        *   `ForgotPasswordForm.tsx`
-        *   `ResetPasswordForm.tsx`
-    *   **Komponenty Funkcjonalne (React Islands):**
-        *   `GenerateView.tsx`
-        *   `FlashcardsReviewList.tsx`
-        *   `SavedFlashcardsList.tsx`
-    *   **Serwisy/Logika:**
-        *   `middleware/index.ts` (Ochrona tras, wstrzykiwanie sesji)
-        *   `lib/supabase/client.ts` (Klient przeglądarkowy)
-        *   `lib/supabase/server.ts` (Klient serwerowy)
+    - **Strony (Astro Pages):**
+      - `index.astro` (Strona główna/Landing)
+      - `login.astro` (Logowanie)
+      - `register.astro` (Rejestracja)
+      - `forgot-password.astro` (Odzyskiwanie hasła)
+      - `generate.astro` (Generowanie fiszek - chroniona)
+      - `flashcards.astro` (Lista fiszek - chroniona)
+    - **Layouty:**
+      - `Layout.astro` (Główny layout z nawigacją)
+      - `AuthLayout` (Opcjonalny, uproszczony dla stron auth)
+    - **Komponenty Nawigacyjne:**
+      - `NavigationBar.tsx` (Górny pasek, stan zalogowania)
+      - `LeftNavigation.tsx` (Boczny pasek, linki)
+      - `HamburgerMenu.tsx` (Mobilne menu)
+    - **Komponenty Auth (React Islands):**
+      - `LoginForm.tsx`
+      - `RegisterForm.tsx`
+      - `ForgotPasswordForm.tsx`
+      - `ResetPasswordForm.tsx`
+    - **Komponenty Funkcjonalne (React Islands):**
+      - `GenerateView.tsx`
+      - `FlashcardsReviewList.tsx`
+      - `SavedFlashcardsList.tsx`
+    - **Serwisy/Logika:**
+      - `middleware/index.ts` (Ochrona tras, wstrzykiwanie sesji)
+      - `lib/supabase/client.ts` (Klient przeglądarkowy)
+      - `lib/supabase/server.ts` (Klient serwerowy)
 
 2.  **Główne strony i komponenty:**
-    *   `login.astro` zawiera `LoginForm.tsx`
-    *   `register.astro` zawiera `RegisterForm.tsx`
-    *   `generate.astro` zawiera `GenerateView.tsx` i `FlashcardsReviewList.tsx`
-    *   `flashcards.astro` zawiera `SavedFlashcardsList.tsx`
+    - `login.astro` zawiera `LoginForm.tsx`
+    - `register.astro` zawiera `RegisterForm.tsx`
+    - `generate.astro` zawiera `GenerateView.tsx` i `FlashcardsReviewList.tsx`
+    - `flashcards.astro` zawiera `SavedFlashcardsList.tsx`
 
 3.  **Przepływ danych:**
-    *   Middleware weryfikuje sesję i przekazuje obiekt `user` do `Layout.astro` via `Astro.locals`.
-    *   `Layout.astro` przekazuje stan zalogowania do `NavigationBar` i `LeftNavigation`.
-    *   Komponenty React (`LoginForm`, etc.) komunikują się bezpośrednio z Supabase Auth i wewnętrznym API (`/api/auth/*`) w celu synchronizacji ciasteczek.
+    - Middleware weryfikuje sesję i przekazuje obiekt `user` do `Layout.astro` via `Astro.locals`.
+    - `Layout.astro` przekazuje stan zalogowania do `NavigationBar` i `LeftNavigation`.
+    - Komponenty React (`LoginForm`, etc.) komunikują się bezpośrednio z Supabase Auth i wewnętrznym API (`/api/auth/*`) w celu synchronizacji ciasteczek.
 
 4.  **Opis funkcjonalności:**
-    *   **Layout:** Odpowiada za strukturę i nawigację, dostosowuje się do stanu autentykacji.
-    *   **Auth Pages:** Kontenery dla formularzy React, renderowane SSR.
-    *   **Auth Forms:** Obsługują interakcję z użytkownikiem i Supabase Auth.
-    *   **Middleware:** Strażnik dostępu, zarządza sesją po stronie serwera.
-</architecture_analysis>
+    _ **Layout:** Odpowiada za strukturę i nawigację, dostosowuje się do stanu autentykacji.
+    _ **Auth Pages:** Kontenery dla formularzy React, renderowane SSR.
+    _ **Auth Forms:** Obsługują interakcję z użytkownikiem i Supabase Auth.
+    _ **Middleware:** Strażnik dostępu, zarządza sesją po stronie serwera.
+    </architecture_analysis>
 
 ```mermaid
 flowchart TD
     subgraph "Warstwa Serwera (Astro SSR)"
         Middleware[Middleware]
-        
+
         subgraph "Layouts"
             MainLayout[Layout.astro]
             AuthLayout[AuthLayout]
@@ -67,7 +68,7 @@ flowchart TD
             GeneratePage[generate.astro]
             FlashcardsPage[flashcards.astro]
         end
-        
+
         API[API Endpoints\n/api/auth/*]
     end
 
@@ -97,12 +98,12 @@ flowchart TD
     %% Połączenia Middleware i Stron
     Middleware -->|Weryfikacja Sesji| MainLayout
     Middleware -.->|Przekierowanie brak sesji| LoginPage
-    
+
     %% Relacje Layout - Strony
     MainLayout --> IndexPage
     MainLayout --> GeneratePage
     MainLayout --> FlashcardsPage
-    
+
     AuthLayout --> LoginPage
     AuthLayout --> RegisterPage
     AuthLayout --> ForgotPage
@@ -111,7 +112,7 @@ flowchart TD
     LoginPage --> LoginForm
     RegisterPage --> RegisterForm
     ForgotPage --> ForgotForm
-    
+
     GeneratePage --> GenView
     GenView --> ReviewList
     FlashcardsPage --> SavedList
@@ -125,7 +126,7 @@ flowchart TD
     LoginForm -->|SignIn| SupabaseClient
     RegisterForm -->|SignUp| SupabaseClient
     ForgotForm -->|ResetPassword| SupabaseClient
-    
+
     %% Synchronizacja Sesji
     SupabaseClient -->|Token| API
     API -->|Set Cookie| Middleware

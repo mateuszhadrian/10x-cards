@@ -23,13 +23,14 @@
    - **Response Payload**:
 
      {
-       "flashcards": [
-         { "id": 1, "front": "Question?", "back": "Answer.", "source": "manual", "generation_id": null, "created_at": "...", "updated_at": "..." },
-         ...
-       ],
-       "pagination": { "total": 50, "page": 1, "limit": 10 }
+     "flashcards": [
+     { "id": 1, "front": "Question?", "back": "Answer.", "source": "manual", "generation_id": null, "created_at": "...", "updated_at": "..." },
+     ...
+     ],
+     "pagination": { "total": 50, "page": 1, "limit": 10 }
      }
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
+
    - **Error Codes**: 401 Unauthorized, 500 Internal Server Error
 
 2. **Create a Flashcard (Manual or AI-approved)**
@@ -41,44 +42,46 @@
    - **Request Payload** (example of sending a list of flashcards):
 
      {
-       "flashcards": [
-         {
-           "front": "What is REST?",
-           "back": "A software architectural style for building APIs.",
-           "source": "manual",
-           "generation_id": null
-         },
-         {
-           "front": "What is GraphQL?",
-           "back": "A query language for APIs.",
-           "source": "ai-full",
-           "generation_id": 5
-         },
-         {
-           "front": "What is AI?",
-           "back": "A branch of computer science dealing with intelligent behavior.",
-           "source": "ai-edited",
-           "generation_id": 5
-         }
-       ]
+     "flashcards": [
+     {
+     "front": "What is REST?",
+     "back": "A software architectural style for building APIs.",
+     "source": "manual",
+     "generation_id": null
+     },
+     {
+     "front": "What is GraphQL?",
+     "back": "A query language for APIs.",
+     "source": "ai-full",
+     "generation_id": 5
+     },
+     {
+     "front": "What is AI?",
+     "back": "A branch of computer science dealing with intelligent behavior.",
+     "source": "ai-edited",
+     "generation_id": 5
      }
-        - **Validations**:
-          - For all flashcards:
-            - `front`: Must be between 1 and 200 characters.
-            - `back`: Must be between 1 and 500 characters.
-            - `source`: Must be one of `manual`, `ai-full`, or `ai-edited`.
-          - For flashcards with `source` set to an AI value (`ai-full` or `ai-edited`): `generation_id` is required.
+     ]
+     }
+     - **Validations**:
+       - For all flashcards:
+         - `front`: Must be between 1 and 200 characters.
+         - `back`: Must be between 1 and 500 characters.
+         - `source`: Must be one of `manual`, `ai-full`, or `ai-edited`.
+       - For flashcards with `source` set to an AI value (`ai-full` or `ai-edited`): `generation_id` is required.
+
    - **Response Payload**:
 
      {
-       "message": "Flashcards saved successfully",
-       "flashcards": [
-         { "id": 10, "front": "What is REST?", "back": "A software architectural style for building APIs.", "source": "manual", "created_at": "..." },
-         { "id": 11, "front": "What is GraphQL?", "back": "A query language for APIs.", "source": "ai-full", "generation_id": 5, "created_at": "..." },
-         { "id": 12, "front": "What is AI?", "back": "A branch of computer science dealing with intelligent behavior.", "source": "ai-edited", "generation_id": 5, "created_at": "..." }
-       ]
+     "message": "Flashcards saved successfully",
+     "flashcards": [
+     { "id": 10, "front": "What is REST?", "back": "A software architectural style for building APIs.", "source": "manual", "created_at": "..." },
+     { "id": 11, "front": "What is GraphQL?", "back": "A query language for APIs.", "source": "ai-full", "generation_id": 5, "created_at": "..." },
+     { "id": 12, "front": "What is AI?", "back": "A branch of computer science dealing with intelligent behavior.", "source": "ai-edited", "generation_id": 5, "created_at": "..." }
+     ]
      }
-        - **Success Codes**: 201 Created
+     - **Success Codes**: 201 Created
+
    - **Error Codes**: 400 Bad Request, 401 Unauthorized
 
 3. **Get Flashcard Details**
@@ -88,7 +91,8 @@
    - **Response Payload**:
 
      { "id": 10, "front": "...", "back": "...", "source": "manual", "generation_id": null, "created_at": "..." }
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
+
    - **Error Codes**: 404 Not Found, 401 Unauthorized
 
 4. **Update Flashcard**
@@ -98,10 +102,11 @@
    - **Request Payload** (fields allowed for update):
 
      { "front": "Updated question?", "back": "Updated answer." }
-        - **Response Payload**:
+     - **Response Payload**:
 
      { "message": "Flashcard updated successfully", "flashcard": { "id": 10, "front": "Updated question?", "back": "Updated answer.", "updated_at": "..." } }
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
+
    - **Error Codes**: 400 Bad Request, 404 Not Found, 401 Unauthorized
 
 5. **Delete Flashcard**
@@ -111,7 +116,8 @@
    - **Response Payload**:
 
      { "message": "Flashcard deleted successfully" }
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
+
    - **Error Codes**: 404 Not Found, 401 Unauthorized
 
 ### 2.2 Generations Endpoints
@@ -123,17 +129,19 @@
    - **Request Payload**:
 
      {
-       "input_text": "<text between 1000 and 10000 characters>"
+     "input_text": "<text between 1000 and 10000 characters>"
      }
-        - **Validations**:
-          - `input_text` length must be between 1000 and 10000 characters.
+     - **Validations**:
+       - `input_text` length must be between 1000 and 10000 characters.
+
    - **Business Logic**:
      - Initiates an AI service call to generate between 1 and 30 flashcards.
      - If no flashcards are generated, an error message "Failed to generate flashcards" is returned.
    - **Response Payload**:
 
      { "message": "Generation initiated", "generation": { "id": 5, "model": "gpt-4", "created_at": "..." }, "flashcards": [ /* generated flashcard proposals */ ] }
-        - **Success Codes**: 201 Created
+     - **Success Codes**: 201 Created
+
    - **Error Codes**: 400 Bad Request, 500 Internal Server Error
 
 2. **Get Generation Details**
@@ -143,7 +151,8 @@
    - **Response Payload**:
 
      { "id": 5, "model": "gpt-4", "created_at": "...", "flashcards": [ { "id": 10, ... } ] }
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
+
    - **Error Codes**: 404 Not Found, 401 Unauthorized
 
 3. **List Generations**
@@ -152,7 +161,7 @@
    - **Description**: Retrieves a paginated list of generation records for the authenticated user.
    - **Query Parameters**: Similar to flashcards listing (page, limit, order, sort, filter)
    - **Response Payload**: Includes generation summary details with pagination information.
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
    - **Error Codes**: 401 Unauthorized, 500 Internal Server Error
 
 4. **Get Generation Errors**
@@ -162,7 +171,8 @@
    - **Response Payload**:
 
      { "generation_id": 5, "errors": [ { "id": 2, "error_message": "AI generation failed due to ...", "created_at": "..." } ] }
-        - **Success Codes**: 200 OK
+     - **Success Codes**: 200 OK
+
    - **Error Codes**: 404 Not Found, 401 Unauthorized
 
 ## 3. Authentication and Authorization

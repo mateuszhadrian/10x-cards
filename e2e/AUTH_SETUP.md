@@ -16,12 +16,12 @@ Przed uruchomieniem testów, specjalny setup test loguje użytkownika i zapisuje
 
 ```typescript
 // e2e/auth.setup.ts
-setup('authenticate', async ({ page }) => {
+setup("authenticate", async ({ page }) => {
   // Login using credentials from .env.test
   await loginPage.login(email, password);
-  
+
   // Save authenticated state
-  await page.context().storageState({ path: 'playwright/.auth/user.json' });
+  await page.context().storageState({ path: "playwright/.auth/user.json" });
 });
 ```
 
@@ -33,19 +33,19 @@ Konfiguracja definiuje dwa projekty:
 projects: [
   // 1. Setup project - runs first
   {
-    name: 'setup',
+    name: "setup",
     testMatch: /.*\.setup\.ts/,
   },
 
   // 2. Main project - uses authenticated state
   {
-    name: 'chromium',
-    use: { 
-      storageState: 'playwright/.auth/user.json',
+    name: "chromium",
+    use: {
+      storageState: "playwright/.auth/user.json",
     },
-    dependencies: ['setup'],
+    dependencies: ["setup"],
   },
-]
+];
 ```
 
 ### 3. Environment Variables
@@ -62,6 +62,7 @@ E2E_PASSWORD=YourSecurePassword123!
 ## Storage State
 
 Storage state to plik JSON zawierający:
+
 - Cookies (session token)
 - Local storage
 - Session storage
@@ -72,16 +73,19 @@ Plik jest zapisany w `playwright/.auth/user.json` i reużywany przez wszystkie t
 ## Korzyści
 
 ### 1. Szybkość
+
 - **Login raz** zamiast przed każdym testem
 - Testy startują już zalogowane
 - Oszczędność czasu: ~2-3s na test
 
 ### 2. Niezawodność
+
 - Konsystentny stan autoryzacji
 - Brak flaky tests związanych z logowaniem
 - Mniej network requests
 
 ### 3. Developer Experience
+
 - Testy skupiają się na funkcjonalności, nie na auth
 - Łatwiejsze debugowanie
 - Czytelniejszy kod testowy
@@ -113,10 +117,10 @@ playwright.config.ts            # Loads .env.test and configures projects
 Wszystkie testy w projekcie `chromium` automatycznie używają authenticated state:
 
 ```typescript
-test('should generate flashcards', async ({ page }) => {
+test("should generate flashcards", async ({ page }) => {
   // Already authenticated! No login needed
-  await page.goto('/generate');
-  
+  await page.goto("/generate");
+
   // Test functionality...
 });
 ```
@@ -128,11 +132,11 @@ Jeśli test potrzebuje testować funkcjonalność bez logowania:
 ```typescript
 test.use({ storageState: { cookies: [], origins: [] } });
 
-test('should show login page for unauthenticated user', async ({ page }) => {
-  await page.goto('/generate');
-  
+test("should show login page for unauthenticated user", async ({ page }) => {
+  await page.goto("/generate");
+
   // Should redirect to /login
-  await expect(page).toHaveURL('/login');
+  await expect(page).toHaveURL("/login");
 });
 ```
 
@@ -142,21 +146,21 @@ Można stworzyć dodatkowe setup files dla różnych użytkowników:
 
 ```typescript
 // e2e/auth-admin.setup.ts
-setup('authenticate as admin', async ({ page }) => {
+setup("authenticate as admin", async ({ page }) => {
   await loginPage.login(adminEmail, adminPassword);
-  await page.context().storageState({ path: 'playwright/.auth/admin.json' });
+  await page.context().storageState({ path: "playwright/.auth/admin.json" });
 });
 
 // playwright.config.ts
 projects: [
   {
-    name: 'chromium-admin',
-    use: { 
-      storageState: 'playwright/.auth/admin.json',
+    name: "chromium-admin",
+    use: {
+      storageState: "playwright/.auth/admin.json",
     },
-    dependencies: ['setup-admin'],
+    dependencies: ["setup-admin"],
   },
-]
+];
 ```
 
 ## Debugowanie
@@ -172,8 +176,8 @@ Powinien zawierać cookies z supabase session token.
 ### Sprawdź Zmienne Środowiskowe
 
 ```typescript
-console.log('E2E_USERNAME:', process.env.E2E_USERNAME);
-console.log('E2E_PASSWORD:', process.env.E2E_PASSWORD ? '***' : 'NOT SET');
+console.log("E2E_USERNAME:", process.env.E2E_USERNAME);
+console.log("E2E_PASSWORD:", process.env.E2E_PASSWORD ? "***" : "NOT SET");
 ```
 
 ### Wymuszenie Ponownego Logowania
@@ -238,11 +242,13 @@ E2E_PASSWORD=your-password
 ### Problem: "Authentication failed"
 
 **Przyczyny:**
+
 1. Niepoprawne credentials w `.env.test`
 2. Użytkownik nie istnieje w bazie
 3. Supabase nie działa
 
 **Rozwiązanie:**
+
 - Sprawdź credentials
 - Upewnij się że dev server działa (`npm run dev`)
 - Sprawdź Supabase connection
@@ -250,11 +256,13 @@ E2E_PASSWORD=your-password
 ### Problem: Testy przekierowują do /login mimo auth setup
 
 **Przyczyny:**
+
 1. Storage state nie został utworzony
 2. Plik `playwright/.auth/user.json` jest pusty/błędny
 3. Session wygasła
 
 **Rozwiązanie:**
+
 ```bash
 # Usuń stary state i wygeneruj nowy
 rm -rf playwright/.auth/
@@ -264,6 +272,7 @@ npm run test:e2e
 ### Problem: Sesja wygasa podczas testów
 
 **Rozwiązanie:** Supabase session powinien być ważny przez 1h. Jeśli testy trwają dłużej, rozważ:
+
 - Refresh token w beforeEach
 - Lub uruchom auth.setup częściej
 
@@ -280,13 +289,13 @@ npm run test:e2e
 ### 2. Zweryfikuj Autoryzację w Setup
 
 ```typescript
-setup('authenticate', async ({ page }) => {
+setup("authenticate", async ({ page }) => {
   await loginPage.login(email, password);
-  
+
   // Verify authentication worked
-  await page.goto('/generate');
-  await expect(page).toHaveURL('/generate'); // Not redirected to /login
-  
+  await page.goto("/generate");
+  await expect(page).toHaveURL("/generate"); // Not redirected to /login
+
   await page.context().storageState({ path: authFile });
 });
 ```
@@ -310,11 +319,11 @@ E2E_PASSWORD=SecureTestPassword123!
 W każdym teście który wymaga specjalnych uprawnień:
 
 ```typescript
-test('should access admin panel', async ({ page }) => {
+test("should access admin panel", async ({ page }) => {
   // Requires: Admin user authentication
   // Setup: auth-admin.setup.ts
-  
-  await page.goto('/admin');
+
+  await page.goto("/admin");
   // ...
 });
 ```

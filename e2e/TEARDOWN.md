@@ -44,25 +44,19 @@ Wszystkie dane z `user_id` równym tej wartości są usuwane.
 async function globalTeardown() {
   // 1. Połącz się z Supabase
   const supabase = createClient(url, key);
-  
+
   // 2. Zaloguj jako test user (bypass RLS)
   await supabase.auth.signInWithPassword({ email, password });
-  
+
   // 3. Usuń flashcards
-  await supabase.from('flashcards')
-    .delete()
-    .eq('user_id', testUserId);
-  
+  await supabase.from("flashcards").delete().eq("user_id", testUserId);
+
   // 4. Usuń generations
-  await supabase.from('generations')
-    .delete()
-    .eq('user_id', testUserId);
-  
+  await supabase.from("generations").delete().eq("user_id", testUserId);
+
   // 5. Usuń generation errors
-  await supabase.from('generations_errors')
-    .delete()
-    .eq('user_id', testUserId);
-  
+  await supabase.from("generations_errors").delete().eq("user_id", testUserId);
+
   // 6. Wyloguj
   await supabase.auth.signOut();
 }
@@ -74,7 +68,7 @@ async function globalTeardown() {
 
 ```typescript
 export default defineConfig({
-  globalTeardown: './e2e/global.teardown.ts',
+  globalTeardown: "./e2e/global.teardown.ts",
   // ... rest of config
 });
 ```
@@ -168,6 +162,7 @@ curl -X POST https://your-project.supabase.co/auth/v1/token \
 ### ❌ "Failed to delete flashcards"
 
 **Przyczyny:**
+
 1. RLS policies blokują usuwanie
 2. Użytkownik nie jest właścicielem danych
 3. Foreign key constraints
@@ -279,6 +274,6 @@ env:
 
 ✅ **Setup** - Loguje użytkownika raz przed testami  
 ✅ **Tests** - Tworzą dane testowe  
-✅ **Teardown** - Czyści dane po testach  
+✅ **Teardown** - Czyści dane po testach
 
 Rezultat: **Czysta baza, idempotentne testy, łatwe debugowanie!** 🎉

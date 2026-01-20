@@ -3,6 +3,7 @@
 ### 1. Tabele i kolumny
 
 #### a) `users`
+
 - `id` - BIGSERIAL PRIMARY KEY
 - `email` - VARCHAR(255) NOT NULL UNIQUE
 - `password_hash` - VARCHAR NOT NULL
@@ -10,6 +11,7 @@
 - `updated_at` - TIMESTAMP WITH TIME ZONE
 
 #### b) `flashcards`
+
 - `id` - BIGSERIAL PRIMARY KEY
 - `user_id` - INTEGER NOT NULL
   - FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
@@ -25,6 +27,7 @@
 - `is_deleted` - BOOLEAN NOT NULL DEFAULT FALSE
 
 #### c) `generations`
+
 - `id` - BIGSERIAL PRIMARY KEY
 - `user_id` - INTEGER NOT NULL
   - FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE CASCADE
@@ -36,6 +39,7 @@
 - `updated_at` - TIMESTAMP WITH TIME ZONE
 
 #### d) `generations_errors`
+
 - `id` - SERIAL PRIMARY KEY
 - `generation_id` - INTEGER NOT NULL
   - FOREIGN KEY (`generation_id`) REFERENCES `generations`(`id`) ON DELETE CASCADE
@@ -62,12 +66,14 @@
 Dla tabel `flashcards` i `generations` wdrożyć mechanizm Row Level Security (RLS), aby użytkownicy mieli dostęp tylko do swoich danych. Przykładowe zasady:
 
 - Włączenie RLS:
+
   ```sql
   ALTER TABLE flashcards ENABLE ROW LEVEL SECURITY;
   ALTER TABLE generations ENABLE ROW LEVEL SECURITY;
   ```
 
 - Polityka przykładowa (do dostosowania w zależności od sposobu uwierzytelnienia):
+
   ```sql
   CREATE POLICY user_policy ON flashcards
     USING (user_id = current_setting('app.current_user_id')::INTEGER);
@@ -76,7 +82,7 @@ Dla tabel `flashcards` i `generations` wdrożyć mechanizm Row Level Security (R
     USING (user_id = current_setting('app.current_user_id')::INTEGER);
   ```
 
-*Uwaga*: Mechanizm `current_setting('app.current_user_id')` wymaga ustawienia tego parametru przy każdej sesji. Dostosować polityki w zależności od implementacji autoryzacji.
+_Uwaga_: Mechanizm `current_setting('app.current_user_id')` wymaga ustawienia tego parametru przy każdej sesji. Dostosować polityki w zależności od implementacji autoryzacji.
 
 ### 5. Dodatkowe Uwagi
 

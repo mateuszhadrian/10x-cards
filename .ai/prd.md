@@ -6,7 +6,7 @@ Produkt 10x-cards to aplikacja webowa umożliwiająca automatyczne generowanie f
 
 ## 2. Problem użytkownika
 
-Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze względu na czasochłonność oraz brak umiejętności stworzenia wielu skutecznych fiszek (czyli takich, które umozliwią skuteczną naukę). Brak efektywnego procesu generowania fiszek obniża motywację do nauki i korzystania z metody spaced repetition. 
+Użytkownicy często rezygnują z manualnego tworzenia fiszek edukacyjnych ze względu na czasochłonność oraz brak umiejętności stworzenia wielu skutecznych fiszek (czyli takich, które umozliwią skuteczną naukę). Brak efektywnego procesu generowania fiszek obniża motywację do nauki i korzystania z metody spaced repetition.
 
 Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, umożliwiając szybsze i bardziej efektywne uczenie się.
 
@@ -52,6 +52,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
 ## 5. Historyjki użytkowników
 
 ### US-001: Autentykacja użytkownika
+
 - Tytuł: Logowanie przez Supabase
 - Opis: Użytkownik loguje się do systemu za pomocą autentykacji opartej na Supabase, co umożliwia zarządzanie osobistymi fiszkami i zapewnia bezpieczeństwo danych.
 - Kryteria akceptacji:
@@ -65,6 +66,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - Nie dopuszcza się logowania społecznościowego.
 
 ### US-002: Walidacja wejściowego tekstu
+
 - Tytuł: Wprowadzanie tekstu do generacji fiszek
 - Opis: Użytkownik wprowadza tekst, który zostanie użyty do generacji fiszek. Tekst musi spełniać kryteria długości (od 1000 do 10000 znaków).
 - Kryteria akceptacji:
@@ -72,6 +74,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - Walidacja odbywa się na poziomie UI, API oraz przez zasady RLS.
 
 ### US-003: Generacja fiszek przez AI
+
 - Tytuł: Automatyczne generowanie fiszek
 - Opis: Użytkownik po zatwierdzeniu prawidłowego tekstu inicjuje proces generowania fiszek przez AI, które generuje od 1 do 30 fiszek.
 - Kryteria akceptacji:
@@ -81,6 +84,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - Funkcjonalność nie jest dostępna bez logowania się do systemu.
 
 ### US-004: Ręczne tworzenie fiszek
+
 - Tytuł: Manualne dodawanie fiszek
 - Opis: Użytkownik może ręcznie stworzyć fiszkę poprzez wprowadzenie treści dla pól 'front' oraz 'back' z określonymi limitami znakowymi.
 - Kryteria akceptacji:
@@ -89,6 +93,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - Fiszka jest zapisywana tylko po pozytywnej walidacji.
 
 ### US-005: Recenzja fiszek
+
 - Tytuł: Przegląd i recenzja fiszek
 - Opis: Po wygenerowaniu fiszek użytkownik przegląda je w interfejsie recenzji, gdzie dla każdej fiszki dostępne są trzy opcje: ZAAKCEPTUJ, ODRZUĆ, EDYTUJ (edycja możliwa przed zatwierdzeniem).
 - Kryteria akceptacji:
@@ -97,6 +102,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - Po zatwierdzeniu, edycja fiszki nie jest już dostępna.
 
 ### US-006: Zarządzanie fiszkami
+
 - Tytuł: Przeglądanie i zarządzanie zapisanymi fiszkami
 - Opis: Użytkownik przegląda wszystkie zapisane fiszki w globalnej liście oraz ma możliwość ich usunięcia, jeśli zajdzie taka potrzeba.
 - Kryteria akceptacji:
@@ -104,8 +110,9 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - Użytkownik może usunąć fiszkę z bazy danych (soft delete).
 
 ### US-007: Nawigacja po aplikacji
+
 - Tytuł: Poruszanie się po interfejsie nawigacyjnym
-- Opis: Użytkownik korzysta z górnej nawigacji, która na desktopie jest sticky, a na urządzeniach mobilnych zamienia się w hamburger menu. Lewa sekcja nawigacji zawiera linki do widoków: 
+- Opis: Użytkownik korzysta z górnej nawigacji, która na desktopie jest sticky, a na urządzeniach mobilnych zamienia się w hamburger menu. Lewa sekcja nawigacji zawiera linki do widoków:
   - Home (prowadzi do widoku `@src/components/Welcome.astro`),
   - Generate (prowadzi do widoku `@src/pages/generate.astro`),
   - Flashcards (prowadzi do widoku `@src/pages/flashcards.astro`),
@@ -113,6 +120,7 @@ Automatyczne generowanie fiszek przez AI ma na celu rozwiązanie tego problemu, 
   - User Profile (element nieaktywny, funkcjonalność w budowie).
 
   Prawa sekcja zawiera przyciski logowania, rejestracji lub wylogowywania w zależności od statusu autoryzacji użytkownika.
+
 - Kryteria akceptacji:
   - Pasek nawigacji jest sticky na desktopie i zawsze widoczny.
   - Na urządzeniach mobilnych, nawigacja jest dostępna jako hamburger menu, które rozwija pełną listę opcji po kliknięciu.

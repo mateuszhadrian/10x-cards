@@ -1,39 +1,40 @@
 <user_journey_analysis>
+
 1.  **Ścieżki użytkownika (z PRD i Auth Spec):**
-    *   Wejście na stronę jako gość.
-    *   Rejestracja nowego konta.
-    *   Logowanie do istniejącego konta.
-    *   Odzyskiwanie zapomnianego hasła.
-    *   Generowanie fiszek (tylko zalogowany).
-    *   Przeglądanie i zarządzanie fiszkami (tylko zalogowany).
-    *   Wylogowanie.
+    - Wejście na stronę jako gość.
+    - Rejestracja nowego konta.
+    - Logowanie do istniejącego konta.
+    - Odzyskiwanie zapomnianego hasła.
+    - Generowanie fiszek (tylko zalogowany).
+    - Przeglądanie i zarządzanie fiszkami (tylko zalogowany).
+    - Wylogowanie.
 
 2.  **Główne podróże i stany:**
-    *   **Gość:** Landing Page, Login, Register, Forgot Password.
-    *   **Zalogowany:** Dashboard (Generate), My Flashcards, Settings (Logout).
+    - **Gość:** Landing Page, Login, Register, Forgot Password.
+    - **Zalogowany:** Dashboard (Generate), My Flashcards, Settings (Logout).
 
 3.  **Punkty decyzyjne:**
-    *   Czy użytkownik ma konto? (Tak -> Login, Nie -> Register).
-    *   Czy dane logowania poprawne?
-    *   Czy generowanie udane?
-    *   Decyzja przy recenzji fiszki (Akceptuj/Odrzuć/Edytuj).
+    - Czy użytkownik ma konto? (Tak -> Login, Nie -> Register).
+    - Czy dane logowania poprawne?
+    - Czy generowanie udane?
+    - Decyzja przy recenzji fiszki (Akceptuj/Odrzuć/Edytuj).
 
 4.  **Cel stanów:**
-    *   **Landing Page:** Zachęta do rejestracji/logowania.
-    *   **Login/Register:** Uzyskanie dostępu.
-    *   **Generate View:** Główna wartość (tworzenie).
-    *   **Review:** Kontrola jakości.
-    *   **Saved List:** Przechowywanie wiedzy.
-</user_journey_analysis>
+    _ **Landing Page:** Zachęta do rejestracji/logowania.
+    _ **Login/Register:** Uzyskanie dostępu.
+    _ **Generate View:** Główna wartość (tworzenie).
+    _ **Review:** Kontrola jakości. \* **Saved List:** Przechowywanie wiedzy.
+    </user_journey_analysis>
 
 <mermaid_diagram>
+
 ```mermaid
 stateDiagram-v2
     [*] --> Gosc: Wejście na stronę
 
     state "Użytkownik Niezalogowany (Gość)" as Gosc {
         [*] --> LandingPage
-        
+
         state "Logowanie" as Logowanie {
             FormularzLogowania --> WalidacjaLogowania
             WalidacjaLogowania --> BłądLogowania: Błędne dane
@@ -63,7 +64,7 @@ stateDiagram-v2
             WprowadzenieTekstu --> GeneracjaAI
             GeneracjaAI --> RecenzjaFiszek: Sukces (1-30 fiszek)
             GeneracjaAI --> BłądGeneracji: Błąd/0 fiszek
-            
+
             state "Recenzja" as RecenzjaFiszek {
                 [*] --> ListaWygenerowanych
                 ListaWygenerowanych --> Edycja: Klik "Edytuj"
@@ -84,7 +85,7 @@ stateDiagram-v2
     WalidacjaLogowania --> Zalogowany: Sukces
     OczekiwanieNaPotwierdzenie --> Logowanie: Potwierdzenie email
     ZmianaHasła --> Logowanie: Hasło zmienione
-    
+
     Zalogowany --> Gosc: Wylogowanie
 
     note right of Generowanie

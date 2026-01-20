@@ -2,14 +2,19 @@
 # Plan implementacji widoku Generowania Fiszek
 
 ## 1. Przegląd
+
 Widok Generowania Fiszek umożliwia użytkownikowi wprowadzenie tekstu źródłowego (1000–10000 znaków) oraz zainicjowanie procesu automatycznego tworzenia propozycji fiszek przy użyciu AI. Następnie prezentuje listę wygenerowanych propozycji fiszek w trybie recenzji (możliwość akceptacji, edycji przed zatwierdzeniem i odrzucenia).
 
 ## 2. Routing widoku
+
 Widok będzie dostępny pod ścieżką:
+
 - `/generate`
 
 ## 3. Struktura komponentów
+
 Proponowana hierarchia:
+
 1. **GenerateLayout** (kontener i układ główny)
 2. **InputTextForm** (formularz do wprowadzenia tekstu)
 3. **GenerateButton** (przycisk wywołujący generowanie)
@@ -31,7 +36,9 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `FlashcardsReviewListBulkSaveButton` (warunkowo)
 
 ## 4. Szczegóły komponentów
+
 ### GenerateLayout
+
 - Opis: Główny kontener widoku. Zawiera logikę i layout.
 - Elementy:
   - Sekcja formularza (InputTextForm + GenerateButton)
@@ -44,6 +51,7 @@ Przykładowa struktura w kodzie (wielopoziomowo):
 - Propsy: Może przyjmować children i ewentualny stan globalny, zależnie od implementacji
 
 ### InputTextForm
+
 - Opis: Formularz służący do wprowadzenia tekstu źródłowego
 - Główne elementy: Pole tekstowe + ewentualne wiadomości walidacyjne (np. podpowiedź, że potrzeba min. 1000 znaków)
 - Obsługiwane interakcje:
@@ -56,10 +64,11 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `onTextChange(value: string)` (aktualizuje stan rodzica w czasie pisania)
 
 ### GenerateButton
+
 - Opis: Przycisk uruchamiający generowanie fiszek
 - Główne elementy: Prostokątny przycisk, disabled, gdy:
-  1) Wprowadzony tekst jest niepoprawnej długości
-  2) Trwa obecnie generowanie fiszek (żeby uniknąć wielokrotnych wywołań)
+  1. Wprowadzony tekst jest niepoprawnej długości
+  2. Trwa obecnie generowanie fiszek (żeby uniknąć wielokrotnych wywołań)
 - Obsługiwane interakcje:
   - OnClick: wywołanie `POST /api/generations` z tekstem
 - Propsy:
@@ -67,12 +76,14 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `onGenerate()` (wywołuje logikę generowania w komponencie rodzicu)
 
 ### LoadingComponent
+
 - Opis: Komponent wizualizujący stan ładowania/generowania
 - Główne elementy: Skeleton z shadcn/ui
 - Obsługiwane interakcje: Brak interakcji użytkownika, jedynie informacja wizualna
 - Propsy: Może nie wymagać propsów, poza ewentualnym rozmiarem/wyglądem
 
 ### ErrorNotification
+
 - Opis: Komponent wyświetlający błąd, np. w ramce, w obszarze widoku
 - Główne elementy: Tekst błędu
 - Obsługiwane interakcje: Może zawierać przycisk z zamknięciem powiadomienia lub ponowieniem operacji
@@ -81,6 +92,7 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `onClose?: () => void` (opcjonalnie, jeśli chcemy pozwolić użytkownikowi zamknąć powiadomienie)
 
 ### FlashcardsReviewList
+
 - Opis: Lista wygenerowanych fiszek wraz z możliwością zaakceptowania (checkbox) i edycji
 - Główne elementy: Kontener w mapowaniu wielu `FlashcardsReviewListItem`
 - Obsługiwane interakcje:
@@ -93,6 +105,7 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `onFlashcardChange( flashcardIndex: number, changes: Partial<CreateFlashcardsCommandViewModelDTO> )`
 
 ### FlashcardsReviewListItem
+
 - Opis: Komponent reprezentujący pojedynczą wygenerowaną fiszkę
 - Główne elementy:
   - `checkbox` do zaznaczania akceptacji
@@ -109,6 +122,7 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `onReject()` → usuwa fiszkę ze stanu
 
 ### FlashcardsReviewListBulkSaveButton
+
 - Opis: Przycisk umożliwiający zapis propozycji fiszek (wszystkich lub tylko tych zaakceptowanych)
 - Główne elementy: Przycisk w UI
 - Obsługiwane interakcje:
@@ -118,6 +132,7 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - `onBulkSave(mode: 'all' | 'accepted')`
 
 ## 5. Typy
+
 1. **TriggerGenerationCommandDTO** – Wysyłany do `/api/generations`:
    - `input_text: string` (1000–10000 znaków)
 2. **GenerationResponseDTO** – Odpowiedź z `/api/generations`:
@@ -137,11 +152,13 @@ Przykładowa struktura w kodzie (wielopoziomowo):
    - `edited: boolean` (informuje, czy user zmodyfikował fiszkę)
 
 > **Uwaga**: Przy zapisywaniu do bazy mapujemy `CreateFlashcardsCommandViewModelDTO` na `CreateFlashcardsCommandDTO`. W szczególności:
+>
 > - Jeśli edited = true, to `source` w finalnym obiekcie jest "ai-edited"
 > - Jeśli accepted = true, to idzie do bazy. W przeciwnym razie pomijamy.
 > - Odrzucenie fiszki (onReject) usuwa ją z listy w stanie.
 
 ## 6. Zarządzanie stanem
+
 - Główny stan (tekst, loading, błąd) w `GenerateLayout`.
   - Tablica `CreateFlashcardsCommandViewModelDTO[]` w momencie, gdy API zwróci wygenerowane fiszki.
 - `InputTextForm` aktualizuje `textValue` w stanie rodzica.
@@ -158,11 +175,13 @@ Przykładowa struktura w kodzie (wielopoziomowo):
   - Wywołuje `POST /api/flashcards` dla wszystkich lub tylko accepted = true. Podczas mapowania do `CreateFlashcardsCommandDTO` uwzględniamy finalne source.
 
 ## 7. Integracja API
+
 - **POST** `/api/generations`: Wysyłamy `TriggerGenerationCommandDTO` z polem `input_text`.
   - Otrzymujemy `GenerationResponseDTO`: stamtąd bierzemy tablicę `flashcards`, konwertujemy na nasz model widoku.
 - **POST** `/api/flashcards`: Wysyłamy tablicę `CreateFlashcardsCommandDTO` (już przefiltrowane i/lub zmienione pole source na "ai-edited" zgodnie z edited).
 
 ## 8. Interakcje użytkownika
+
 1. Użytkownik wprowadza tekst w `InputTextForm`. Wartość jest walidowana.
 2. `GenerateButton` staje się aktywny, gdy tekst ma odpowiednią liczbę znaków i nie trwa obecnie generowanie.
 3. Kliknięcie `GenerateButton` → uruchamia generowanie (pokazywany jest `LoadingComponent`, przycisk disabled).
@@ -174,11 +193,13 @@ Przykładowa struktura w kodzie (wielopoziomowo):
 7. Kliknięcie `FlashcardsReviewListBulkSaveButton` → tworzona tablica docelowa z obiektów, gdzie accepted = true (lub wszystkie), i wysyłamy do `/api/flashcards`. Po sukcesie można wyświetlić toast.
 
 ## 9. Warunki i walidacja
+
 - Tekst wejściowy: 1000–10000 znaków, weryfikacja w `InputTextForm`.
 - Fiszki (front/back) w UI: 1–200 znaków dla front, 1–500 znaków dla back (zależnie od API i logiki edycji w itemie).
 - W razie błędów generowania bądź zapisu → `ErrorNotification`.
 
 ## 10. Obsługa błędów
+
 - Błąd walidacji UI: blokuje `GenerateButton`.
 - Błąd generowania → pokazuje `ErrorNotification`.
 - Błąd zapisu → również `ErrorNotification`.
@@ -190,6 +211,7 @@ Przykładowa struktura w kodzie (wielopoziomowo):
 - Sprawdź poprawne działanie elementów formularza i przycisków na urządzeniach mobilnych, tabletach i desktopach.
 - Zadbaj, by kluczowe elementy (np. przyciski, pola tekstowe) miały wystarczające marginesy i padding, a także poprawne skalowanie czcionki.
 - Rozważ dodanie breakpointów (np. `md:`, `lg:`) w klasach Tailwind, aby układ i rozmiary komponentów dostosowywały się do szerokości ekranu.
+
 1. **Utwórz** `GenerateLayout` i umieść w nim:
    - `InputTextForm` + `GenerateButton`
    - Warunkowo: `LoadingComponent`, `ErrorNotification`, `FlashcardsReviewList` + `FlashcardsReviewListBulkSaveButton`.

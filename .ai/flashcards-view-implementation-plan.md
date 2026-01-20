@@ -1,12 +1,15 @@
 # Plan implementacji widoku Listy Fiszek
 
 ## 1. Przegląd
+
 Widok umożliwia przeglądanie zapisanych fiszek użytkownika wraz z możliwością ich usunięcia. Użytkownik widzi listę fiszek z kluczowymi informacjami (pola front, back, źródło) oraz mechanizmem paginacji. Widok zapewnia również informację o stanie ładowania danych przy użyciu komponentu szkieletowego, co zwiększa spójność z innymi widokami aplikacji.
 
 ## 2. Routing widoku
+
 Widok powinien być dostępny pod ścieżką: `/flashcards`.
 
 ## 3. Struktura komponentów
+
 - **FlashcardsReviewList** – główny kontener pobierający dane z API oraz renderujący listę fiszek. W trakcie ładowania danych wyświetla komponent LoadingSkeleton.
 - **FlashcardsReviewListHeader** – nagłówek widoku, zawierający ewentualne informacje o paginacji oraz filtry.
 - **FlashcardReviewItem** – pojedynczy element listy, prezentujący dane fiszki oraz przycisk do usunięcia.
@@ -15,7 +18,9 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
 - **LoadingSkeleton** – komponent wyświetlający placeholder (skeleton) w trakcie ładowania listy, zgodny z podejściem używanym w widoku generowania fiszek.
 
 ## 4. Szczegóły komponentów
+
 ### FlashcardsReviewList
+
 - **Opis:** Główny komponent odpowiedzialny za pobieranie danych (flashcards oraz informacje paginacyjne) oraz renderowanie listy. W trakcie pobierania danych renderuje `LoadingSkeleton`.
 - **Elementy:** Lista elementów `FlashcardReviewItem`, komponent `PaginationControl`, komponent `LoadingSkeleton`, komunikat o błędzie, jeżeli wystąpi problem z pobieraniem danych.
 - **Obsługiwane interakcje:** Inicjowanie usunięcia fiszki, zmiana strony paginacji, automatyczne odświeżanie widoku po operacjach usunięcia lub błędzie.
@@ -24,6 +29,7 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
 - **Propsy:** Opcjonalne callbacki dla globalnych zdarzeń (np. refresh) przekazywane z poziomu strony.
 
 ### FlashcardReviewItem
+
 - **Opis:** Komponent renderujący pojedynczą fiszkę zawierającą pola: front, back, źródło oraz przycisk inicjujący proces usunięcia.
 - **Elementy:** Tekst fiszki, przycisk usunięcia, ewentualny wskaźnik ładowania dla tej konkretnej operacji.
 - **Obsługiwane interakcje:** Kliknięcie przycisku usunięcia, które wyświetla `ConfirmationModal` do potwierdzenia.
@@ -32,6 +38,7 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
 - **Propsy:** Obiekt typu `Flashcard` oraz callback do inicjowania usunięcia.
 
 ### ConfirmationModal
+
 - **Opis:** Modal umożliwiający potwierdzenie lub anulowanie operacji usunięcia.
 - **Elementy:** Treść komunikatu potwierdzającego, przyciski "Tak" i "Nie".
 - **Obsługiwane interakcje:** Kliknięcie przycisku potwierdzenia (wywołanie funkcji usuwającej) lub anulowania (zamknięcie modala).
@@ -40,6 +47,7 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
 - **Propsy:** Flaga widoczności, tekst komunikatu, funkcje `onConfirm` i `onCancel`.
 
 ### PaginationControl
+
 - **Opis:** Komponent umożliwiający zmianę stron wyników listy fiszek.
 - **Elementy:** Przyciski lub wskaźniki stron, informacja o aktualnej stronie.
 - **Obsługiwane interakcje:** Zmiana strony wywołująca odpowiedni callback w celu pobrania danych dla nowej strony.
@@ -48,6 +56,7 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
 - **Propsy:** Aktualny stan paginacji oraz callback do zmiany strony.
 
 ### LoadingSkeleton
+
 - **Opis:** Komponent wyświetlający placeholder w trakcie ładowania danych, bazujący na komponencie `Skeleton` z biblioteki Shadcn/ui.
 - **Elementy:** Grafika lub animowane bloki, imitujące strukturę zawartości listy.
 - **Obsługiwane interakcje:** Brak interakcji – wyłącznie wizualny efekt informujący o ładowaniu.
@@ -56,6 +65,7 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
 - **Propsy:** Opcjonalnie konfiguracja liczby bloków, klasa CSS dla stylizacji.
 
 ## 5. Typy
+
 - **Flashcard (DTO):**
   - `id`: number
   - `front`: string
@@ -81,11 +91,13 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
   - `currentPage`: number
 
 ## 6. Zarządzanie stanem
+
 - Użycie hooków `useState` i `useEffect` w komponencie `FlashcardsReviewList` do zarządzania stanem ładowania, przechowywania listy fiszek i obsługi błędów.
 - Stworzenie customowego hooka `useFlashcards`, który obsłuży logikę pobierania danych, aktualizację stanu oraz operację usuwania.
 - Stan komponentu zawiera flagę `isLoading`, która determinuje wyświetlenie `LoadingSkeleton` podczas pobierania danych.
 
 ## 7. Integracja API
+
 - **Pobieranie listy fiszek:**
   - Metoda: GET `/api/flashcards`
   - Oczekiwany response: obiekt zawierający `flashcards` oraz `pagination`
@@ -97,22 +109,26 @@ Widok powinien być dostępny pod ścieżką: `/flashcards`.
   - Po usunięciu dane muszą zostać odświeżone przez ponowne wywołanie GET.
 
 ## 8. Interakcje użytkownika
+
 - Kliknięcie przycisku usunięcia w komponencie `FlashcardReviewItem` wyświetla modal `ConfirmationModal`.
 - Po potwierdzeniu w modal, wywoływane jest API do usunięcia fiszki, a widok aktualizuje się, usuwając dany element.
 - Użytkownik może zmieniać strony przy użyciu komponentu `PaginationControl`; wybrana strona powoduje ponowne pobranie danych.
 - W trakcie pobierania danych wyświetlany jest `LoadingSkeleton`.
 
 ## 9. Warunki i walidacja
+
 - Weryfikacja struktury danych zwracanych przez API, w tym obecność wszystkich wymaganych pól w obiektach typu `Flashcard`.
 - Sprawdzanie poprawności numeru strony w paginacji oraz zakresu dostępnych stron.
 - Przed usunięciem, potwierdzenie operacji przez użytkownika poprzez modal.
 
 ## 10. Obsługa błędów
+
 - Wyświetlenie komunikatu o błędzie przy niepowodzeniu pobierania danych lub operacji usuwania.
 - Mechanizm retry w przypadku błędów sieciowych.
 - Odpowiednie logowanie błędów w konsoli (dla deweloperów) oraz informowanie użytkownika w UI.
 
 ## 11. Kroki implementacji
+
 1. Utworzenie nowej strony w Astro dostępnej pod adresem `/flashcards`.
 2. Implementacja komponentu `FlashcardsReviewList` z logiką pobierania danych za pomocą customowego hooka `useFlashcards`.
 3. Dodanie logiki renderowania stanu ładowania przy użyciu komponentu `LoadingSkeleton`.

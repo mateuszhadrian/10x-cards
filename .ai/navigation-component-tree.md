@@ -52,23 +52,26 @@ NavigationBar
 ## Props flow
 
 ### NavigationBar
+
 ```typescript
 interface NavigationProps {
-  currentPath: string;      // From Astro.url.pathname
-  userStatus: UserStatus;   // "authenticated" | "unauthenticated" | "loading"
+  currentPath: string; // From Astro.url.pathname
+  userStatus: UserStatus; // "authenticated" | "unauthenticated" | "loading"
 }
 ```
 
 ### LeftNavigation
+
 ```typescript
 interface LeftNavigationProps {
-  links: NavLink[];         // Array of navigation links
-  isMobile?: boolean;       // Layout variant
+  links: NavLink[]; // Array of navigation links
+  isMobile?: boolean; // Layout variant
   onLinkClick?: () => void; // Close menu callback (mobile)
 }
 ```
 
 ### RightNavigation
+
 ```typescript
 interface RightNavigationProps {
   userStatus: UserStatus;
@@ -80,6 +83,7 @@ interface RightNavigationProps {
 ```
 
 ### HamburgerMenu
+
 ```typescript
 interface HamburgerMenuProps {
   links: NavLink[];
@@ -93,6 +97,7 @@ interface HamburgerMenuProps {
 ## State management
 
 ### Local state
+
 ```typescript
 // NavigationBar
 const { isMobile } = useWindowSize(); // Hook state
@@ -103,6 +108,7 @@ const [isOpen, setIsOpen] = useState(false); // Menu open/close state
 ```
 
 ### No global state needed
+
 - userStatus przekazywany z Layout
 - currentPath z Astro routing
 - Brak shared state między komponentami
@@ -110,11 +116,13 @@ const [isOpen, setIsOpen] = useState(false); // Menu open/close state
 ## Optimizations applied
 
 ### React.memo
+
 - ✅ LeftNavigation
 - ✅ RightNavigation
 - ✅ HamburgerMenu
 
 ### useCallback
+
 - ✅ handleLogin
 - ✅ handleRegister
 - ✅ handleLogout
@@ -122,11 +130,13 @@ const [isOpen, setIsOpen] = useState(false); // Menu open/close state
 - ✅ handleLinkClick
 
 ### useMemo
+
 - ✅ navLinks array
 
 ## Rendering behavior
 
 ### Initial render
+
 1. Layout.astro renders with currentPath & userStatus
 2. NavigationBar hydrates (client:load)
 3. useWindowSize checks viewport
@@ -134,12 +144,14 @@ const [isOpen, setIsOpen] = useState(false); // Menu open/close state
 5. Animations trigger (fade-in, slide-in)
 
 ### On resize
+
 1. useWindowSize detects change
 2. isMobile updates
 3. View switches (no remount, just conditional render)
 4. Smooth transition
 
 ### On navigation
+
 1. Astro router updates currentPath
 2. Layout re-renders with new path
 3. NavigationBar receives new currentPath
@@ -147,6 +159,7 @@ const [isOpen, setIsOpen] = useState(false); // Menu open/close state
 5. Active link updates
 
 ### On auth action (mock)
+
 1. User clicks auth button
 2. Handler called (useCallback)
 3. Toast notification shown
@@ -209,6 +222,7 @@ Toaster (sonner)
 ## Event flow
 
 ### Desktop navigation click
+
 ```
 User clicks link
   ↓
@@ -222,6 +236,7 @@ NavigationBar updates active link
 ```
 
 ### Mobile navigation click
+
 ```
 User clicks hamburger icon
   ↓
@@ -239,6 +254,7 @@ Native navigation continues
 ```
 
 ### Auth button click (mock)
+
 ```
 User clicks "Zaloguj"
   ↓
@@ -252,6 +268,7 @@ User sees: "Funkcja logowania będzie dostępna wkrótce"
 ## Future enhancements
 
 ### Real auth integration
+
 ```
 NavigationBar
   ├── useSupabaseAuth() hook       (TODO)
@@ -265,6 +282,7 @@ RightNavigation
 ```
 
 ### Additional features
+
 ```
 NavigationBar
   └── ProfileMenu (TODO)

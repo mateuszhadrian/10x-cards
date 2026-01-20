@@ -7,6 +7,7 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 ## 2. Lista widoków
 
 ### Widok Logowania
+
 - **Ścieżka widoku:** `/login`
 - **Główny cel:** Umożliwić użytkownikowi uwierzytelnienie się za pomocą email i hasła przy jednoczesnej walidacji inline.
 - **Kluczowe informacje do wyświetlenia:** Formularz logowania, komunikaty o błędach (np. nieprawidłowe dane), link do rejestracji.
@@ -14,6 +15,7 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 - **UX, dostępność i bezpieczeństwo:** Interaktywna walidacja inline, czytelne etykiety, zabezpieczenie przed wstrzyknięciem kodu oraz odpowiednie komunikaty przy błędach autoryzacji.
 
 ### Widok Rejestracji
+
 - **Ścieżka widoku:** `/register`
 - **Główny cel:** Pozwolić użytkownikowi utworzyć nowe konto zgodnie z procedurą Supabase.
 - **Kluczowe informacje do wyświetlenia:** Formularz rejestracyjny, podpowiedzi dotyczące hasła, komunikaty walidacyjne.
@@ -21,14 +23,15 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 - **UX, dostępność i bezpieczeństwo:** Prezentacja błędów inline, obsługa czytników ekranu, ochrona danych.
 
 ### Widok Generowania Fiszek
+
 - **Ścieżka widoku:** `/generate`
 - **Główny cel:** Pozwolić użytkownikowi wprowadzić tekst wejściowy i generować propozycje fiszek przy użyciu AI.
 - **Kluczowe informacje do wyświetlenia:** Edytor tekstu z natychmiastową walidacją liczby znaków (1000–10000), podpowiedzi dotyczące limitów, sekcja z propozycjami fiszek.
 - **Kluczowe komponenty widoku:** Edytor tekstu, moduł walidacji, lista fiszek z opcjami zatwierdzania, edycji i odrzucenia, przycisk do zbiorczego zatwierdzania.
 - **UX, dostępność i bezpieczeństwo:** Dynamiczna walidacja, responsywny design, szybka informacja zwrotna oraz ograniczenie widoczności danych do bieżącego użytkownika.
 
-
 ### Widok Ręcznego Dodawania Fiszek
+
 - **Ścieżka widoku:** `/add-manually`
 - **Główny cel:** Pozwolić użytkownikowi ręcznie dodać fiszki bez wsparcia AI.
 - **Kluczowe informacje do wyświetlenia:** Formularz umożliwiający wprowadzenie treści fiszki (np. pola front i back) oraz opcjonalne metadane.
@@ -36,6 +39,7 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 - **UX, dostępność i bezpieczeństwo:** Natychmiastowa walidacja danych, przyjazny i responsywny interfejs, oraz komunikaty błędów. Widok korzysta z tego samego endpointa co widok generowania fiszek, jednak wysyłany parametr `source` ma wartość `manual` zamiast `ai-full` lub `ai-edited`.
 
 ### Widok Listy Fiszek
+
 - **Ścieżka widoku:** `/flashcards`
 - **Główny cel:** Umożliwić przegląd i usuwanie zapisanych fiszek.
 - **Kluczowe informacje do wyświetlenia:** Lista fiszek (pola front, back, źródło), opcje usuwania, paginacja.
@@ -43,6 +47,7 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 - **UX, dostępność i bezpieczeństwo:** Łatwa nawigacja, potwierdzenie akcji (np. usunięcia), czytelne oznaczenia przycisków, zgodność z wytycznymi dostępności.
 
 ### Widok Panelu Użytkownika
+
 - **Ścieżka widoku:** `/profile`
 - **Główny cel:** Prezentacja danych użytkownika i umożliwienie zarządzania kontem.
 - **Kluczowe informacje do wyświetlenia:** Informacje profilu, ustawienia konta, historia generacji fiszek, opcje zmiany hasła.
@@ -50,6 +55,7 @@ Aplikacja 10x-cards to narzędzie umożliwiające automatyczną generację fisze
 - **UX, dostępność i bezpieczeństwo:** Przejrzysty interfejs, ochrona danych osobowych, intuicyjne zarządzanie kontem.
 
 ### Widok Sesji Nauki
+
 - **Ścieżka widoku:** `/sessions`
 - **Główny cel:** Umożliwić użytkownikowi interaktywne sesje nauki na podstawie zapisanych fiszek.
 - **Kluczowe informacje do wyświetlenia:** Wyświetlenie przodu fiszki oraz przycisk do odsłonięcia tylnej strony.

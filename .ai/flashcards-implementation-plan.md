@@ -3,6 +3,7 @@
 ## 1. Przegląd punktu końcowego
 
 Endpoint będzie wykorzystywany do tworzenia fiszek. Obsługuje zarówno ręczne tworzenie, jak i zatwierdzanie propozycji fiszek wygenerowanych przez sztuczną inteligencję. Endpoint zapisze nowe rekordy do tabeli `flashcards` i odpowiednio ustawi wartość pola `source`:
+
 - `manual` dla ręcznie utworzonych fiszek
 - `ai-full` lub `ai-edited` dla fiszek wygenerowanych przez AI (wymagane jest podanie `generation_id`)
 
@@ -15,7 +16,6 @@ Endpoint będzie wykorzystywany do tworzenia fiszek. Obsługuje zarówno ręczne
 - **Request Body:**
 
   Oczekiwany payload zawiera właściwość `flashcards`, która jest listą obiektów z następującymi polami:
-  
   - `front` (string, wymagane): Tekst przodu fiszki (długość: 1 - 200 znaków).
   - `back` (string, wymagane): Tekst tyłu fiszki (długość: 1 - 500 znaków).
   - `source` (string, wymagane): Wartość określająca źródło. Dozwolone wartości to `manual`, `ai-full` oraz `ai-edited`.
@@ -119,4 +119,3 @@ W przypadku błędu:
 4. **Obsługa operacji bazy danych:**
    - Wstawianie rekordów do tabeli `flashcards`.
    - Weryfikacja istnienia `generation_id` dla fiszek AI oraz ewentualne logowanie błędów do tabeli `generations_errors`.
-

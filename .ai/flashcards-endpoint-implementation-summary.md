@@ -11,11 +11,13 @@ Endpoint `POST /api/flashcards` został w pełni zaimplementowany zgodnie z plan
 ### 1. Walidacja: `src/lib/validations/flashcards.validation.ts`
 
 **Zawartość:**
+
 - `flashcardSchema` - Schema Zod dla pojedynczej fiszki
 - `createFlashcardsSchema` - Schema Zod dla tablicy fiszek (1-30 elementów)
 - Custom refinement rule: wymaga `generation_id` dla źródeł AI (ai-full, ai-edited)
 
 **Walidacje:**
+
 - `front`: 1-200 znaków
 - `back`: 1-500 znaków
 - `source`: enum ['manual', 'ai-full', 'ai-edited']
@@ -27,16 +29,19 @@ Endpoint `POST /api/flashcards` został w pełni zaimplementowany zgodnie z plan
 ### 2. Serwis: `src/lib/services/flashcards.service.ts`
 
 **Funkcje:**
+
 - `verifyGenerationExists()` - Weryfikuje istnienie generation_id w bazie danych
 - `createFlashcards()` - Główna funkcja tworzenia fiszek
 
 **Logika biznesowa:**
+
 1. Weryfikacja wszystkich unikalnych `generation_id` dla fiszek AI
 2. Przygotowanie rekordów do wstawienia (dodanie `user_id`)
 3. Bulk insert do tabeli `flashcards`
 4. Zwrócenie utworzonych rekordów
 
 **Obsługa błędów:**
+
 - Rzuca błąd, jeśli `generation_id` nie istnieje lub nie należy do użytkownika
 - Rzuca błąd, jeśli operacja na bazie danych się nie powiedzie
 - Czytelne komunikaty błędów dla każdego scenariusza
@@ -50,6 +55,7 @@ Endpoint `POST /api/flashcards` został w pełni zaimplementowany zgodnie z plan
 **Prerendering:** Wyłączony (`export const prerender = false`)
 
 **Przepływ:**
+
 1. Parsowanie request body
 2. Walidacja danych wejściowych (Zod)
 3. Sprawdzenie dostępności klienta Supabase
@@ -57,6 +63,7 @@ Endpoint `POST /api/flashcards` został w pełni zaimplementowany zgodnie z plan
 5. Zwrócenie odpowiedzi
 
 **Kody odpowiedzi:**
+
 - `201 Created` - Fiszki utworzone pomyślnie
 - `400 Bad Request` - Błędy walidacji lub nieistniejący generation_id
 - `500 Internal Server Error` - Błąd serwera lub bazy danych
@@ -68,11 +75,13 @@ Endpoint `POST /api/flashcards` został w pełni zaimplementowany zgodnie z plan
 ### `src/types.ts`
 
 **Dodane typy:**
+
 - `CreateFlashcardCommandDTO` - Interface dla pojedynczej fiszki (bez user_id)
 - `CreateFlashcardsCommandDTO` - Interface dla tablicy fiszek
 - `CreateFlashcardsResponseDTO` - Interface dla odpowiedzi endpointa
 
 **Usunięte:**
+
 - `FlashcardInsert` alias (duplikat, używany tylko w services)
 
 ---
@@ -99,20 +108,24 @@ Endpoint `POST /api/flashcards` został w pełni zaimplementowany zgodnie z plan
 ### Zrealizowane etapy (zgodnie z planem):
 
 #### ✅ Krok 1: Tworzenie schematu endpointu
+
 - [x] Utworzony plik `src/pages/api/flashcards.ts`
 - [x] Skonfigurowany routing
 - [x] Sprawdzanie autoryzacji (dostęp do Supabase z locals)
 
 #### ✅ Krok 2: Implementacja walidacji
+
 - [x] Zaimplementowana walidacja za pomocą Zod
 - [x] Sprawdzanie parametrów `front`, `back`, `source`, `generation_id`
 - [x] Custom validation rule dla `generation_id` w kontekście AI sources
 
 #### ✅ Krok 3: Integracja z warstwą serwisową
+
 - [x] Wyodrębniona logika biznesowa do `flashcards.service.ts`
 - [x] Serwis odpowiada za operacje na bazie danych przy użyciu klienta Supabase
 
 #### ✅ Krok 4: Obsługa operacji bazy danych
+
 - [x] Wstawianie rekordów do tabeli `flashcards` (bulk insert)
 - [x] Weryfikacja istnienia `generation_id` dla fiszek AI
 - [x] Logowanie błędów (w catch block)
@@ -324,6 +337,7 @@ Pełne test cases znajdują się w: `.ai/flashcards-endpoint-tests.md`
 Implementacja endpointa `POST /api/flashcards` została zakończona zgodnie z planem wdrożenia.
 
 Wszystkie wymagania zostały spełnione:
+
 - ✅ Walidacja danych wejściowych
 - ✅ Obsługa ręcznych i AI fiszek
 - ✅ Bulk insert (1-30 fiszek)
@@ -334,4 +348,3 @@ Wszystkie wymagania zostały spełnione:
 - ✅ Zero błędów lintingu
 
 **Data zakończenia:** 2026-01-04
-
