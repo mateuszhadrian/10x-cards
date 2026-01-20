@@ -1,10 +1,5 @@
 import { useState, useCallback } from "react";
 
-interface FlashcardEditState {
-  front: string;
-  back: string;
-}
-
 interface UseFlashcardEditReturn {
   isEditing: boolean;
   editedFront: string;

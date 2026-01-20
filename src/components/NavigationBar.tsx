@@ -84,7 +84,7 @@ export function NavigationBar({ currentPath, userStatus, userEmail }: Navigation
       setTimeout(() => {
         window.location.href = "/";
       }, 500);
-    } catch (error) {
+    } catch {
       toast.error("Logout failed", {
         description: "Please try again",
       });

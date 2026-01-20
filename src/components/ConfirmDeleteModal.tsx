@@ -68,16 +68,20 @@ export default function ConfirmDeleteModal({
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-background/80 backdrop-blur-sm"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="modal-title"
+      role="presentation"
       onClick={(e) => {
         if (e.target === e.currentTarget && !isDeleting) {
           onCancel();
         }
       }}
     >
-      <Card ref={modalRef} className="w-full max-w-md shadow-lg">
+      <Card
+        ref={modalRef}
+        className="w-full max-w-md shadow-lg"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <CardHeader className="space-y-1">
           <CardTitle id="modal-title" className="text-xl font-semibold text-foreground">
             Delete Flashcard?

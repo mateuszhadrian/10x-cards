@@ -28,9 +28,7 @@ const userEmail = Astro.locals.user?.email || null;
     <ViewTransitions />
     <title>{title}</title>
     <!-- Critical: Theme script MUST be in head and run before body renders -->
-    <!-- eslint-disable -->
     <script is:inline>
-      // Apply theme immediately on page load (use IIFE to avoid variable conflicts)
       (function () {
         const applyTheme = () => {
           const savedTheme = localStorage.getItem("theme") || "dark";
@@ -40,12 +38,7 @@ const userEmail = Astro.locals.user?.email || null;
             document.documentElement.classList.remove("dark");
           }
         };
-
-        // Apply on initial load
         applyTheme();
-
-        // Preserve theme during Astro View Transitions
-        // Remove existing listener if any to avoid duplicates
         const handleBeforeSwap = (ev) => {
           const savedTheme = localStorage.getItem("theme") || "dark";
           if (savedTheme === "dark") {
@@ -54,7 +47,6 @@ const userEmail = Astro.locals.user?.email || null;
             ev.newDocument.documentElement.classList.remove("dark");
           }
         };
-
         document.removeEventListener("astro:before-swap", handleBeforeSwap);
         document.addEventListener("astro:before-swap", handleBeforeSwap);
       })();

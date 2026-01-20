@@ -36,22 +36,26 @@ beforeAll(() => {
 
   // Mock IntersectionObserver
   global.IntersectionObserver = class IntersectionObserver {
-    constructor() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     disconnect() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     observe() {}
     takeRecords() {
       return [];
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     unobserve() {}
-  } as any;
+  } as unknown as typeof IntersectionObserver;
 
   // Mock ResizeObserver
   global.ResizeObserver = class ResizeObserver {
-    constructor() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     disconnect() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     observe() {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     unobserve() {}
-  } as any;
+  } as unknown as typeof ResizeObserver;
 
   // Mock scrollTo
   window.scrollTo = vi.fn();
@@ -63,7 +67,7 @@ beforeAll(() => {
     removeItem: vi.fn(),
     clear: vi.fn(),
   };
-  global.localStorage = localStorageMock as any;
+  global.localStorage = localStorageMock as unknown as Storage;
 
   // Mock sessionStorage
   const sessionStorageMock = {
@@ -72,5 +76,5 @@ beforeAll(() => {
     removeItem: vi.fn(),
     clear: vi.fn(),
   };
-  global.sessionStorage = sessionStorageMock as any;
+  global.sessionStorage = sessionStorageMock as unknown as Storage;
 });

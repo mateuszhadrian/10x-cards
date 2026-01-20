@@ -5,11 +5,7 @@ import AuthFormWrapper from "./AuthFormWrapper";
 import ValidatedField from "./ValidatedField";
 import { registerSchema, type RegisterFormData } from "@/lib/validations/auth.validation";
 
-interface RegisterFormProps {
-  onSuccess?: () => void;
-}
-
-export default function RegisterForm({ onSuccess }: RegisterFormProps) {
+export default function RegisterForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -29,9 +25,9 @@ export default function RegisterForm({ onSuccess }: RegisterFormProps) {
       return true;
     } catch (err) {
       if (err instanceof Error && "issues" in err) {
-        const zodError = err as any;
+        const zodError = err as { issues: { path: (string | number)[]; message: string }[] };
         const errors: Partial<Record<keyof RegisterFormData, string>> = {};
-        zodError.issues.forEach((issue: any) => {
+        zodError.issues.forEach((issue: { path: (string | number)[]; message: string }) => {
           if (issue.path[0]) {
             errors[issue.path[0] as keyof RegisterFormData] = issue.message;
           }

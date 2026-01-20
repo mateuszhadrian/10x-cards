@@ -1,11 +1,7 @@
 import type { APIRoute } from "astro";
 
-import {
-  createFlashcardsSchema,
-  listFlashcardsQuerySchema,
-  deleteFlashcardParamsSchema,
-} from "../../lib/validations/flashcards.validation";
-import { createFlashcards, listFlashcards, deleteFlashcard } from "../../lib/services/flashcards.service";
+import { createFlashcardsSchema, listFlashcardsQuerySchema } from "../../lib/validations/flashcards.validation";
+import { createFlashcards, listFlashcards } from "../../lib/services/flashcards.service";
 import type { CreateFlashcardsResponseDTO, ListFlashcardsResponseDTO } from "../../types";
 
 /**

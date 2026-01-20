@@ -25,9 +25,9 @@ export default function ForgotPasswordForm({ onSuccess }: ForgotPasswordFormProp
       return true;
     } catch (err) {
       if (err instanceof Error && "issues" in err) {
-        const zodError = err as any;
+        const zodError = err as { issues: { path: (string | number)[]; message: string }[] };
         const errors: Partial<Record<keyof ForgotPasswordFormData, string>> = {};
-        zodError.issues.forEach((issue: any) => {
+        zodError.issues.forEach((issue: { path: (string | number)[]; message: string }) => {
           if (issue.path[0]) {
             errors[issue.path[0] as keyof ForgotPasswordFormData] = issue.message;
           }

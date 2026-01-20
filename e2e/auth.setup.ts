@@ -21,11 +21,14 @@ setup("authenticate", async ({ page }) => {
   const password = process.env.E2E_PASSWORD;
 
   if (!email || !password) {
+    // eslint-disable-next-line no-console
     console.warn("⚠️  E2E_USERNAME and E2E_PASSWORD not set - skipping authentication setup");
+    // eslint-disable-next-line no-console
     console.warn("   Tests requiring authentication will be skipped");
     return;
   }
 
+  // eslint-disable-next-line no-console
   console.log(`Authenticating user: ${email}`);
 
   try {
@@ -45,8 +48,11 @@ setup("authenticate", async ({ page }) => {
     // Check if we're still on login page (authentication failed)
     if (page.url().includes("/login")) {
       const errorText = await page.locator('[role="alert"]').textContent();
+      // eslint-disable-next-line no-console
       console.error(`❌ Authentication failed: ${errorText}`);
+      // eslint-disable-next-line no-console
       console.warn("⚠️  Please check your .env file has valid SUPABASE_URL and SUPABASE_KEY");
+      // eslint-disable-next-line no-console
       console.warn("⚠️  Tests requiring authentication will be skipped");
       return;
     }
@@ -55,18 +61,26 @@ setup("authenticate", async ({ page }) => {
     await page.goto("/generate");
     await expect(page).toHaveURL("/generate");
 
+    // eslint-disable-next-line no-console
     console.log("✓ Authentication successful, saving session state...");
 
     // Save the authenticated state to be reused in tests
     await page.context().storageState({ path: authFile });
 
+    // eslint-disable-next-line no-console
     console.log(`✓ Session state saved to: ${authFile}`);
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(`❌ Authentication setup failed:`, error);
+    // eslint-disable-next-line no-console
     console.warn("⚠️  Tests requiring authentication will be skipped");
+    // eslint-disable-next-line no-console
     console.warn("⚠️  Common causes:");
+    // eslint-disable-next-line no-console
     console.warn("   - Invalid Supabase credentials in .env file");
+    // eslint-disable-next-line no-console
     console.warn("   - E2E_USERNAME/PASSWORD in .env.test do not match an existing user");
+    // eslint-disable-next-line no-console
     console.warn("   - Supabase project is not accessible");
     // Don't throw - let tests run without auth (they will skip if they need it)
   }

@@ -100,6 +100,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
   } catch (error) {
     // Handle unexpected errors
+    // eslint-disable-next-line no-console
     console.error("Error in POST /api/generations:", error);
 
     // Check if it's a known error with a message

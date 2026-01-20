@@ -47,6 +47,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     );
   } catch (error) {
     // Handle unexpected errors
+    // eslint-disable-next-line no-console
     console.error("Logout error:", error);
 
     return new Response(

@@ -83,7 +83,7 @@ export function useFlashcards(initialPage = 1, limit = 10): UseFlashcardsReturn 
           pagination: data.pagination,
         });
       } catch (error) {
-        console.error("Error fetching flashcards:", error);
+        // Error fetching flashcards
         setState((prev) => ({
           ...prev,
           isLoading: false,
@@ -109,7 +109,7 @@ export function useFlashcards(initialPage = 1, limit = 10): UseFlashcardsReturn 
         // Refresh the list after successful deletion
         await fetchFlashcards(state.pagination.page);
       } catch (error) {
-        console.error("Error deleting flashcard:", error);
+        // Error deleting flashcard
         setState((prev) => ({
           ...prev,
           error: error instanceof Error ? error.message : "Failed to delete flashcard",
@@ -123,7 +123,7 @@ export function useFlashcards(initialPage = 1, limit = 10): UseFlashcardsReturn 
   const changePage = useCallback(
     (page: number) => {
       if (page < 1 || page > Math.ceil(state.pagination.total / state.pagination.limit)) {
-        console.warn(`Invalid page number: ${page}`);
+        // Invalid page number
         return;
       }
       setShouldScrollToTop(true);
@@ -134,8 +134,11 @@ export function useFlashcards(initialPage = 1, limit = 10): UseFlashcardsReturn 
 
   // Initial fetch on mount
   useEffect(() => {
-    fetchFlashcards(initialPage);
-  }, [initialPage]); // Only run on mount
+    const loadInitialData = async () => {
+      await fetchFlashcards(initialPage);
+    };
+    loadInitialData();
+  }, [fetchFlashcards, initialPage]);
 
   // Scroll to top after page change completes
   useEffect(() => {

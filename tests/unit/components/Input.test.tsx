@@ -92,6 +92,7 @@ describe("Input", () => {
     });
 
     it("should handle empty input", () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       render(<Input value="" onChange={() => {}} />);
 
       const input = screen.getByRole("textbox") as HTMLInputElement;
@@ -99,6 +100,7 @@ describe("Input", () => {
     });
 
     it("should display initial value", () => {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       render(<Input value="Initial Value" onChange={() => {}} />);
 
       const input = screen.getByRole("textbox") as HTMLInputElement;
@@ -381,6 +383,7 @@ describe("Input", () => {
   describe("edge cases", () => {
     it("should handle very long values", () => {
       const longValue = "a".repeat(1000);
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       render(<Input value={longValue} onChange={() => {}} />);
 
       const input = screen.getByRole("textbox") as HTMLInputElement;

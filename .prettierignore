@@ -1,0 +1,14 @@
+# Prettier ignore file
+
+# Astro files - prettier has issues parsing inline scripts
+*.astro
+
+# Build outputs
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Generated files
+*.d.ts

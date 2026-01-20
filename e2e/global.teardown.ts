@@ -31,17 +31,20 @@ async function cleanupTableWithRetry(supabase: SupabaseClient, table: string, us
       }
 
       const count = data?.length || 0;
+      // eslint-disable-next-line no-console
       console.log(`✓ Deleted ${count} ${table} record(s)`);
       return count;
     } catch (error) {
       const isLastAttempt = attempt === maxRetries - 1;
 
       if (isLastAttempt) {
+        // eslint-disable-next-line no-console
         console.error(`❌ Failed to delete ${table} after ${maxRetries} attempts:`, error);
         throw error;
       }
 
       const waitTime = 1000 * Math.pow(2, attempt); // Exponential backoff: 1s, 2s, 4s
+      // eslint-disable-next-line no-console
       console.log(`⚠️  Retry ${attempt + 1}/${maxRetries} for ${table} cleanup in ${waitTime}ms...`);
       await new Promise((resolve) => setTimeout(resolve, waitTime));
     }
@@ -50,6 +53,7 @@ async function cleanupTableWithRetry(supabase: SupabaseClient, table: string, us
 }
 
 async function globalTeardown() {
+  // eslint-disable-next-line no-console
   console.log("\n🧹 Starting global teardown - cleaning test data...\n");
 
   // Get credentials from environment
@@ -58,11 +62,13 @@ async function globalTeardown() {
   const testUserId = process.env.E2E_USERNAME_ID;
 
   if (!supabaseUrl || !supabaseKey) {
+    // eslint-disable-next-line no-console
     console.warn("⚠️  Warning: SUPABASE_URL or SUPABASE_PUBLIC_KEY not set, skipping teardown");
     return;
   }
 
   if (!testUserId) {
+    // eslint-disable-next-line no-console
     console.warn("⚠️  Warning: E2E_USERNAME_ID not set, skipping teardown");
     return;
   }
@@ -76,6 +82,7 @@ async function globalTeardown() {
     const password = process.env.E2E_PASSWORD;
 
     if (!email || !password) {
+      // eslint-disable-next-line no-console
       console.warn("⚠️  Warning: E2E credentials not set, skipping teardown");
       return;
     }
@@ -86,10 +93,12 @@ async function globalTeardown() {
     });
 
     if (authError) {
+      // eslint-disable-next-line no-console
       console.error("❌ Failed to authenticate for teardown:", authError.message);
       return;
     }
 
+    // eslint-disable-next-line no-console
     console.log("✓ Authenticated as test user");
 
     // Clean up flashcards (will cascade delete via foreign keys if needed)
@@ -97,6 +106,7 @@ async function globalTeardown() {
       await cleanupTableWithRetry(supabase, "flashcards", testUserId);
     } catch {
       // Continue even if this fails - we want to try cleaning other tables
+      // eslint-disable-next-line no-console
       console.warn("⚠️  Flashcards cleanup failed, continuing with other tables...");
     }
 
@@ -105,6 +115,7 @@ async function globalTeardown() {
       await cleanupTableWithRetry(supabase, "generations", testUserId);
     } catch {
       // Continue even if this fails
+      // eslint-disable-next-line no-console
       console.warn("⚠️  Generations cleanup failed, continuing...");
     }
 
@@ -122,18 +133,23 @@ async function globalTeardown() {
       }
 
       const count = data?.length || 0;
+      // eslint-disable-next-line no-console
       console.log(`✓ Deleted ${count} generations_errors record(s)`);
     } catch {
       // This is expected to fail if table doesn't exist or already cascade deleted
+      // eslint-disable-next-line no-console
       console.log("ℹ️  Generation errors cleanup skipped (likely cascade deleted or table does not exist)");
     }
 
     // Sign out
     await supabase.auth.signOut();
+    // eslint-disable-next-line no-console
     console.log("✓ Signed out test user");
 
+    // eslint-disable-next-line no-console
     console.log("\n✅ Global teardown completed successfully\n");
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error("❌ Global teardown failed:", error);
     // Don't throw - we don't want to fail the entire test run on teardown errors
   }

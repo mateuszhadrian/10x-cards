@@ -9,9 +9,8 @@ import { render, RenderOptions } from "@testing-library/react";
 import { ReactElement, ReactNode } from "react";
 
 // Custom render function that includes common providers
-interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {
-  // Add custom options here if needed
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+interface CustomRenderOptions extends Omit<RenderOptions, "wrapper"> {}
 
 /**
  * Custom render function with providers
