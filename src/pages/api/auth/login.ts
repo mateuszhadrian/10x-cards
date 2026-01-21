@@ -36,9 +36,7 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
     const { email, password } = validationResult.data;
 
     // Get runtime env from Cloudflare Pages
-    const runtime = locals.runtime as
-      | { env: { SUPABASE_URL: string; SUPABASE_KEY: string } }
-      | undefined;
+    const runtime = locals.runtime as { env: { SUPABASE_URL: string; SUPABASE_KEY: string } } | undefined;
 
     // Create Supabase server client with cookie handling
     const supabase = createSupabaseServerInstance({

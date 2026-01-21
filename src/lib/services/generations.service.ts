@@ -84,7 +84,10 @@ const FLASHCARDS_RESPONSE_SCHEMA: ResponseFormat = {
  * @param openrouterApiKey - OpenRouter API key
  * @returns An array of flashcard proposals (between 1 and 30)
  */
-async function aiGenerateFlashcards(inputText: string, openrouterApiKey: string): Promise<{ front: string; back: string }[]> {
+async function aiGenerateFlashcards(
+  inputText: string,
+  openrouterApiKey: string
+): Promise<{ front: string; back: string }[]> {
   try {
     // Create OpenRouter service instance
     const openRouterService = createOpenRouterService(openrouterApiKey);

@@ -55,9 +55,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const user = locals.user;
 
     // Get runtime env from Cloudflare Pages
-    const runtime = locals.runtime as
-      | { env: { OPENROUTER_API_KEY: string } }
-      | undefined;
+    const runtime = locals.runtime as { env: { OPENROUTER_API_KEY: string } } | undefined;
 
     if (!supabase) {
       return new Response(
