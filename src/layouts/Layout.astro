@@ -3,6 +3,7 @@
 import { ViewTransitions } from "astro:transitions";
 import { NavigationBar } from "../components/NavigationBar";
 import { Toaster } from "../components/ui/sonner";
+import "../styles/global.css";
 
 interface Props {
   title?: string;
@@ -24,7 +25,6 @@ const userEmail = Astro.locals.user?.email || null;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- Apple Human Interface Guidelines - System Fonts -->
-    <link rel="stylesheet" href="/src/styles/global.css" />
     <ViewTransitions />
     <title>{title}</title>
     <!-- Critical: Theme script MUST be in head and run before body renders -->
