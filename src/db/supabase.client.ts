@@ -1,4 +1,4 @@
-import { createBrowserClient, createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
+import { createServerClient, type CookieOptionsWithName } from "@supabase/ssr";
 import type { AstroCookies } from "astro";
 import type { Database } from "./database.types";
 
@@ -52,20 +52,6 @@ export const createSupabaseServerInstance = (context: {
     },
   });
 };
-
-/**
- * Create Supabase browser client instance
- * Used in React components for client-side operations
- * WARNING: Do not use this for authentication operations!
- * Auth should go through API endpoints to ensure proper cookie handling
- */
-export const createSupabaseBrowserClient = () => {
-  return createBrowserClient<Database>(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_KEY);
-};
-
-// Legacy export for backward compatibility
-// TODO: Remove after migrating all usages to new server/browser clients
-export const supabaseClient = createBrowserClient<Database>(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_KEY);
 
 export type SupabaseClient = ReturnType<typeof createSupabaseServerInstance>;
 
