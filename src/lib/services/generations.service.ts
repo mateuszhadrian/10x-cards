@@ -1,4 +1,3 @@
-import { createHash } from "crypto";
 import type { SupabaseClient } from "../../db/supabase.client";
 import type { Database } from "../../db/database.types";
 import { createOpenRouterService, type ResponseFormat } from "./openrouter.service";
@@ -15,14 +14,28 @@ export interface GenerationResult {
 }
 
 /**
- * Generates an MD5 hash of the input text for deduplication.
- * MD5 is sufficient for checksum/fingerprint purposes where cryptographic security is not required.
+ * Generates a SHA-256 hash of the input text for deduplication.
+ * Uses Web Crypto API (compatible with Cloudflare Workers).
+ *
+ * SHA-256 is more secure than MD5 and provides excellent deduplication.
+ * Note: Migrating from MD5 to SHA-256 means existing hashes won't match.
  *
  * @param text - The text to hash
- * @returns A 32-character hex string representation of the MD5 hash
+ * @returns A 64-character hex string representation of the SHA-256 hash
  */
-function generateTextHash(text: string): string {
-  return createHash("md5").update(text, "utf8").digest("hex");
+async function generateTextHash(text: string): Promise<string> {
+  // Encode text as UTF-8
+  const encoder = new TextEncoder();
+  const data = encoder.encode(text);
+
+  // Generate SHA-256 hash using Web Crypto API
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+
+  // Convert buffer to hex string
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+
+  return hashHex;
 }
 
 /**
@@ -134,7 +147,7 @@ export async function initiateGeneration(
   const startTime = Date.now();
 
   // Generate hash of the input text for deduplication (checksum)
-  const textHash = generateTextHash(inputText);
+  const textHash = await generateTextHash(inputText);
 
   // Step 1: Create a generation record
   const { data: generation, error: generationError } = await supabase

@@ -24,6 +24,18 @@
 
 _See [./.ai/tech-stack.md](./.ai/tech-stack.md) for more details about the tech stack._
 
+### Infrastructure & Hosting
+
+- **Platform**: Cloudflare Pages
+- **Architecture**: Edge Computing (Serverless)
+- **Rationale**:
+  - Native support for Astro's Edge Runtime adapter.
+  - Global low-latency CDN network.
+  - Cost-effective for startups (generous free tier, no per-seat pricing).
+  - Seamless integration with the current tech stack.
+
+_See [./.ai/hosting-analysis-result.md](./.ai/hosting-analysis-result.md) for the detailed hosting analysis and recommendation._
+
 ### Database Schema
 
 The database schema is designed to be efficient, scalable, and compliant with modern best practices. Key design aspects include:

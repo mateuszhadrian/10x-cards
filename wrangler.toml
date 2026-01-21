@@ -1,0 +1,14 @@
+name = "10x-cards"
+compatibility_date = "2024-01-01"
+
+# Public variables (non-sensitive)
+[vars]
+PUBLIC_SUPABASE_URL = "https://your-project.supabase.co"
+
+# Secrets (set via CLI):
+# npx wrangler secret put SUPABASE_KEY
+# npx wrangler secret put OPENROUTER_API_KEY
+# 
+# Note: For local development, you can also use .dev.vars file with:
+# SUPABASE_KEY=your_key
+# OPENROUTER_API_KEY=your_key
