@@ -511,19 +511,17 @@ export class OpenRouterService {
 // ============================================================================
 
 /**
- * Creates a new OpenRouter service instance from environment variables
+ * Creates a new OpenRouter service instance
  *
- * @param apiKey - Optional API key (defaults to import.meta.env.OPENROUTER_API_KEY)
+ * @param apiKey - OpenRouter API key (required)
  * @returns New OpenRouterService instance
  */
-export function createOpenRouterService(apiKey?: string): OpenRouterService {
-  const key = apiKey || import.meta.env.OPENROUTER_API_KEY;
-
-  if (!key) {
-    throw new Error("OPENROUTER_API_KEY environment variable is not set");
+export function createOpenRouterService(apiKey: string): OpenRouterService {
+  if (!apiKey) {
+    throw new Error("OPENROUTER_API_KEY is required");
   }
 
   return new OpenRouterService({
-    apiKey: key,
+    apiKey,
   });
 }

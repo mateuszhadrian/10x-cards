@@ -41,10 +41,16 @@ function isPublicPath(pathname: string): boolean {
  * 5. Redirect authenticated users away from /login to /generate
  */
 export const onRequest = defineMiddleware(async ({ locals, cookies, url, request, redirect }, next) => {
+  // Get runtime env from Cloudflare Pages
+  const runtime = locals.runtime as
+    | { env: { SUPABASE_URL: string; SUPABASE_KEY: string; OPENROUTER_API_KEY: string } }
+    | undefined;
+
   // Create Supabase server client
   const supabase = createSupabaseServerInstance({
     cookies,
     headers: request.headers,
+    env: runtime?.env,
   });
 
   // IMPORTANT: Always get user session first

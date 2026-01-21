@@ -81,12 +81,13 @@ const FLASHCARDS_RESPONSE_SCHEMA: ResponseFormat = {
  * AI service that generates flashcard proposals based on input text using OpenRouter.
  *
  * @param inputText - The text to generate flashcards from
+ * @param openrouterApiKey - OpenRouter API key
  * @returns An array of flashcard proposals (between 1 and 30)
  */
-async function aiGenerateFlashcards(inputText: string): Promise<{ front: string; back: string }[]> {
+async function aiGenerateFlashcards(inputText: string, openrouterApiKey: string): Promise<{ front: string; back: string }[]> {
   try {
     // Create OpenRouter service instance
-    const openRouterService = createOpenRouterService();
+    const openRouterService = createOpenRouterService(openrouterApiKey);
 
     // Configure response format for structured output
     openRouterService.setResponseFormat(FLASHCARDS_RESPONSE_SCHEMA);
@@ -136,13 +137,15 @@ async function aiGenerateFlashcards(inputText: string): Promise<{ front: string;
  * @param supabase - Supabase client instance
  * @param userId - The ID of the authenticated user
  * @param inputText - The input text to generate flashcards from (1000-10000 chars)
+ * @param openrouterApiKey - OpenRouter API key
  * @returns Generation result with generation record and flashcard proposals
  * @throws Error if generation fails or no flashcards are generated
  */
 export async function initiateGeneration(
   supabase: SupabaseClient,
   userId: string,
-  inputText: string
+  inputText: string,
+  openrouterApiKey: string
 ): Promise<GenerationResult> {
   const startTime = Date.now();
 
@@ -172,7 +175,7 @@ export async function initiateGeneration(
       setTimeout(() => reject(new Error("AI service timeout after 60 seconds")), 60000)
     );
 
-    const flashcardsPromise = aiGenerateFlashcards(inputText);
+    const flashcardsPromise = aiGenerateFlashcards(inputText, openrouterApiKey);
 
     const aiFlashcards = await Promise.race([flashcardsPromise, timeoutPromise]);
 

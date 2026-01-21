@@ -10,12 +10,18 @@ import { createSupabaseServerInstance } from "@/db/supabase.client";
  * @route POST /api/auth/logout
  * @access Public (but only makes sense for authenticated users)
  */
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
   try {
+    // Get runtime env from Cloudflare Pages
+    const runtime = locals.runtime as
+      | { env: { SUPABASE_URL: string; SUPABASE_KEY: string } }
+      | undefined;
+
     // Create Supabase server client with cookie handling
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
+      env: runtime?.env,
     });
 
     // Sign out from Supabase

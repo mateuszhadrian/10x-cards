@@ -54,6 +54,11 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const supabase = locals.supabase;
     const user = locals.user;
 
+    // Get runtime env from Cloudflare Pages
+    const runtime = locals.runtime as
+      | { env: { OPENROUTER_API_KEY: string } }
+      | undefined;
+
     if (!supabase) {
       return new Response(
         JSON.stringify({
@@ -82,8 +87,25 @@ export const POST: APIRoute = async ({ request, locals }) => {
       );
     }
 
+    // Get OpenRouter API key from runtime env or fallback to import.meta.env
+    const openrouterApiKey = runtime?.env.OPENROUTER_API_KEY || import.meta.env.OPENROUTER_API_KEY;
+
+    if (!openrouterApiKey) {
+      return new Response(
+        JSON.stringify({
+          error: "OpenRouter API key not configured",
+        }),
+        {
+          status: 500,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
+
     // Call generation service to initiate the generation process
-    const result = await initiateGeneration(supabase, user.id, input_text);
+    const result = await initiateGeneration(supabase, user.id, input_text, openrouterApiKey);
 
     // Return successful response with generation data and flashcard proposals
     const response: GenerationResponseDTO = {

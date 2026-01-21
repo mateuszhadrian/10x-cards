@@ -29,10 +29,18 @@ function parseCookieHeader(cookieHeader: string): { name: string; value: string 
 /**
  * Create Supabase server client instance
  * Used in middleware and API routes for SSR
- * @param context - Astro context with headers and cookies
+ * @param context - Astro context with headers, cookies and runtime env
  */
-export const createSupabaseServerInstance = (context: { headers: Headers; cookies: AstroCookies }) => {
-  return createServerClient<Database>(import.meta.env.SUPABASE_URL, import.meta.env.SUPABASE_KEY, {
+export const createSupabaseServerInstance = (context: {
+  headers: Headers;
+  cookies: AstroCookies;
+  env?: { SUPABASE_URL: string; SUPABASE_KEY: string };
+}) => {
+  // Get env variables from context.env (Cloudflare Pages runtime) or fallback to import.meta.env (build time)
+  const supabaseUrl = context.env?.SUPABASE_URL || import.meta.env.SUPABASE_URL;
+  const supabaseKey = context.env?.SUPABASE_KEY || import.meta.env.SUPABASE_KEY;
+
+  return createServerClient<Database>(supabaseUrl, supabaseKey, {
     cookieOptions,
     cookies: {
       getAll() {

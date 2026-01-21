@@ -12,7 +12,7 @@ import { loginSchema } from "@/lib/validations/auth.validation";
  * @route POST /api/auth/login
  * @access Public
  */
-export const POST: APIRoute = async ({ request, cookies }) => {
+export const POST: APIRoute = async ({ request, cookies, locals }) => {
   try {
     // Parse and validate request body
     const body = await request.json();
@@ -35,10 +35,16 @@ export const POST: APIRoute = async ({ request, cookies }) => {
 
     const { email, password } = validationResult.data;
 
+    // Get runtime env from Cloudflare Pages
+    const runtime = locals.runtime as
+      | { env: { SUPABASE_URL: string; SUPABASE_KEY: string } }
+      | undefined;
+
     // Create Supabase server client with cookie handling
     const supabase = createSupabaseServerInstance({
       cookies,
       headers: request.headers,
+      env: runtime?.env,
     });
 
     // Attempt to sign in with email and password
