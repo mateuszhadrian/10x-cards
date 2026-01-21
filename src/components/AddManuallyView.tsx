@@ -145,7 +145,7 @@ export default function AddManuallyView() {
               {isSaving ? "Saving..." : "Save Flashcard"}
             </Button>
             <span className="text-sm text-muted-foreground hidden sm:inline">
-              or press {navigator.platform.includes("Mac") ? "⌘" : "Ctrl"}+Enter
+              or press {typeof navigator !== "undefined" && navigator.platform?.includes("Mac") ? "⌘" : "Ctrl"}+Enter
             </span>
           </div>
         </div>
