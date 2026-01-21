@@ -62,10 +62,6 @@ jobs:
     permissions:
       contents: read
       deployments: write
-    env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
-      OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
     steps:
       - uses: actions/checkout@v6
 
@@ -82,10 +78,6 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name=10x-cards
-          secrets: |
-            SUPABASE_URL
-            SUPABASE_KEY
-            OPENROUTER_API_KEY
 
       - name: Output deployment URL
         run: |

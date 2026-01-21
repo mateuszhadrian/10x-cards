@@ -141,11 +141,18 @@ Przed pierwszym uruchomieniem workflow należy dodać w GitHub Secrets:
 |--------|------|--------------|
 | `CLOUDFLARE_API_TOKEN` | Token API Cloudflare | Deploy job |
 | `CLOUDFLARE_ACCOUNT_ID` | ID konta Cloudflare | Deploy job |
-| `SUPABASE_URL` | URL projektu Supabase | Build + Deploy |
-| `SUPABASE_KEY` | Klucz anon/public Supabase | Build + Deploy |
-| `OPENROUTER_API_KEY` | Klucz API OpenRouter | Build + Deploy |
+| `SUPABASE_URL` | URL projektu Supabase | Build job |
+| `SUPABASE_KEY` | Klucz anon/public Supabase | Build job |
+| `OPENROUTER_API_KEY` | Klucz API OpenRouter | Build job |
 
-**Szczegółowa instrukcja:** Zobacz `.ai/deployment-setup.md`
+**⚠️ WAŻNE:** 
+- Zmienne `SUPABASE_URL`, `SUPABASE_KEY` i `OPENROUTER_API_KEY` są używane podczas buildu
+- **Musisz je również dodać w Cloudflare Dashboard** → Pages → 10x-cards → Settings → Environment variables
+- Bez zmiennych w Cloudflare Dashboard aplikacja nie będzie działać w production!
+
+**Szczegółowe instrukcje:** 
+- Konfiguracja: `.ai/deployment-setup.md`
+- Naprawa błędu: `.ai/deployment-fix-secrets-error.md`
 
 ---
 

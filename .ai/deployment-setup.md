@@ -23,13 +23,15 @@ Przed uruchomieniem deploymentu należy dodać następujące sekrety w repozytor
 
 **Lokalizacja:** `Settings` → `Secrets and variables` → `Actions` → `New repository secret`
 
-| Nazwa Sekretu | Opis | Gdzie Znaleźć |
-|---------------|------|---------------|
-| `CLOUDFLARE_API_TOKEN` | Token API Cloudflare | [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens) → Create Token → Edit Cloudflare Workers (Template) |
-| `CLOUDFLARE_ACCOUNT_ID` | ID konta Cloudflare | Cloudflare Dashboard → Workers & Pages → Overview (w prawym bocznym panelu) |
-| `SUPABASE_URL` | URL projektu Supabase | Supabase Dashboard → Project Settings → API → Project URL |
-| `SUPABASE_KEY` | Klucz API Supabase (anon/public) | Supabase Dashboard → Project Settings → API → anon/public key |
-| `OPENROUTER_API_KEY` | Klucz API OpenRouter | [OpenRouter Dashboard](https://openrouter.ai/keys) |
+| Nazwa Sekretu | Opis | Gdzie Znaleźć | Używane W |
+|---------------|------|---------------|-----------|
+| `CLOUDFLARE_API_TOKEN` | Token API Cloudflare | [Cloudflare Dashboard](https://dash.cloudflare.com/profile/api-tokens) → Create Token → Edit Cloudflare Workers (Template) | Deploy job |
+| `CLOUDFLARE_ACCOUNT_ID` | ID konta Cloudflare | Cloudflare Dashboard → Workers & Pages → Overview (w prawym bocznym panelu) | Deploy job |
+| `SUPABASE_URL` | URL projektu Supabase | Supabase Dashboard → Project Settings → API → Project URL | Build job |
+| `SUPABASE_KEY` | Klucz API Supabase (anon/public) | Supabase Dashboard → Project Settings → API → anon/public key | Build job |
+| `OPENROUTER_API_KEY` | Klucz API OpenRouter | [OpenRouter Dashboard](https://openrouter.ai/keys) | Build job |
+
+**⚠️ WAŻNE:** Zmienne `SUPABASE_URL`, `SUPABASE_KEY` i `OPENROUTER_API_KEY` są używane podczas buildu Astro. Aby działały w production na Cloudflare Pages, **musisz je również dodać w Cloudflare Dashboard** (patrz sekcja poniżej).
 
 ### 2. Tworzenie Cloudflare API Token
 
@@ -43,7 +45,32 @@ Przed uruchomieniem deploymentu należy dodać następujące sekrety w repozytor
 6. Kliknij `Continue to summary` → `Create Token`
 7. **Zapisz token** - nie będzie możliwe ponowne jego wyświetlenie!
 
-### 3. Utworzenie Projektu Cloudflare Pages
+### 3. Zmienne Środowiskowe w Cloudflare Pages (WYMAGANE!)
+
+Po utworzeniu projektu Cloudflare Pages, **musisz dodać zmienne środowiskowe** aby aplikacja działała poprawnie w production.
+
+**Lokalizacja:** [Cloudflare Dashboard](https://dash.cloudflare.com) → Workers & Pages → 10x-cards → Settings → Environment variables
+
+**Dodaj następujące zmienne dla środowiska `Production`:**
+
+| Nazwa Zmiennej | Wartość | Typ |
+|----------------|---------|-----|
+| `SUPABASE_URL` | (URL projektu Supabase) | Plain text |
+| `SUPABASE_KEY` | (Klucz anon/public Supabase) | Encrypted (zalecane) |
+| `OPENROUTER_API_KEY` | (Klucz API OpenRouter) | Encrypted (zalecane) |
+
+**Kroki:**
+1. Przejdź do Cloudflare Dashboard → Workers & Pages
+2. Kliknij na projekt `10x-cards`
+3. Przejdź do `Settings` → `Environment variables`
+4. W sekcji `Production` kliknij `Add variable`
+5. Dodaj każdą zmienną osobno
+6. Dla `SUPABASE_KEY` i `OPENROUTER_API_KEY` zaznacz opcję `Encrypt`
+7. Kliknij `Save`
+
+**⚠️ Bez tych zmiennych aplikacja nie będzie działać w production!**
+
+### 4. Utworzenie Projektu Cloudflare Pages
 
 **Opcja A: Przez Dashboard (Rekomendowane dla pierwszego deploymentu)**
 
@@ -54,15 +81,13 @@ Przed uruchomieniem deploymentu należy dodać następujące sekrety w repozytor
    - Framework preset: `Astro`
    - Build command: `npm run build`
    - Build output directory: `dist`
-5. **Environment variables:**
-   - `SUPABASE_URL` = (wartość z Supabase)
-   - `SUPABASE_KEY` = (wartość z Supabase)
-   - `OPENROUTER_API_KEY` = (wartość z OpenRouter)
-6. Kliknij `Save and Deploy`
+5. Kliknij `Save and Deploy` (zmienne środowiskowe dodasz później zgodnie z sekcją 3)
 
 **Opcja B: GitHub Actions zrobi to automatycznie**
 
-Po dodaniu sekretów GitHub, workflow automatycznie wykona deployment przy pushu do brancha `main`.
+Po dodaniu sekretów GitHub i zmiennych w Cloudflare Dashboard, workflow automatycznie wykona deployment przy pushu do brancha `main`.
+
+**UWAGA:** Niezależnie od wybranej opcji, **musisz ręcznie dodać zmienne środowiskowe w Cloudflare Dashboard** (patrz sekcja 3 powyżej)!
 
 ---
 
@@ -142,23 +167,41 @@ wrangler pages deploy dist --project-name=10x-cards
 ### Kroki
 
 1. **Dodaj sekrety GitHub** (patrz sekcja "Sekrety GitHub")
-2. **Commituj i pushuj workflow:**
+2. **Dodaj zmienne środowiskowe w Cloudflare Dashboard** (patrz sekcja "Zmienne Środowiskowe w Cloudflare Pages")
+   - **KRYTYCZNE:** Bez tych zmiennych aplikacja nie będzie działać!
+3. **Commituj i pushuj workflow:**
    ```bash
    git add .github/workflows/master.yml
    git commit -m "Add Cloudflare Pages deployment workflow"
    git push origin main
    ```
-3. **Obserwuj workflow:**
+4. **Obserwuj workflow:**
    - Przejdź do `Actions` w repozytorium GitHub
    - Kliknij na najnowszy workflow run
    - Sprawdź logi każdego job'a
-4. **Sprawdź deployment URL:**
+5. **Sprawdź deployment URL:**
    - Po zakończeniu job'a `deploy` sprawdź `Summary`
    - URL będzie w formacie: `https://10x-cards.pages.dev`
 
 ---
 
 ## ⚠️ Znane Problemy i Rozwiązania
+
+### Problem: "Failed to upload secrets"
+
+**Objaw:** 
+```
+🔑 Uploading secrets...
+Error: Failed to upload secrets.
+Error: 🚨 Action failed
+```
+
+**Przyczyna:** Parametr `secrets:` w `wrangler-action` jest przeznaczony tylko dla Cloudflare Workers, nie dla Pages.
+
+**Rozwiązanie:**
+- ✅ **NAPRAWIONE** - Usunięto parametr `secrets:` z workflow
+- Zmienne środowiskowe dla Cloudflare Pages **muszą być skonfigurowane w Cloudflare Dashboard**
+- Zobacz sekcję "Zmienne Środowiskowe w Cloudflare Pages"
 
 ### Problem: "Missing API Token"
 
