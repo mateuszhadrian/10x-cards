@@ -2,12 +2,13 @@ name = "10x-cards"
 compatibility_date = "2024-01-01"
 
 # Public variables (non-sensitive)
+# These are available in runtime through context.locals.runtime.env
 [vars]
-PUBLIC_SUPABASE_URL = "https://your-project.supabase.co"
+SUPABASE_URL = "https://ysbiohasdktsri.supabase.co"
 
-# Secrets (set via CLI):
-# npx wrangler secret put SUPABASE_KEY
-# npx wrangler secret put OPENROUTER_API_KEY
+# Secrets (set via Cloudflare Dashboard):
+# SUPABASE_KEY - add as "Encrypted" secret in Dashboard
+# OPENROUTER_API_KEY - add as "Encrypted" secret in Dashboard
 # 
 # Note: For local development, you can also use .dev.vars file with:
 # SUPABASE_KEY=your_key
