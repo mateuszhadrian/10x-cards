@@ -135,7 +135,7 @@ Zastosowano wszystkie zasady z `.ai/github-action.mdc`:
 
 ## 🔐 Wymagane Sekrety GitHub
 
-Przed pierwszym uruchomieniem workflow należy dodać w GitHub Secrets:
+Przed pierwszym uruchomieniem workflow należy dodać w GitHub Environment Secrets dla środowiska `production`:
 
 | Sekret | Opis | Wymagane dla |
 |--------|------|--------------|

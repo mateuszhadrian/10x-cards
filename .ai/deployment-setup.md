@@ -17,11 +17,13 @@ Projekt został skonfigurowany do automatycznego deploymentu na Cloudflare Pages
 
 ## 🔧 Konfiguracja Wymagana
 
-### 1. Sekrety GitHub (GitHub Secrets)
+### 1. Sekrety GitHub (GitHub Environment Secrets)
 
-Przed uruchomieniem deploymentu należy dodać następujące sekrety w repozytorium GitHub:
+Przed uruchomieniem deploymentu należy dodać następujące sekrety w środowisku `production`.
 
-**Lokalizacja:** `Settings` → `Secrets and variables` → `Actions` → `New repository secret`
+**Lokalizacja:** `Settings` → `Environments` → `production` → `Environment secrets` → `Add secret`
+
+**⚠️ WAŻNE:** Workflow używa **Environment secrets** dla środowiska `production`, NIE Repository secrets!
 
 | Nazwa Sekretu | Opis | Gdzie Znaleźć | Używane W |
 |---------------|------|---------------|-----------|
@@ -31,7 +33,21 @@ Przed uruchomieniem deploymentu należy dodać następujące sekrety w repozytor
 | `SUPABASE_KEY` | Klucz API Supabase (anon/public) | Supabase Dashboard → Project Settings → API → anon/public key | Build job |
 | `OPENROUTER_API_KEY` | Klucz API OpenRouter | [OpenRouter Dashboard](https://openrouter.ai/keys) | Build job |
 
-**⚠️ WAŻNE:** Zmienne `SUPABASE_URL`, `SUPABASE_KEY` i `OPENROUTER_API_KEY` są używane podczas buildu Astro. Aby działały w production na Cloudflare Pages, **musisz je również dodać w Cloudflare Dashboard** (patrz sekcja poniżej).
+**Kroki dodawania Environment secrets:**
+1. Przejdź do `Settings` → `Environments`
+2. Jeśli nie ma środowiska `production`, kliknij `New environment` i utwórz je z nazwą `production`
+3. Kliknij na środowisko `production`
+4. W sekcji `Environment secrets` kliknij `Add secret`
+5. Dodaj każdy sekret osobno (nazwa + wartość)
+
+**Zalety Environment secrets vs Repository secrets:**
+- ✅ Dodatkowa warstwa bezpieczeństwa (deployment do production może wymagać zatwierdzenia)
+- ✅ Możliwość ustawienia protection rules (np. wymagane review przed deploymentem)
+- ✅ Oddzielne sekrety dla różnych środowisk (production/staging/development)
+- ✅ Historia deploymentów dostępna w zakładce `Deployments`
+- ✅ Lepsza kontrola kto może deployować na production
+
+**⚠️ WAŻNE:** Zmienne `SUPABASE_URL`, `SUPABASE_KEY` i `OPENROUTER_API_KEY` są używane podczas buildu Astro. Aby działały w production na Cloudflare Pages, **musisz je również dodać w Cloudflare Dashboard** (patrz sekcja 3 poniżej).
 
 ### 2. Tworzenie Cloudflare API Token
 
