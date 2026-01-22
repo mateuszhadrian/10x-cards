@@ -28,6 +28,7 @@ _See [./.ai/tech-stack.md](./.ai/tech-stack.md) for more details about the tech 
 
 - **Platform**: Cloudflare Pages
 - **Architecture**: Edge Computing (Serverless)
+- **Live Deployment**: [https://10x-cards-3k2.pages.dev/](https://10x-cards-3k2.pages.dev/)
 - **Rationale**:
   - Native support for Astro's Edge Runtime adapter.
   - Global low-latency CDN network.
